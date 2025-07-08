@@ -27,7 +27,7 @@ public class Dht11LogService {
     }
     
     // 마지막 로그 조회
-    public Dht11LogDto getLastLog() {
+    public Dht11LogDto getLatestLog() {
     	return Dht11LogDto.fromEntity(dht11LogRepository.findTopByOrderByMeasurementTimeDesc().orElseThrow());
     }
 }

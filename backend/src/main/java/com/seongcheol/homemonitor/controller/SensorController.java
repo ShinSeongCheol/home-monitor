@@ -32,9 +32,9 @@ public class SensorController {
 		return dht11LogService.getLogsBetween(start, end);
 	}
 	
-	@GetMapping("/dht11/log/last")
+	@GetMapping("/dht11/log/latest")
 	public Dht11LogDto getLastLog() throws Exception {
-		return dht11LogService.getLastLog();
+		return dht11LogService.getLatestLog();
 	}
 	
 }
