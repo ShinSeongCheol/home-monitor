@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Monitoring - Temperature & Humidity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .value {
+      font-size: 48px;
+      font-weight: bold;
+      color: #0077cc;
+    }
+
+    .label {
+      font-size: 18px;
+      color: #777;
+    }
+
+    .timestamp {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏠 Home Monitoring Dashboard</h1>
+
+  <div class="card">
+    <div class="value" id="temp">-- °C</div>
+    <div class="label">Temperature</div>
+  </div>
+
+  <div class="card">
+    <div class="value" id="humidity">-- %</div>
+    <div class="label">Humidity</div>
+  </div>
+
+  <div class="timestamp" id="timestamp">Last updated: --</div>
+
+  <button onclick="updateData()">🔄 Refresh Data</button>
+
+  <script>
+    function updateData() {
+      // Simulated values — replace with actual sensor values if connected
+      const temp = (20 + Math.random() * 10).toFixed(1);
+      const humidity = (40 + Math.random() * 30).toFixed(1);
+
+      document.getElementById("temp").textContent = temp + " °C";
+      document.getElementById("humidity").textContent = humidity + " %";
+
+      const now = new Date().toLocaleString();
+      document.getElementById("timestamp").textContent = "Last updated: " + now;
+    }
+
+    // Auto-load data when page opens
+    window.onload = updateData;
+  </script>
+
+</body>
+</html>
