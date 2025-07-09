@@ -2,4 +2,4 @@ spring:
   application:
     name: HomeMonitor
   profiles:
-    active: prod
+    active: dev
