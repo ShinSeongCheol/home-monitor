@@ -10,7 +10,7 @@ function App() {
   
   useEffect(() => {
     const fetchData = () => {
-      fetch('http://localhost:8080/api/v1/dht11/log/latest')
+      fetch(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/latest`)
       .then(response => response.json())
       .then(data => {
           const measurementTime = data.measurementTime;
