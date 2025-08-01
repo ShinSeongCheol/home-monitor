@@ -35,10 +35,6 @@ public class CorsConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/api/v1/**", config);
 
-		System.out.println(origins);
-		System.out.println(methods);
-		System.out.println(headers);
-
 		return source;
 	}
 
