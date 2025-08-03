@@ -1,6 +1,7 @@
 import './styles/App.css'
 import InfoCard from './components/InfoCard'
 import { useEffect, useState } from 'react'
+import LineChart from './components/LineChart';
 
 function App() {
 
@@ -34,11 +35,13 @@ function App() {
   return (
     <>
       <div className="app">
-        <h1>🏠 Home Monitoring Dashboard</h1>
-
-        <InfoCard id='temp' value={temperature} unit='°C' label='Temperature'></InfoCard>
-        <InfoCard id='humidity' value={humidity} unit='%' label='humidity'></InfoCard>
-
+        <div className='container'>
+          <InfoCard id='temp' value={temperature} unit='°C' label='🌡️ 현재 온도'></InfoCard>
+          <InfoCard id='humidity' value={humidity} unit='%' label='💧 현재 습도'></InfoCard>
+        </div>
+        <div>
+          <LineChart></LineChart>
+        </div>
         <div className="timestamp" id="timestamp">Last updated: {measurementTime}</div>
       </div>
     </>
