@@ -50,7 +50,7 @@ const LineChart: React.FC<LineChartProps> = () => {
         const measurementTime = data.map((d) => new Date(d.measurementTime));
         const flatHumidityAndTemperature = d3.union(data.flatMap((d) => [(d.humidity), d.temperature]));
 
-        const x = d3.scaleUtc().domain(d3.extent(measurementTime) as [Date, Date]).range([marginLeft, width - marginRight]);
+        const x = d3.scaleTime().domain(d3.extent(measurementTime) as [Date, Date]).range([marginLeft, width - marginRight]);
         const y = d3.scaleLinear().domain([0, d3.max(flatHumidityAndTemperature)] as [number, number]).range([height - marginBottom, marginTop]);
 
         
