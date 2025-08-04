@@ -5,16 +5,16 @@ import LineChart from './components/LineChart';
 
 function App() {
 
-  const [measurementTime, setMesurementTime] = useState<string | number>('--');
+  const [measurementTime, setMesurementTime] = useState<string | Date>('--');
   const [temperature, setTemperature] = useState<string | number>('--');
   const [humidity, setHumidity] = useState<string | number>('--');
   
   useEffect(() => {
     const fetchData = () => {
       fetch(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/latest`)
-      .then(response => response.json())
-      .then(data => {
-          const measurementTime = data.measurementTime;
+        .then(response => response.json())
+        .then(data => {
+          const measurementTime = new Date(data.measurementTime);
           const temperature = data.temperature;
           const humidity = data.humidity;
   
@@ -42,7 +42,7 @@ function App() {
         <div>
           <LineChart></LineChart>
         </div>
-        <div className="timestamp" id="timestamp">Last updated: {measurementTime}</div>
+        <div className={styles.timestamp} id="timestamp">마지막 업데이트: {measurementTime.toLocaleString()}</div>
       </div>
     </>
   )

@@ -13,3 +13,9 @@ body {
 .container {
   display: flex;
 }
+
+.timestamp {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #999;
+}
