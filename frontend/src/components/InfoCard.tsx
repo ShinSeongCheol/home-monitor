@@ -12,10 +12,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ id, value, unit, label }) => {
     return (
         <>
             <div className={styles.card}>
-                <div className={styles.label}>{label}</div>
-                <div className={styles.value} id={id}>
-                    {value} {unit}
-                </div>
+                <span className={styles.label}>{label}</span> <span className={styles.value}>{value} {unit}</span>
             </div>
         </>
     )
