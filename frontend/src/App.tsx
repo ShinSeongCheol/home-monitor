@@ -36,8 +36,8 @@ function App() {
     <>
       <div className={styles.app}>
         <div className={styles.container}>
-          <InfoCard id='temp' value={temperature} unit='°C' label='🌡️ 온도: '></InfoCard>
-          <InfoCard id='humidity' value={humidity} unit='%' label='💧 습도: '></InfoCard>
+          <InfoCard value={temperature} unit='°C' label='🌡️ 온도: '></InfoCard>
+          <InfoCard value={humidity} unit='%' label='💧 습도: '></InfoCard>
         </div>
         <div>
           <LineChart></LineChart>
