@@ -1,4 +1,4 @@
-import './styles/App.css'
+import styles from './styles/App.module.css'
 import InfoCard from './components/InfoCard'
 import { useEffect, useState } from 'react'
 import LineChart from './components/LineChart';
@@ -34,8 +34,8 @@ function App() {
 
   return (
     <>
-      <div className="app">
-        <div className='container'>
+      <div className={styles.app}>
+        <div className={styles.container}>
           <InfoCard id='temp' value={temperature} unit='°C' label='🌡️ 현재 온도'></InfoCard>
           <InfoCard id='humidity' value={humidity} unit='%' label='💧 현재 습도'></InfoCard>
         </div>

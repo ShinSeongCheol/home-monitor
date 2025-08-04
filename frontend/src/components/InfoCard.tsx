@@ -1,19 +1,19 @@
 import React from "react";
-import '../styles/InfoCard.css'
+import styles from '../styles/InfoCard.module.css'
 
-type InfoCardProps = {
-    id: string;
-    value: string | number;
-    unit: string;
-    label: string;
+interface InfoCardProps {
+    id: string,
+    value: string | number,
+    unit: string,
+    label: string,
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ id, value, unit, label }) => {
     return (
         <>
-            <div className="card">
-                <div className="label">{label}</div>
-                <div className="value" id={id}>
+            <div className={styles.card}>
+                <div className={styles.label}>{label}</div>
+                <div className={styles.value} id={id}>
                     {value} {unit}
                 </div>
             </div>
