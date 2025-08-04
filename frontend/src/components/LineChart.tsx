@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, type RefObject } from 'react';
 import * as d3 from 'd3';
+import styles from '../styles/LineChart.module.css'
 
 interface DataItem {
     temperature: number,
@@ -13,18 +14,11 @@ interface LineChartProps {
 const LineChart: React.FC<LineChartProps> = () => {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const [data, setData] = useState<DataItem[]>([]);
+    const [size, setSize] = useState({width: window.innerWidth, height: window.innerHeight});
 
     const isoFormat = d3.timeFormat("%Y-%m-%dT%H:%M:%S");
     const startTimeDay = isoFormat(d3.timeDay.floor(new Date()));
     const endTimeDay = isoFormat(d3.timeDay.ceil(new Date()));
-
-    const width = 800;
-    const height = 200;
-
-    const marginTop = 20;
-    const marginRight = 30;
-    const marginBottom = 20;
-    const marginLeft = 30;
 
     useEffect(() => {
          const fetchData = () => {
@@ -45,7 +39,27 @@ const LineChart: React.FC<LineChartProps> = () => {
     }, []);
 
     useEffect(() => {
+        const handleResize = () => { 
+            setSize({width: window.innerWidth, height: window.innerHeight});
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, []);
+
+    useEffect(() => {
+        if (!svgRef.current) return;
+
         const svgElement = d3.select(svgRef.current);
+
+        const width = svgRef.current.getBoundingClientRect().width;
+        const height = 200;
+
+        const marginTop = 20;
+        const marginRight = 30;
+        const marginBottom = 20;
+        const marginLeft = 30;
 
         const measurementTime = data.map((d) => new Date(d.measurementTime));
         const flatHumidityAndTemperature = d3.union(data.flatMap((d) => [(d.humidity), d.temperature]));
@@ -65,6 +79,7 @@ const LineChart: React.FC<LineChartProps> = () => {
         ;
 
         svgElement.selectAll('*').remove();
+        svgElement.attr('viewBox', `0 0 ${width} ${height}`)
 
         svgElement.append('path')
         .datum(data)
@@ -98,9 +113,9 @@ const LineChart: React.FC<LineChartProps> = () => {
             )
         ;
 
-    }, [data]);
+    }, [data, size]);
 
-    return <svg ref={svgRef} viewBox={`0, 0, ${width}, ${height}`} width={width} height={height}></svg>;
+    return <svg ref={svgRef} className={styles.chart}></svg>;
 };
 
 export default LineChart;

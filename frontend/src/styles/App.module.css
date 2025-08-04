@@ -19,3 +19,16 @@ body {
   font-size: 14px;
   color: #999;
 }
+
+@media(max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+  .container {
+    display: block;
+    width: 100%;
+  }
+  .chartContainer {
+    width: 100%
+  }
+}
