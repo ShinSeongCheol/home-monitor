@@ -102,6 +102,7 @@ const LineChart: React.FC<LineChartProps> = () => {
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('d', temperatureLine)
+            .attr('id', 'temperatureLine')
             ;
             
             const node = path.node();
@@ -123,6 +124,7 @@ const LineChart: React.FC<LineChartProps> = () => {
             .attr('fill', 'none')
             .attr('stroke', 'steelblue')
             .attr('d', humidityLine)
+            .attr('id', 'humidityLine')
             ;
 
             const node = path.node();
@@ -138,14 +140,14 @@ const LineChart: React.FC<LineChartProps> = () => {
             }
         }
         
-        svgElement.append("g")
+        const xAxis = svgElement.append("g")
             .attr("transform", `translate(0, ${height - marginBottom})`)
             .call(d3.axisBottom(x))
             .call(g => g.select(".domain").remove())
             .call(g => g.selectAll(".tick line").remove())
         ;
 
-        svgElement.append('g')
+        const yAxis = svgElement.append('g')
             .attr("transform", `translate(${marginLeft}, 0)`)
             .call(d3.axisLeft(y))
             .call(g => g.select(".domain").remove())
@@ -155,6 +157,62 @@ const LineChart: React.FC<LineChartProps> = () => {
                 .attr("stroke-opacity", 0.1)
             )
         ;
+        
+        const zoom = d3.zoom<SVGSVGElement, unknown>()
+            .scaleExtent([1, 8])
+            .translateExtent([[marginLeft, marginTop], [width - marginRight, height - marginTop]])
+            .extent([[marginLeft, marginTop], [width - marginRight, height - marginTop]])
+            .on('zoom', (event) => {
+                const newX = event.transform.rescaleX(x);
+                const newY = event.transform.rescaleY(y);
+
+                xAxis.call(d3.axisBottom(newX));
+                yAxis.call(d3.axisLeft(newY));
+
+                const newTemperatureLine = d3.line<DataItem>()
+                    .x(d => newX(new Date(d.measurementTime)))
+                    .y(d => newY(d.temperature));
+
+                const newHumidityLine = d3.line<DataItem>()
+                    .x(d => newX(new Date(d.measurementTime)))
+                    .y(d => newY(d.humidity));
+
+                const temperaturePath = svgElement.selectAll<SVGPathElement, DataItem[]>("#temperatureLine")
+                    .datum(data)
+                    .attr('d', d => newTemperatureLine(d))
+                ;
+
+                const temperatureNode = temperaturePath.node()
+                if(temperatureNode){
+                    const totalLength = temperatureNode.getTotalLength();
+
+                    temperaturePath.attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength)
+                        .transition()
+                        .duration(1000)
+                        .ease(d3.easeLinear)
+                        .attr("stroke-dashoffset", 0)
+                }
+
+                const humidityPath = svgElement.selectAll<SVGPathElement, DataItem[]>("#humidityLine")
+                    .datum(data)
+                    .attr('d', d => newHumidityLine(d))
+                ;
+
+                const humidityNode = humidityPath.node()
+                if(humidityNode){
+                    const totalLength = humidityNode.getTotalLength();
+
+                    humidityPath.attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength)
+                        .transition()
+                        .duration(1000)
+                        .ease(d3.easeLinear)
+                        .attr("stroke-dashoffset", 0)
+                }
+            });
+    
+        svgElement.call(zoom)
 
     }, [data, size, isHumiditySelect, isTemperatureSelect]);
 
