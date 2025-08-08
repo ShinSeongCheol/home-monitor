@@ -137,17 +137,24 @@ const LineChart: React.FC<LineChartProps> = () => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <div className={styles.dateContainer}>
-                    <input id='startDate' type="datetime-local" value={startDate} className={styles.datetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setStartDate(event.target.value)}/>
-                    <span> ~ </span>
-                    <input id='endDate' type="datetime-local" value={endDate} className={styles.datetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEndDate(event.target.value)}/>
+
+                <div className={styles.dateTimeContainer}>
+                    <div className={styles.datetime}>
+                        <label>시작일 : </label>
+                        <input id='startDate' type="datetime-local" value={startDate} className={styles.localDatetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setStartDate(event.target.value)}/>
+                    </div>
+                    <div className={styles.datetime}>
+                        <label>종료일 : </label>
+                        <input id='endDate' type="datetime-local" value={endDate} className={styles.localDatetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEndDate(event.target.value)}/>
+                    </div>
                 </div>
+
                 <div className={styles.buttonContainer}>
-                    <button type="button" className={isTemperatureSelect ? styles.activeButton : styles.button} onClick={() => setIsTemperatureSelect(!isTemperatureSelect)}>🌡️ 온도</button>
-                    <button type="button" className={isHumiditySelect ? styles.activeButton : styles.button} onClick={() => setIsHumiditySelect(!isHumiditySelect)}>💧 습도</button>
+                    <button type="button" className={`${styles.button} ${isTemperatureSelect ? styles.activeButton : ""}`} onClick={() => setIsTemperatureSelect(!isTemperatureSelect)}>🌡️ 온도</button>
+                    <button type="button" className={`${styles.button} ${isHumiditySelect ? styles.activeButton : ""}`} onClick={() => setIsHumiditySelect(!isHumiditySelect)}>💧 습도</button>
                 </div>
+
             </div>
-            
             <svg ref={svgRef} className={styles.chart}></svg>
         </div>
     );
