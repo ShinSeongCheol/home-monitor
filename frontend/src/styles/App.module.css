@@ -20,6 +20,10 @@ body {
   color: #999;
 }
 
+.chartContainer {
+  width: 800px;
+}
+
 @media(max-width: 768px) {
   .app {
     padding: 10px;
