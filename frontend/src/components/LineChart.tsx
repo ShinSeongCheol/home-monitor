@@ -97,21 +97,45 @@ const LineChart: React.FC<LineChartProps> = () => {
         svgElement.attr('viewBox', `0 0 ${width} ${height}`)
 
         if (isTemperatureSelect) {
-            svgElement.append('path')
+            const path = svgElement.append('path')
             .datum(data)
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('d', temperatureLine)
             ;
+            
+            const node = path.node();
+            if (node) {
+                const totalLength = node.getTotalLength();
+    
+                path.attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(1000)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+            }
         }
         
         if (isHumiditySelect) {
-            svgElement.append('path')
+            const path = svgElement.append('path')
             .datum(data)
             .attr('fill', 'none')
             .attr('stroke', 'steelblue')
             .attr('d', humidityLine)
             ;
+
+            const node = path.node();
+            if (node) {
+                const totalLength = node.getTotalLength();
+    
+                path.attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(1000)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+            }
         }
         
         svgElement.append("g")
