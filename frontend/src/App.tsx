@@ -39,9 +39,7 @@ function App() {
           <InfoCard value={temperature} unit='°C' label='🌡️ 온도: '></InfoCard>
           <InfoCard value={humidity} unit='%' label='💧 습도: '></InfoCard>
         </div>
-        <div className={styles.chartContainer}>
-          <LineChart></LineChart>
-        </div>
+        <LineChart></LineChart>
         <div className={styles.timestamp} id="timestamp">마지막 업데이트: {measurementTime.toLocaleString()}</div>
       </div>
     </>

@@ -17,12 +17,17 @@ const LineChart: React.FC<LineChartProps> = () => {
     const [size, setSize] = useState({width: window.innerWidth, height: window.innerHeight});
 
     const isoFormat = d3.timeFormat("%Y-%m-%dT%H:%M:%S");
-    const startTimeDay = isoFormat(d3.timeDay.floor(new Date()));
-    const endTimeDay = isoFormat(d3.timeDay.ceil(new Date()));
+    const formatedStartDate = isoFormat(d3.timeDay.floor(new Date()));
+    const formatedEndDate = isoFormat(d3.timeDay.ceil(new Date()));
+
+    const [startDate, setStartDate] = useState<string>(formatedStartDate);
+    const [endDate, setEndDate] = useState<string>(formatedEndDate);
+    const [isTemperatureSelect, setIsTemperatureSelect] = useState<boolean>(true);
+    const [isHumiditySelect, setIsHumiditySelect] = useState<boolean>(true);
 
     useEffect(() => {
          const fetchData = () => {
-            d3.json<DataItem[]>(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/range?start=${startTimeDay}&end=${endTimeDay}`)
+            d3.json<DataItem[]>(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/range?start=${startDate}&end=${endDate}`)
                 .then(response => {
                     if (response) {
                         setData(response);
@@ -36,7 +41,7 @@ const LineChart: React.FC<LineChartProps> = () => {
         const interval = setInterval(fetchData, 1000 * 60);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [startDate, endDate]);
 
     useEffect(() => {
         const handleResize = () => { 
@@ -62,7 +67,17 @@ const LineChart: React.FC<LineChartProps> = () => {
         const marginLeft = 30;
 
         const measurementTime = data.map((d) => new Date(d.measurementTime));
-        const flatHumidityAndTemperature = d3.union(data.flatMap((d) => [(d.humidity), d.temperature]));
+        const flatHumidityAndTemperature = d3.union(data.flatMap((d) => {
+            const data = [];
+            if (isTemperatureSelect) {
+                data.push(d.temperature);
+            }
+
+            if (isHumiditySelect) {
+                data.push(d.humidity);
+            }
+            return data;  
+        }));
 
         const x = d3.scaleTime().domain(d3.extent(measurementTime) as [Date, Date]).range([marginLeft, width - marginRight]);
         const y = d3.scaleLinear().domain([0, d3.max(flatHumidityAndTemperature)] as [number, number]).range([height - marginBottom, marginTop]);
@@ -81,19 +96,23 @@ const LineChart: React.FC<LineChartProps> = () => {
         svgElement.selectAll('*').remove();
         svgElement.attr('viewBox', `0 0 ${width} ${height}`)
 
-        svgElement.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', 'red')
-        .attr('d', temperatureLine)
-        ;
+        if (isTemperatureSelect) {
+            svgElement.append('path')
+            .datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', 'red')
+            .attr('d', temperatureLine)
+            ;
+        }
         
-        svgElement.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('d', humidityLine)
-        ;
+        if (isHumiditySelect) {
+            svgElement.append('path')
+            .datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', 'steelblue')
+            .attr('d', humidityLine)
+            ;
+        }
         
         svgElement.append("g")
             .attr("transform", `translate(0, ${height - marginBottom})`)
@@ -113,9 +132,25 @@ const LineChart: React.FC<LineChartProps> = () => {
             )
         ;
 
-    }, [data, size]);
+    }, [data, size, isHumiditySelect, isTemperatureSelect]);
 
-    return <svg ref={svgRef} className={styles.chart}></svg>;
+    return (
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <div>
+                    <input id='startDate' type="datetime-local" value={startDate} className={styles.datetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setStartDate(event.target.value)}/>
+                    <span> ~ </span>
+                    <input id='endDate' type="datetime-local" value={endDate} className={styles.datetime} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEndDate(event.target.value)}/>
+                </div>
+                <div>
+                    <button type="button" className={isTemperatureSelect ? styles.activeButton : styles.button} onClick={() => setIsTemperatureSelect(!isTemperatureSelect)}>🌡️ 온도</button>
+                    <button type="button" className={isHumiditySelect ? styles.activeButton : styles.button} onClick={() => setIsHumiditySelect(!isHumiditySelect)}>💧 습도</button>
+                </div>
+            </div>
+            
+            <svg ref={svgRef} className={styles.chart}></svg>
+        </div>
+    );
 };
 
 export default LineChart;
