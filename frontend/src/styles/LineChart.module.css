@@ -55,6 +55,18 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.tooltip {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 5px 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
 @media(max-width: 768px) {
     .container {
         width: 100%

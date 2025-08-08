@@ -210,9 +210,106 @@ const LineChart: React.FC<LineChartProps> = () => {
                         .ease(d3.easeLinear)
                         .attr("stroke-dashoffset", 0)
                 }
+
+                d3.selectAll('g circle').remove();
+                
+                const tooltip = d3.select("#tooltip");
+                
+                svgElement.append('g').selectAll<SVGCircleElement, DataItem>('circle')
+                    .data(data)
+                    .join('circle')
+                    .attr('cx', d => newX(new Date(d.measurementTime)))
+                    .attr('cy', d => newY(d.humidity))
+                    .attr('r', 4)
+                    .style('fill', 'transparent')
+                    .style('stroke', 'transparent')
+                    .on("mouseover", (event, d) => {
+                        tooltip.style("opacity", 1)
+                        .html(`시간: ${d.measurementTime}<br>습도: ${d.humidity}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.style("opacity", 0);
+                    })
+                    .on("mousemove", (event) => {
+                        tooltip
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    });
+                
+                svgElement.append('g').selectAll<SVGCircleElement, DataItem>('circle')
+                    .data(data)
+                    .join('circle')
+                    .attr('cx', d => newX(new Date(d.measurementTime)))
+                    .attr('cy', d => newY(d.temperature))
+                    .attr('r', 4)
+                    .style('fill', 'transparent')
+                    .style('stroke', 'transparent')
+                    .on("mouseover", (event, d) => {
+                        tooltip.style("opacity", 1)
+                        .html(`시간: ${d.measurementTime}<br>온도: ${d.temperature}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.style("opacity", 0);
+                    })
+                    .on("mousemove", (event) => {
+                        tooltip
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    });
             });
     
         svgElement.call(zoom)
+
+        const tooltip = d3.select("#tooltip");
+        svgElement.append('g').selectAll<SVGCircleElement, DataItem>('circle')
+            .data(data)
+            .join('circle')
+            .attr('cx', d => x(new Date(d.measurementTime)))
+            .attr('cy', d => y(d.humidity))
+            .attr('r', 4)
+            .style('fill', 'transparent')
+            .style('stroke', 'transparent')
+            .on("mouseover", (event, d) => {
+                tooltip.style("opacity", 1)
+                .html(`시간: ${d.measurementTime}<br>습도: ${d.humidity}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.style("opacity", 0);
+            })
+            .on("mousemove", (event) => {
+                tooltip
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            });
+
+        svgElement.append('g').selectAll<SVGCircleElement, DataItem>('circle')
+            .data(data)
+            .join('circle')
+            .attr('cx', d => x(new Date(d.measurementTime)))
+            .attr('cy', d => y(d.temperature))
+            .attr('r', 4)
+            .style('fill', 'transparent')
+            .style('stroke', 'transparent')
+            .on("mouseover", (event, d) => {
+                tooltip.style("opacity", 1)
+                .html(`시간: ${d.measurementTime}<br>온도: ${d.temperature}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.style("opacity", 0);
+            })
+            .on("mousemove", (event) => {
+                tooltip
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            });
 
     }, [data, size, isHumiditySelect, isTemperatureSelect]);
 
@@ -238,6 +335,7 @@ const LineChart: React.FC<LineChartProps> = () => {
 
             </div>
             <svg ref={svgRef} className={styles.chart}></svg>
+            <div id="tooltip" className={styles.tooltip}></div>
         </div>
     );
 };
