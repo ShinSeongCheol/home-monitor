@@ -3,3 +3,14 @@ spring:
     name: HomeMonitor
   profiles:
     active: dev
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: debug              # 실행된 SQL
+        orm:
+          jdbc:
+            bind: trace    # 바인드 값
+            extract: trace # 결과 추출(옵션)
