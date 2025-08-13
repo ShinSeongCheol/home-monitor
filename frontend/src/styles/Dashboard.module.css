@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+}
+
+.timestamp {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #999;
+}
+
+@media(max-width: 768px) {
+  .container {
+    display: block;
+    width: 100%;
+  }
+}
