@@ -20,7 +20,7 @@ interface AdministartiveDistrict {
     latitude_seconds: number | string;
     longitude: number | string;
     latitude: number | string;
-    updatedAt: Date
+    updatedAt: string
 }
 
 const ForecastAdministrativeDistrict = () => {
@@ -92,7 +92,7 @@ const ForecastAdministrativeDistrict = () => {
                             latitude_seconds: data['M'],
                             longitude: data['N'],
                             latitude: data['O'],
-                            updatedAt: new Date(data['P']),
+                            updatedAt: data['P'],
                         }
                     });
 
