@@ -4,6 +4,10 @@ import Dashboard from './Dashboard';
 import ForecastAdministrativeDistrict from './ForecastAdministrativeDistrict';
 import MiddleForecastAreaDistrict from './MiddleForecastAreaDistrict';
 
+import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
+
 function App() {
 
   return (
