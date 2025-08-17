@@ -29,5 +29,6 @@ cors:
       - http://localhost:5173
     methods:
       - GET
+      - POST
     headers:
       - '*'
