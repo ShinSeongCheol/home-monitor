@@ -20,7 +20,7 @@ interface AdministartiveDistrict {
     latitude_seconds: number | string;
     longitude: number | string;
     latitude: number | string;
-    updatedAt: string
+    updatedAt: String
 }
 
 const ForecastAdministrativeDistrict = () => {
@@ -40,7 +40,7 @@ const ForecastAdministrativeDistrict = () => {
     ]);
 
     const [colDefs, setColDefs] = useState<ColDef<AdministartiveDistrict>[]>([
-        { field: "type", headerName: "구분", filter: true },
+        { field: "type", headerName: "구분", filter: true},
         { field: "code", headerName: "행정구역코드", filter: true },
         { field: "level1", headerName: "1단계", filter: true },
         { field: "level2", headerName: "2단계", filter: true },
@@ -60,7 +60,14 @@ const ForecastAdministrativeDistrict = () => {
 
     const onSubmitExcel: FormEventHandler = (event) => {
         event.preventDefault();
-        console.log(event);
+    
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(rowData)
+        });
     }
 
     const onChangeExcel: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -92,7 +99,7 @@ const ForecastAdministrativeDistrict = () => {
                             latitude_seconds: data['M'],
                             longitude: data['N'],
                             latitude: data['O'],
-                            updatedAt: data['P'],
+                            updatedAt: data['P'] ? String(data['P']) : '',
                         }
                     });
 
@@ -105,6 +112,13 @@ const ForecastAdministrativeDistrict = () => {
     }
 
     useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`)
+        .then(res => res.json())
+        .then(data => setRowData(data))
+        ;
+    }, [])
+
+    useEffect(() => {
         const gridApi = agGridRef.current?.api;
         if (gridApi) {
             gridApi.sizeColumnsToFit();
@@ -113,7 +127,7 @@ const ForecastAdministrativeDistrict = () => {
 
     return (
         <>
-            <form id="form" action="" method="POST" style={{ width: "100%", height: "720px", padding: "10px" }} onSubmit={onSubmitExcel}>
+            <form id="form" style={{ width: "100%", height: "720px", padding: "10px" }} onSubmit={onSubmitExcel}>
                 <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
                 <input type="file" name="" id="" onChange={onChangeExcel} />
                 <input type="submit" value="업로드" />
