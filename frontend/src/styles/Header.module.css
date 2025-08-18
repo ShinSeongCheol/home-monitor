@@ -1,0 +1,50 @@
+.header {
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid lightgray;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1024px;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: 'DMSans';
+    font-size: 24px;
+    color:#e96c6c83
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    font-family: 'DMSans';
+    font-size: 18px;
+    color:#23789DE5;
+}
+
+.login:hover {
+    border: 1px solid #23789DE5;
+    padding: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.account {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+}
+
+.account:hover {
+    background-color: lightgray;
+    border-radius: 5px;
+}

@@ -5,6 +5,7 @@ import ForecastAdministrativeDistrict from './ForecastAdministrativeDistrict';
 import MiddleForecastAreaDistrict from './MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import Header from './components/Header';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -12,6 +13,7 @@ function App() {
 
   return (
     <div className={styles.app}>
+      <Header></Header>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Dashboard></Dashboard>}></Route>
