@@ -22,7 +22,7 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 16)
+    @Column(length = 16, unique = true)
     private String name;
     @Column(length = 128)
     private String password;
