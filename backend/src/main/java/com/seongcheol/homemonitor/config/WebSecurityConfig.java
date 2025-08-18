@@ -18,7 +18,11 @@ public class WebSecurityConfig {
 		http
 			.csrf(csrf -> csrf.disable())
 			.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
-			.authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll());
+			.authorizeHttpRequests((authorizeRequests) -> 
+				authorizeRequests
+				.requestMatchers("/api/v1/forecast/**").authenticated()
+				.anyRequest().permitAll()
+			);
 		return http.build();
 	}
 	
