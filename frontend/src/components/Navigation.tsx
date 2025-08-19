@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import styles from '../styles/Navigation.module.css'
 import { Link, useLocation } from 'react-router-dom';
+import DashboardSVG from '../assets/dashboard.svg?react';
+import SettingSVG from '../assets/settings.svg?react';
 
 const navigation = () => {
 
@@ -14,11 +16,13 @@ const navigation = () => {
         <nav className={styles.navigation}>
             <div className={styles.container}>
                 <ul className={styles.menuContainer}>
-                    <li>
-                        <Link to={"/"} className={location.pathname === '/' ? `${styles.item} ${styles.activeItem}` : `${styles.item}`}>대시보드</Link>
+                    <li className={location.pathname === '/' ? `${styles.active}` : ""}>
+                        <DashboardSVG width={"16px"} height={"16px"} fill={"gray"}></DashboardSVG>
+                        <Link to={"/"} >대시보드</Link>
                     </li>
-                    <li>
-                        <Link to={"/configuration/forecast/administrativeDistrict"} className={location.pathname === '/configuration/forecast/administrativeDistrict' ? `${styles.item} ${styles.activeItem}` : `${styles.item}`}>설정</Link>
+                    <li className={location.pathname === '/configuration/forecast/administrativeDistrict' ? `${styles.active}` : ""}>
+                        <SettingSVG width={"16px"} height={"16px"} fill={"gray"}></SettingSVG>
+                        <Link to={"/configuration/forecast/administrativeDistrict"}>설정</Link>
                     </li>
                 </ul>
             </div>

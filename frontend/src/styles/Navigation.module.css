@@ -20,25 +20,33 @@
     gap: 4px;
 }
 
-.menu {
-    padding: 4px;
-}
-
-.item {
+.menuContainer > li {
     font-family: 'DMSans';
     font-size: 16px;
-    color: gray;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
-.item:hover {
-    color: rgb(133, 177, 235);
+.menuContainer > li:hover {
     background-color: rgb(239, 244, 252);
     border-bottom: 2px solid rgb(133, 177, 235);
 }
 
-.activeItem {
+.menuContainer > li > a {
+    color: gray;
+    text-decoration: none;
+}
+
+.menuContainer > li:hover > a {
     color: rgb(133, 177, 235);
+}
+
+.menuContainer > li.active > a {
+    color: rgb(133, 177, 235);
+}
+
+.active {
     background-color: rgb(239, 244, 252);
     border-bottom: 2px solid rgb(133, 177, 235);
 }
