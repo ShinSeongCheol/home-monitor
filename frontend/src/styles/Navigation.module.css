@@ -1,0 +1,43 @@
+.navigation {
+    width: 100%;
+    height: auto;
+    background-color: white;
+    border-bottom: 1px solid lightgray;
+    position:sticky;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1024px;
+    padding: 0px 4px;
+}
+
+.menuContainer {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 4px;
+}
+
+.menu {
+    padding: 4px;
+}
+
+.item {
+    font-family: 'DMSans';
+    font-size: 18px;
+    color: gray;
+    text-decoration: none;
+}
+
+.item:hover {
+    color: rgb(133, 177, 235);
+    background-color: rgb(239, 244, 252);
+    border-bottom: 2px solid rgb(133, 177, 235);
+}
+
+.activeItem {
+    color: rgb(133, 177, 235);
+    background-color: rgb(239, 244, 252);
+    border-bottom: 2px solid rgb(133, 177, 235);
+}
