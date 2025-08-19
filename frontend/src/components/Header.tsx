@@ -1,22 +1,23 @@
-import styles from '../styles/Header.module.css'
-import accountSvg from '../assets/contacts_product.svg'
-import deviceThermometer from '../assets/device_thermostat.svg'
-import login from '../assets/login.svg'
+import styles from '../styles/Header.module.css';
+import AccountSVG from '../assets/contacts_product.svg?react';
+import DeviceThermometerSVG from '../assets/device_thermostat.svg?react';
+import LoginSVG from '../assets/login.svg?react';
 
 const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.container}>
                 <div className={styles.logo}>
-                    <img src={deviceThermometer} alt="device thermometer" width="36px" height="36px"/>
+                    <DeviceThermometerSVG width={"32px"} height={"32px"} fill={"#d47878ff"}></DeviceThermometerSVG>
                     <h1>ClimaHome</h1>
                 </div>
                 <div className={styles.login}>
-                    <img src={login} alt="account" width="24px" height="24px"/>
+                    <LoginSVG width={"16px"} height={"16px"} fill="#23789DE5"></LoginSVG>
+                    {/* <img src={login} alt="account" width="16px" height="16px" fill/> */}
                     <p>로그인</p>
                 </div>
                 <div className={styles.account}>
-                    <img src={accountSvg} alt="account" width="36px" height="36px"/>
+                    <AccountSVG width={"28px"} height={"28px"} fill={"#789DE5"}></AccountSVG>
                 </div>
             </div>
         </header>

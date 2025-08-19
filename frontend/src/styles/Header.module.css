@@ -25,15 +25,18 @@
     display: flex;
     align-items: center;
     font-family: 'DMSans';
-    font-size: 18px;
+    font-size: 16px;
+    gap: 2px;
     color:#23789DE5;
+    border:1px solid #23789DE5;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 .login:hover {
-    border: 1px solid #23789DE5;
-    padding: 4px;
-    border-radius: 2px;
     cursor: pointer;
+    background-color: rgb(245, 245, 245);
+
 }
 
 .account {
