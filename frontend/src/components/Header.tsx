@@ -1,5 +1,5 @@
 import styles from '../styles/Header.module.css'
-import accountSvg from '../assets/account.svg'
+import accountSvg from '../assets/contacts_product.svg'
 import deviceThermometer from '../assets/device_thermostat.svg'
 import login from '../assets/login.svg'
 
