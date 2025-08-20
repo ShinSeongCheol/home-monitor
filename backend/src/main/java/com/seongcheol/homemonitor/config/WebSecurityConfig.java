@@ -1,10 +1,22 @@
 package com.seongcheol.homemonitor.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
+
+import com.seongcheol.homemonitor.service.UserDetailServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,18 +24,35 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-	
+
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf(csrf -> csrf.disable())
-			.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
-			.authorizeHttpRequests((authorizeRequests) -> 
-				authorizeRequests
-				.requestMatchers("/api/v1/forecast/**").authenticated()
-				.anyRequest().permitAll()
-			);
-		return http.build();
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+			.csrf(csrf -> csrf.disable())
+			.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+			.formLogin(formLogin -> formLogin.disable())
+            .authorizeHttpRequests((authorizeHttpRequests) -> 
+				authorizeHttpRequests
+				.requestMatchers("/api/v1/auth/**").permitAll()
+				.requestMatchers("/api/v1/dht11/**").permitAll()
+				.requestMatchers("/api/v1/forecast").hasRole("ADMIN")
+				.anyRequest().authenticated()
+			)
+			.httpBasic(httpBasic -> Customizer.withDefaults())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			;
+
+        return http.build();
+    }
+
 }

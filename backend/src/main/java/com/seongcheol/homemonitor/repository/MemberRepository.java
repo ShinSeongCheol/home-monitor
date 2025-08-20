@@ -8,4 +8,5 @@ import com.seongcheol.homemonitor.domain.MemberEntity;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Long>{
     Optional<MemberEntity> findByName(String name);
+    boolean existsByName(String name);
 }

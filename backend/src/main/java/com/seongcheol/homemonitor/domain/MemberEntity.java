@@ -13,11 +13,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "member")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 public class MemberEntity {
     
     @Id
@@ -31,6 +37,6 @@ public class MemberEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"))
-    @Column(name = "role", length = 8)
+    @Column(name = "role", length = 16)
     private Set<String> role = new HashSet<String>();
 }
