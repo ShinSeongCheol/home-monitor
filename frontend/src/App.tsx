@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Login from './Login';
 import Signup from './Signup';
+import ProtectedRoute from './components/ProtectedRoute';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -21,8 +22,8 @@ function App() {
         <Navigation></Navigation>
         <Routes>
           <Route path="/" element={<Dashboard></Dashboard>}></Route>
-          <Route path="/configuration/forecast/administrativeDistrict" element={<ForecastAdministrativeDistrict></ForecastAdministrativeDistrict>}></Route>
-          <Route path="/configuration/forecast/AreaDistrict" element={<MiddleForecastAreaDistrict></MiddleForecastAreaDistrict>}></Route>
+          <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
+          <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
           <Route path="*" element={<div>Page Not Found</div>}></Route>
           <Route path='/login' element={<Login></Login>}></Route>
           <Route path='/signup' element={<Signup></Signup>}></Route>

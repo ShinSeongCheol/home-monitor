@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEventHandler, type For
 import { themeBalham, type ColDef, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
+import { useAuth } from "./contexts/AuthContext";
 
 interface AdministartiveDistrict {
     type: string;
@@ -26,6 +27,8 @@ interface AdministartiveDistrict {
 const ForecastAdministrativeDistrict = () => {
     const agGridRef = useRef<AgGridReact | null>(null);
 
+    const { auth } = useAuth();
+
     const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy>(() => {
         return {
             type: 'fitGridWidth',
@@ -40,7 +43,7 @@ const ForecastAdministrativeDistrict = () => {
     ]);
 
     const [colDefs, setColDefs] = useState<ColDef<AdministartiveDistrict>[]>([
-        { field: "type", headerName: "구분", filter: true},
+        { field: "type", headerName: "구분", filter: true },
         { field: "code", headerName: "행정구역코드", filter: true },
         { field: "level1", headerName: "1단계", filter: true },
         { field: "level2", headerName: "2단계", filter: true },
@@ -60,11 +63,12 @@ const ForecastAdministrativeDistrict = () => {
 
     const onSubmitExcel: FormEventHandler = (event) => {
         event.preventDefault();
-    
+
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": auth ?? "",
             },
             body: JSON.stringify(rowData)
         });
@@ -112,10 +116,15 @@ const ForecastAdministrativeDistrict = () => {
     }
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`)
-        .then(res => res.json())
-        .then(data => setRowData(data))
-        ;
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": auth ?? "",
+            }
+        })
+            .then(res => res.json())
+            .then(data => setRowData(data))
+            ;
     }, [])
 
     useEffect(() => {
