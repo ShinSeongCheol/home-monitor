@@ -1,17 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './styles/Login.module.css'
 import type { FormEventHandler } from 'react';
+import { useAuth } from './contexts/AuthContext';
 
 const Login = () => { 
 
     const navigate = useNavigate();
 
+    const {login} = useAuth();
+
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
         const formData = new FormData(event.target as HTMLFormElement);
-        const login_id = formData.get("login_id");
-        const login_password = formData.get("login_password");
+        const login_id = String(formData.get("login_id"));
+        const login_password = String(formData.get("login_password"));
 
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
             method: 'POST',
@@ -26,12 +29,7 @@ const Login = () => {
         .then(res => {
             if(res.ok) {
                 alert('로그인 성공');
-
-                const token = btoa(`${login_id}:${login_password}`);
-                const authHeader = `Basic ${token}`;
-
-                localStorage.setItem('auth', authHeader);
-
+                login(login_id, login_password);
                 navigate('/');
             }else if (res.status == 401) {
                 alert('로그인 실패');

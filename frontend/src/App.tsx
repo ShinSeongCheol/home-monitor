@@ -9,7 +9,6 @@ import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Login from './Login';
 import Signup from './Signup';
-import useAuth from './hooks/useAuth';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

@@ -3,7 +3,8 @@ import AccountSVG from '../assets/contacts_product.svg?react';
 import DeviceThermometerSVG from '../assets/device_thermostat.svg?react';
 import LoginSVG from '../assets/login.svg?react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from 'react';
 
 const Header = () => {
 
@@ -13,7 +14,7 @@ const Header = () => {
         navigate('/login');
     }
 
-    const {auth, isAuthenticated, isLoading} = useAuth();
+    const {auth, isAuthenticated} = useAuth();
 
     return (
         <header className={styles.header}>
@@ -22,9 +23,7 @@ const Header = () => {
                     <DeviceThermometerSVG width={"32px"} height={"32px"} fill={"#d47878ff"}></DeviceThermometerSVG>
                     <h1>ClimaHome</h1>
                 </div>
-                {isLoading ? 
-                    ""
-                : isAuthenticated ?
+                {isAuthenticated ?
                     <div className={styles.account}>
                         <AccountSVG width={"28px"} height={"28px"} fill={"#789DE5"}></AccountSVG>
                     </div>
