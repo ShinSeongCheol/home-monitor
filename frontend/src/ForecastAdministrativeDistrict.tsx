@@ -42,7 +42,7 @@ const ForecastAdministrativeDistrict = () => {
     const [rowData, setRowData] = useState<AdministartiveDistrict[]>([
     ]);
 
-    const [colDefs, setColDefs] = useState<ColDef<AdministartiveDistrict>[]>([
+    const [colDefs] = useState<ColDef<AdministartiveDistrict>[]>([
         { field: "type", headerName: "구분", filter: true },
         { field: "code", headerName: "행정구역코드", filter: true },
         { field: "level1", headerName: "1단계", filter: true },

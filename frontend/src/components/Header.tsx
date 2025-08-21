@@ -4,7 +4,6 @@ import DeviceThermometerSVG from '../assets/device_thermostat.svg?react';
 import LoginSVG from '../assets/login.svg?react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from 'react';
 
 const Header = () => {
 
@@ -14,7 +13,7 @@ const Header = () => {
         navigate('/login');
     }
 
-    const {auth, isAuthenticated} = useAuth();
+    const {isAuthenticated} = useAuth();
 
     return (
         <header className={styles.header}>
