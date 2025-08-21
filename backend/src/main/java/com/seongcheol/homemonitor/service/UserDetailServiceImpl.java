@@ -24,8 +24,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         MemberEntity memberEntity = memberRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
 
-        logger.info(memberEntity.getName());
-        
         return User.builder()
             .username(memberEntity.getName())
             .password(memberEntity.getPassword())

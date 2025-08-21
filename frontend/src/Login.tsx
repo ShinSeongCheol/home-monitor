@@ -26,7 +26,15 @@ const Login = () => {
         .then(res => {
             if(res.ok) {
                 alert('로그인 성공');
+
+                const token = btoa(`${login_id}:${login_password}`);
+                const authHeader = `Basic ${token}`;
+
+                localStorage.setItem('auth', authHeader);
+
                 navigate('/');
+            }else if (res.status == 401) {
+                alert('로그인 실패');
             }else {
                 throw new Error(`HTTP ERROR ${res.status}`);
             }
