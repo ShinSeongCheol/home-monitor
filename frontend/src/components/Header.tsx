@@ -1,7 +1,8 @@
 import styles from '../styles/Header.module.css';
-import AccountSVG from '../assets/contacts_product.svg?react';
 import DeviceThermometerSVG from '../assets/device_thermostat.svg?react';
 import LoginSVG from '../assets/login.svg?react';
+import AccountCircleSVG from '../assets/account_circle.svg?react';
+import KeyboardArrowDownSVG from '../assets/keyboard_arrow_down.svg?react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 
@@ -13,7 +14,7 @@ const Header = () => {
         navigate('/login');
     }
 
-    const {isAuthenticated} = useAuth();
+    const { user, isAuthenticated} = useAuth();
 
     return (
         <header className={styles.header}>
@@ -24,7 +25,9 @@ const Header = () => {
                 </div>
                 {isAuthenticated ?
                     <div className={styles.account}>
-                        <AccountSVG width={"28px"} height={"28px"} fill={"#789DE5"}></AccountSVG>
+                        <AccountCircleSVG width={"24px"} height={"24px"} fill={"#789DE5"}></AccountCircleSVG>
+                        <span>{user?.username}</span>
+                        <KeyboardArrowDownSVG width={"16px"} height={"16px"} ></KeyboardArrowDownSVG>
                     </div>
                 :
                     <div className={styles.login} onClick={onClickLogin}>

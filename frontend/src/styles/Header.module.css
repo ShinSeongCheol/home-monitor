@@ -45,10 +45,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
+    gap: 2px;
+    padding:2px;
 }
 
 .account:hover {
     background-color: lightgray;
-    border-radius: 5px;
+    border-radius: 4px;
 }
