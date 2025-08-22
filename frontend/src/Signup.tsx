@@ -34,7 +34,7 @@ const Signup = () => {
             return;
         }
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signup`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/member/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

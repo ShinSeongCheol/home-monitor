@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styles from '../styles/Navigation.module.css'
 import { Link, useLocation } from 'react-router-dom';
 import DashboardSVG from '../assets/dashboard.svg?react';
@@ -7,10 +6,6 @@ import SettingSVG from '../assets/settings.svg?react';
 const navigation = () => {
 
     const location = useLocation();
-
-    useEffect(() => {
-        console.log(location.pathname)
-    }, [location])
 
     return (
         <nav className={styles.navigation}>

@@ -10,6 +10,7 @@ import Navigation from './components/Navigation';
 import Login from './Login';
 import Signup from './Signup';
 import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './Profile';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="*" element={<div>Page Not Found</div>}></Route>
           <Route path='/login' element={<Login></Login>}></Route>
           <Route path='/signup' element={<Signup></Signup>}></Route>
+          <Route path="/profile" element={<ProtectedRoute><Profile></Profile></ProtectedRoute>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -55,7 +55,7 @@ const Header = () => {
                                         <p>{user?.username} 님 안녕하세요</p>
                                         <hr />
                                         <div className={styles.buttonContainer}>
-                                            <button className={`${styles.button} ${styles.editProfile}`}><SettingSVG width={'16px'} height={'16px'} fill='gray'></SettingSVG> 내 정보 수정</button>
+                                            <button className={`${styles.button} ${styles.editProfile}`} onClick={() => navigate('/profile')}><SettingSVG width={'16px'} height={'16px'} fill='gray'></SettingSVG> 내 정보 수정</button>
                                             <button className={`${styles.button} ${styles.logout}`} onClick={logout}><LogoutSVG width={'16px'} height={'16px'} fill='red'></LogoutSVG>로그아웃</button>
                                         </div>
                                     </div>
