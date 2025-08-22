@@ -1,8 +1,5 @@
 package com.seongcheol.homemonitor.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +11,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.domain.MemberEntity;
-import com.seongcheol.homemonitor.dto.LoginDto;
-import com.seongcheol.homemonitor.dto.SignUpDto;
-import com.seongcheol.homemonitor.repository.MemberRepository;
+import com.seongcheol.homemonitor.dto.MemberDto;
+import com.seongcheol.homemonitor.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -41,28 +32,20 @@ public class AuthContoroller {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody MemberDto memberDto) {
         try {
-            logger.info(loginDto.getName());
-            logger.info(loginDto.getPassword());
-
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDto.getName(), loginDto.getPassword());
-
-            logger.info("Authenticating user: {}", loginDto.getName());
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(memberDto.getName(),
+                    memberDto.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);
 
-    
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return ResponseEntity.ok("Login");
-        }catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
@@ -71,30 +54,19 @@ public class AuthContoroller {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
+
         if (session != null) {
             session.invalidate();
         }
+
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Logout");
     }
-    
+
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignUpDto signUpDto) {
-        if (memberRepository.existsByName(signUpDto.getName())) {
-            return ResponseEntity.badRequest().body("Username is already exist");
-        }
-
-        Set<String> roles = new HashSet<>();
-        roles.add("ROLE_USER");
-
-        MemberEntity memberEntity = MemberEntity.builder()
-            .name(signUpDto.getName())
-            .password(passwordEncoder.encode(signUpDto.getPassword()))
-            .role(roles)
-            .build();
-
-        memberRepository.save(memberEntity);
-        return ResponseEntity.ok("Sign up");
+    public ResponseEntity<MemberDto> signUp(@RequestBody MemberDto memberDto) {
+        MemberDto savedMemberDto = memberService.signup(memberDto);
+        return ResponseEntity.ok(savedMemberDto);
     }
 
     @GetMapping("/isAuth")
@@ -102,10 +74,9 @@ public class AuthContoroller {
         if (authentication == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(user);
     }
-    
 
 }
