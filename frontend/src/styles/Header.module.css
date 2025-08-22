@@ -40,6 +40,15 @@
 
 }
 
+.accountContainer {
+    position: relative;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
 .account {
     cursor: pointer;
     display: flex;
@@ -52,4 +61,61 @@
 .account:hover {
     background-color: lightgray;
     border-radius: 4px;
+}
+
+.profile {
+    position: absolute;
+    background-color: white;
+    border: 1px solid lightgray;
+    z-index: 1;
+
+    margin-top: 10px;
+    right: 0px;
+
+    width: 200px;
+
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.profile p {
+    text-align: center;
+}
+
+.buttonContainer {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.button {
+    border: none;
+    background-color: white;
+}
+
+.editProfile {
+    border: 1px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.editProfile:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.logout {
+    border: 1px solid rgb(248, 118, 118);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.logout:hover {
+    background-color: rgb(255, 194, 194);
+    cursor: pointer;
 }

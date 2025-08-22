@@ -53,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const logout = () => {
         sessionStorage.removeItem("auth");
         setAuth(null);
+        alert('로그아웃 되었습니다');
     };
 
     return (
