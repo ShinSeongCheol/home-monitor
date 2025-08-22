@@ -64,4 +64,18 @@ public class MemberService {
         return MemberDto.fromEntity(savedMemberEntity);
     }
 
+    @Transactional
+    public MemberDto putMember(MemberDto memberDto) {
+        // 유저와 비밀번호 확인
+        MemberEntity memberEntity = memberRepository.findByName(memberDto.getName()).orElseThrow();
+
+        if (!passwordEncoder.matches(memberDto.getPassword(), memberEntity.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        memberEntity.setPassword(passwordEncoder.encode(memberDto.getNewPassword()));
+
+        return MemberDto.fromEntity(memberEntity);
+    }
+
 }

@@ -6,13 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MemberDto {
     private String name;
     private String password;
+    private String newPassword;
 
     @Builder
     public MemberDto(String name) {

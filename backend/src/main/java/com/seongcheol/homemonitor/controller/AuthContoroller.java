@@ -63,12 +63,6 @@ public class AuthContoroller {
         return ResponseEntity.ok("Logout");
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<MemberDto> signUp(@RequestBody MemberDto memberDto) {
-        MemberDto savedMemberDto = memberService.signup(memberDto);
-        return ResponseEntity.ok(savedMemberDto);
-    }
-
     @GetMapping("/isAuth")
     public ResponseEntity<User> getAuth(Authentication authentication) {
         if (authentication == null) {

@@ -38,9 +38,12 @@ public class WebSecurityConfig {
 			.formLogin(formLogin -> formLogin.disable())
             .authorizeHttpRequests((authorizeHttpRequests) -> 
 				authorizeHttpRequests
+				// .requestMatchers("/h2-console/**").permitAll()
 				.requestMatchers("/api/v1/auth/**").permitAll()
 				.requestMatchers("/api/v1/dht11/**").permitAll()
 				.requestMatchers("/api/v1/forecast/**").hasRole("ADMIN")
+				.requestMatchers("/api/v1/member/signup").permitAll()
+				.requestMatchers("/api/v1/member/**").authenticated()
 				.anyRequest().authenticated()
 			)
 			.httpBasic(httpBasic -> Customizer.withDefaults())
