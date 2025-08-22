@@ -14,6 +14,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     const onClickLogin = () => {
+        setIsProfileOpen(false);
         navigate('/login');
     }
 
