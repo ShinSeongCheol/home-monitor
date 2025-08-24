@@ -19,6 +19,8 @@ import com.seongcheol.homemonitor.service.ForecastService;
 @RequestMapping("/api/v1")
 @RestController
 public class ForecastController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     
     @Autowired
     private ForecastService forecastService;

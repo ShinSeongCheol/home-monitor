@@ -31,9 +31,6 @@ public class AuthContoroller {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private MemberService memberService;
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/login")
