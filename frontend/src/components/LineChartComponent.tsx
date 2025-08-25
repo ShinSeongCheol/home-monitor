@@ -6,13 +6,32 @@ const LineChartComponent = () => {
     const svgRef = useRef<SVGSVGElement | null>(null);
 
     useEffect(() => {
-        const xScale = d3.scaleLinear().domain([0,100]).range([0, 1024]);
         const svgElement = d3.select(svgRef.current);
-        const axisGenerator = d3.axisBottom(xScale);
 
-        console.log()
+        const width = svgRef.current?.getBoundingClientRect().width ?? 1024;
+        const height = 400;
 
-        svgElement.append('g').call(axisGenerator);
+        const marginTop = 20;
+        const marginRight = 30;
+        const marginBottom = 20;
+        const marginLeft = 20;
+
+        svgElement.attr('viewBox', `0 0 ${width} ${height}`);
+
+
+        const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+        const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+
+        const xAxis = d3.axisBottom(xScale);
+        const yAxis = d3.axisRight(yScale);
+
+        svgElement.append("g")
+        .attr("transform", `translate(0, ${height - marginBottom})`)
+        .call(xAxis);
+
+        svgElement.append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .call(yAxis);
     }, [])
 
     return(
