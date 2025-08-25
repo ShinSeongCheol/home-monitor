@@ -22,7 +22,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         try {
             memberService.initAdmin();    
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error("ApplicationRunnerImpl Error", e);
         }
     }
     
