@@ -18,7 +18,11 @@ public class forecastScheduler {
     
     @Scheduled(cron = "0 0 * * * *")
     public void getUltraForecastNowCast() {
-        forecastService.getUltraForecastNowCast();
+        try {
+            forecastService.getUltraForecastNowCast();
+        } catch (Exception e) {
+            logger.error("forecastScheduler failed", e);
+        }
     }
 
 }

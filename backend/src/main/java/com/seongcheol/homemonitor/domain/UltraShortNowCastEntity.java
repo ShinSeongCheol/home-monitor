@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,11 +18,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Table(name = "ultra_short_nowcast")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class UltraShortNowCastEntity {
 
     @Id
@@ -39,7 +41,7 @@ public class UltraShortNowCastEntity {
     private Double UUU;
     private Double VVV;
     private Double REH;
-    private Integer PTY;
+    private Byte PTY;
     private Double VEC;
     private Double WSD;
 }

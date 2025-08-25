@@ -1,7 +1,5 @@
 package com.seongcheol.homemonitor.service;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.seongcheol.homemonitor.components.forecastScheduler;
 import com.seongcheol.homemonitor.domain.AdministrativeDistrictEntity;
 import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
@@ -24,7 +21,6 @@ import com.seongcheol.homemonitor.repository.AdministrativeDistrictRepository;
 import com.seongcheol.homemonitor.repository.UltraShortNowCastRepository;
 
 import jakarta.transaction.Transactional;
-import reactor.core.publisher.Mono;
 
 @Service
 public class ForecastService {
@@ -58,7 +54,7 @@ public class ForecastService {
 
     // 초단기 실황 조회
     @Transactional
-    public void getUltraForecastNowCast() {
+    public void getUltraForecastNowCast() throws Exception {
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.getLevel2List();
 
         LocalDate localDate = LocalDate.now();
@@ -97,7 +93,7 @@ public class ForecastService {
                     case "UUU" -> builder.UUU(Double.parseDouble(value));
                     case "VVV" -> builder.VVV(Double.parseDouble(value));
                     case "REH" -> builder.REH(Double.parseDouble(value));
-                    case "PTY" -> builder.PTY(Integer.parseInt(value));
+                    case "PTY" -> builder.PTY(Byte.parseByte(value));
                     case "VEC" -> builder.VEC(Double.parseDouble(value));
                     case "WSD" -> builder.WSD(Double.parseDouble(value));
                     default -> logger.warn("Unknown category: {}", category);
