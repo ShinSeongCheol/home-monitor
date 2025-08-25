@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.card {
+    width: 100%;
+    background-color: white;
+
+    border: 1px solid lightgray;
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 8px;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardContent {
+    margin-top: 8px;
+}
+
+.cardContent span {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cardContent p {
+    margin-top: 8px;
+    font-size: 12px;
+}
