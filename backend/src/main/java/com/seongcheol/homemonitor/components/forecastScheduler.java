@@ -1,14 +1,11 @@
 package com.seongcheol.homemonitor.components;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
 import com.seongcheol.homemonitor.service.ForecastService;
 
 @Component
@@ -19,9 +16,9 @@ public class forecastScheduler {
     @Autowired
     private ForecastService forecastService;
     
-    @Scheduled(cron = "0 1 * * * *")
-    public void test() {
-        // List<AdministrativeDistrictDto> administrativeDisctrictDtoList = forecastService.getAdministrativeDistrictLevel2();
+    @Scheduled(cron = "0 0 * * * *")
+    public void getUltraForecastNowCast() {
+        forecastService.getUltraForecastNowCast();
     }
 
 }

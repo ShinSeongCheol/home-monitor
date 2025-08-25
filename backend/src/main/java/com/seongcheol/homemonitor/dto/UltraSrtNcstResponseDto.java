@@ -5,7 +5,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 public class UltraSrtNcstResponseDto {
@@ -39,7 +38,6 @@ public class UltraSrtNcstResponseDto {
     }
 
     @Getter
-    @ToString
     public static class Item {
         private String baseDate;
         private String baseTime;

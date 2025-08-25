@@ -2,6 +2,9 @@ package com.seongcheol.homemonitor.service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,11 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.seongcheol.homemonitor.components.forecastScheduler;
 import com.seongcheol.homemonitor.domain.AdministrativeDistrictEntity;
+import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
 import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto;
 import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto.Item;
 import com.seongcheol.homemonitor.repository.AdministrativeDistrictRepository;
+import com.seongcheol.homemonitor.repository.UltraShortNowCastRepository;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
@@ -30,6 +36,9 @@ public class ForecastService {
     
     @Autowired
     private AdministrativeDistrictRepository administrativeDistrictRepository;
+
+    @Autowired
+    private UltraShortNowCastRepository ultraShortNowCastRepository;
 
     public List<AdministrativeDistrictDto> getAdministrativeDistrict() {
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.findAll();
@@ -51,23 +60,54 @@ public class ForecastService {
     @Transactional
     public void getUltraForecastNowCast() {
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.getLevel2List();
+
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime = LocalTime.now();
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmm");
+
+        String currentDate = localDate.format(dateFormatter);
+        String currentTime = localTime.format(timeFormatter);
         
         for (AdministrativeDistrictEntity administrativeDistrictEntity : administrativeDistrictEntityList) {
-        }
-        WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").build();
-        Mono<UltraSrtNcstResponseDto> responseMono = webClient.get()
-            .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType=JSON&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, "20250825", "0050", 91, 90)
-            .retrieve()
-            .bodyToMono(UltraSrtNcstResponseDto.class)
-        ;
+            int x = administrativeDistrictEntity.getX();
+            int y = administrativeDistrictEntity.getY();
 
-        responseMono.subscribe(
-            response -> {
-                for (Item item : response.getResponse().getBody().getItems().getItemList()) {
-                    logger.info(item.toString());
+            WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").build();
+            UltraSrtNcstResponseDto response = webClient.get()
+                .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType=JSON&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, currentDate, currentTime, x, y)
+                .retrieve()
+                .bodyToMono(UltraSrtNcstResponseDto.class)
+                .block();
+                ;
+
+            UltraShortNowCastEntity.UltraShortNowCastEntityBuilder builder = UltraShortNowCastEntity.builder()
+                .administrativeDistrict(administrativeDistrictEntity)
+                .baseDate(localDate)
+                .baseTime(localTime);
+
+            for (Item item : response.getResponse().getBody().getItems().getItemList()) {
+                String category = item.getCategory();
+                String value = item.getObsrValue();
+
+                switch(category) {
+                    case "T1H" -> builder.T1H(Double.parseDouble(value));
+                    case "RN1" -> builder.RN1(Double.parseDouble(value));
+                    case "UUU" -> builder.UUU(Double.parseDouble(value));
+                    case "VVV" -> builder.VVV(Double.parseDouble(value));
+                    case "REH" -> builder.REH(Double.parseDouble(value));
+                    case "PTY" -> builder.PTY(Integer.parseInt(value));
+                    case "VEC" -> builder.VEC(Double.parseDouble(value));
+                    case "WSD" -> builder.WSD(Double.parseDouble(value));
+                    default -> logger.warn("Unknown category: {}", category);
                 }
-            },
-            error -> logger.error(error.toString())
-        );
+            }
+
+            UltraShortNowCastEntity ultraShortNowCastEntity = builder.build();
+            ultraShortNowCastRepository.save(ultraShortNowCastEntity);
+
+            logger.info(ultraShortNowCastEntity.toString());
+        }
     }
 }

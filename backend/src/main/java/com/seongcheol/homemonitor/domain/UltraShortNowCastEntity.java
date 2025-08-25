@@ -11,14 +11,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UltraShortNowCast {
+@Builder
+@ToString
+public class UltraShortNowCastEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +39,7 @@ public class UltraShortNowCast {
     private Double UUU;
     private Double VVV;
     private Double REH;
-    private Double PTY;
+    private Integer PTY;
     private Double VEC;
     private Double WSD;
 }
