@@ -58,7 +58,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
             .range(yRange)
 
         const height = yRange[1] - yRange[0];
-        const pixelsPerTick = 20;
+        const pixelsPerTick = 10;
         const numberOfTicksTarget = Math.max(1, Math.floor(height / pixelsPerTick));
 
         return yScale.ticks(numberOfTicksTarget)
