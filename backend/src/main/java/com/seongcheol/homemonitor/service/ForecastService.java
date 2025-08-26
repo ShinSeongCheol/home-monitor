@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -70,7 +72,7 @@ public class ForecastService {
             int x = administrativeDistrictEntity.getX();
             int y = administrativeDistrictEntity.getY();
 
-            WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").build();
+            WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
             UltraSrtNcstResponseDto response = webClient.get()
                 .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType=JSON&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, currentDate, currentTime, x, y)
                 .retrieve()
