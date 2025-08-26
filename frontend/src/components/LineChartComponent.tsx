@@ -17,9 +17,9 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const containerHeight = containerRef.current?.offsetHeight ?? 300;
 
     const marginTop = 20;
-    const marginRight = 0;
+    const marginRight = -20;
     const marginBottom = 20;
-    const marginLeft = 0;
+    const marginLeft = -20;
 
     const xDomain = [d3.timeDay.floor(new Date()), d3.timeHour.offset(d3.timeDay.ceil(new Date()), -1)]
     const xRange = [marginLeft, containerWidth - marginRight]
