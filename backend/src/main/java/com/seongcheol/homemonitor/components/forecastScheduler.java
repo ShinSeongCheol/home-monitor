@@ -16,7 +16,7 @@ public class forecastScheduler {
     @Autowired
     private ForecastService forecastService;
     
-    @Scheduled(cron = "0 10 * * * *")
+    @Scheduled(cron = "0 30 * * * *")
     public void getUltraForecastNowCast() {
         try {
             forecastService.getUltraForecastNowCast();
