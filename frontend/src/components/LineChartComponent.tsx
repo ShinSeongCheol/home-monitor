@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../styles/LineChartComponent.module.css';
 import * as d3 from 'd3';
 import type { Data, Datasets } from '../Dashboard';
@@ -17,9 +17,9 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const containerHeight = containerRef.current?.offsetHeight ?? 300;
 
     const marginTop = 20;
-    const marginRight = 40;
+    const marginRight = 0;
     const marginBottom = 20;
-    const marginLeft = 40;
+    const marginLeft = 0;
 
     const xDomain = [d3.timeDay.floor(new Date()), d3.timeHour.offset(d3.timeDay.ceil(new Date()), -1)]
     const xRange = [marginLeft, containerWidth - marginRight]
@@ -42,7 +42,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
 
         const timeFormatter = d3.timeFormat("%H:%M")
         const width = xRange[1] - xRange[0];
-        const pixelsPerTick = 30;
+        const pixelsPerTick = 60;
         const numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
 
         return xScale.ticks(numberOfTicksTarget)
@@ -58,7 +58,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
             .range(yRange)
 
         const height = yRange[1] - yRange[0];
-        const pixelsPerTick = 10;
+        const pixelsPerTick = 20;
         const numberOfTicksTarget = Math.max(1, Math.floor(height / pixelsPerTick));
 
         return yScale.ticks(numberOfTicksTarget)
@@ -75,7 +75,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     return (
         <div className={styles.container} ref={containerRef}>
             <h2>{icon} {title}</h2>
-            <svg width={containerWidth} height={containerHeight}>
+            <svg className={`${styles.svg}`} viewBox={`0 0 ${containerWidth} ${containerHeight}`} >
                 <g>
                     <path d={["M", -6, yRange[0], "H", 0, "V", yRange[1], "H", -6].join(" ")} fill='none' stroke='currentColor' transform={`translate(${marginLeft}, 0)`}></path>
                     {yTicks.map(({ value, yOffset }) => (
