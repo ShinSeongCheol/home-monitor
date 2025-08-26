@@ -76,8 +76,8 @@ const Dashboard = () => {
         <main className={styles.main}>
             <section className={styles.section}>
                 <WeatherComponent></WeatherComponent>
-                <LineChartComponent title='온도 추이' icon={<TemeratureSVG width={"24px"} height={"24px"} fill='#ffa2a2ff' />} datasets={temperatureDatasets}></LineChartComponent>
-                <LineChartComponent title='습도 추이' icon={<HumiditySVG width={"24px"} height={"24px"} fill='#99ddfdff' />} datasets={humidityDatasets}></LineChartComponent>
+                <LineChartComponent title='온도 추이 (24 시간)' icon={<TemeratureSVG width={"24px"} height={"24px"} fill='#ffa2a2ff' />} datasets={temperatureDatasets}></LineChartComponent>
+                <LineChartComponent title='습도 추이 (24 시간)' icon={<HumiditySVG width={"24px"} height={"24px"} fill='#99ddfdff' />} datasets={humidityDatasets}></LineChartComponent>
             </section>
         </main>
     );
