@@ -15,7 +15,7 @@ const LineChartComponent = ({title, icon} : LineChartComponentProps) => {
     const containerHeight = containerRef.current?.offsetHeight ?? 300;
 
     const marginTop = 20;
-    const marginRight = 20;
+    const marginRight = 40;
     const marginBottom = 20;
     const marginLeft = 40;
 
