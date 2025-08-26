@@ -36,6 +36,11 @@ public class SensorController {
 		return ResponseEntity.ok(dht11LogService.getLogsBetween(start, end));
 	}
 
+	@GetMapping("/dht11/log/today")
+	public ResponseEntity<List<Dht11LogDto>> getLogToday() {
+		return ResponseEntity.ok(dht11LogService.getTodayLog());
+	}
+
 	@GetMapping("/dht11/log/latest")
 	public ResponseEntity<Dht11LogDto> getLastLog() throws Exception {
 		try{

@@ -1,6 +1,8 @@
 package com.seongcheol.homemonitor.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +26,15 @@ public class Dht11LogService {
     // 기간 조회
     public List<Dht11LogDto> getLogsBetween(LocalDateTime start, LocalDateTime end) {
         return dht11LogRepository.findByMeasurementTimeBetween(start, end).stream().map(Dht11LogDto::fromEntity).toList();
+    }
+
+    // 오늘 조회
+    public List<Dht11LogDto> getTodayLog() {
+
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        return dht11LogRepository.getTodayLog(startOfDay, endOfDay).stream().map(Dht11LogDto::fromEntity).toList();
     }
     
     // 마지막 로그 조회
