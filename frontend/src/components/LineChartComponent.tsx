@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import styles from '../styles/LineChartComponent.module.css';
 import * as d3 from 'd3';
 import type { Data, Datasets } from '../Dashboard';
