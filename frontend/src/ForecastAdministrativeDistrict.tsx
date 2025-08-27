@@ -1,9 +1,10 @@
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
-import { themeBalham, type ColDef, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
+import { themeBalham, type ColDef, type SizeColumnsToContentStrategy, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
 import { useAuth } from "./contexts/AuthContext";
+import styles from './styles/ForecastAdministrativeDistrict.module.css';
 
 interface AdministartiveDistrict {
     type: string;
@@ -29,11 +30,10 @@ const ForecastAdministrativeDistrict = () => {
 
     const { auth } = useAuth();
 
-    const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy>(() => {
+    const autoSizeStrategy = useMemo<SizeColumnsToContentStrategy>(() => {
         return {
-            type: 'fitGridWidth',
+            type: 'fitCellContents',
             defaultMinWidth: 100,
-            // defaultMaxWidth: 100,
             columnLimits: [
             ]
         };
@@ -135,13 +135,18 @@ const ForecastAdministrativeDistrict = () => {
     }, [rowData]);
 
     return (
-        <>
-            <form id="form" style={{ width: "100%", height: "720px", padding: "10px" }} onSubmit={onSubmitExcel}>
-                <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
-                <input type="file" name="" id="" onChange={onChangeExcel} />
-                <input type="submit" value="업로드" />
-            </form>
-        </>
+        <main className={styles.main}>
+            <section className={styles.section}>
+                <form id="form" className={styles.form} onSubmit={onSubmitExcel}>
+                    <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
+                    <div className={styles.buttonContainer}>
+                        <label className={styles.fileUploadLabel} htmlFor="fileInput">엑셀 파일 읽기</label>
+                        <input className={styles.fileInputButton} type="file" name="fileInput" id="fileInput" onChange={onChangeExcel} />
+                        <input className={styles.fileUploadButton} type="submit" value="등록" />
+                    </div>
+                </form>
+            </section>
+        </main>
     )
 }
 
