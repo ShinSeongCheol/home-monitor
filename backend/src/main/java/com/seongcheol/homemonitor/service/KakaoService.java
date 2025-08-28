@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,7 +30,7 @@ public class KakaoService {
     public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_OAUTH_URL)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
 
         KakaoTokenDto kakaoTokenDto = webClient.post()
@@ -50,7 +51,7 @@ public class KakaoService {
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_USER_INFO_URL)
             .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenDto.getTokenType() + " " + kakaoTokenDto.getAccessToken())
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
         
         String response = webClient.get()
