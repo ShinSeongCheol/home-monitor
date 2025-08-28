@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.KakaoTokenDto;
+import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
 
 @Service
 public class KakaoService {
@@ -54,12 +55,12 @@ public class KakaoService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
         
-        String response = webClient.get()
+        KakaoUserInfoDto kakaoUserInfoDto = webClient.get()
             .retrieve()
-            .bodyToMono(String.class)
+            .bodyToMono(KakaoUserInfoDto.class)
             .block();
 
-        logger.info(response);
+        logger.info(kakaoUserInfoDto.toString());
     }
 
 }
