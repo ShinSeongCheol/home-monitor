@@ -80,6 +80,8 @@ public class ForecastService {
                 .block();
                 ;
 
+            logger.info(response.toString());
+
             UltraShortNowCastEntity.UltraShortNowCastEntityBuilder builder = UltraShortNowCastEntity.builder()
                 .administrativeDistrict(administrativeDistrictEntity)
                 .baseDate(localDate)
@@ -104,8 +106,6 @@ public class ForecastService {
 
             UltraShortNowCastEntity ultraShortNowCastEntity = builder.build();
             ultraShortNowCastRepository.save(ultraShortNowCastEntity);
-
-            logger.info(ultraShortNowCastEntity.toString());
         }
     }
 }
