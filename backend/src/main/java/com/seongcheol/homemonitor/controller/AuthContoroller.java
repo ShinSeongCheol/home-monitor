@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
+import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.service.KakaoService;
 
@@ -77,7 +78,8 @@ public class AuthContoroller {
     @PostMapping("/kakao")
     public ResponseEntity<String> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
         try {
-            kakaoService.requestToken(kaKaoAuthorizeDto);
+            KakaoTokenDto kakaoTokenDto = kakaoService.requestToken(kaKaoAuthorizeDto);
+            kakaoService.requestUserInfo(kakaoTokenDto);
         }catch (Exception e) {
             e.printStackTrace();
         }

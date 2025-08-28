@@ -17,6 +17,7 @@ public class KakaoService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String KAKAO_OAUTH_URL = "https://kauth.kakao.com/oauth/token";
+    private final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
 
     @Value("${kakao.client_id}")
     private String KAKAO_CLIENT_ID;
@@ -25,7 +26,7 @@ public class KakaoService {
     private String KAKAO_REDIRECT_URI;
     
     
-    public void requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) throws Exception{
+    public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_OAUTH_URL)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
@@ -42,9 +43,22 @@ public class KakaoService {
             .bodyToMono(KakaoTokenDto.class)
             .block()
         ;
+        return kakaoTokenDto;
+    }
 
-        logger.info(kakaoTokenDto.toString());
+    public void requestUserInfo(KakaoTokenDto kakaoTokenDto) {
+        WebClient webClient = WebClient.builder()
+            .baseUrl(KAKAO_USER_INFO_URL)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenDto.getTokenType() + " " + kakaoTokenDto.getAccessToken())
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
+            .build();
+        
+        String response = webClient.get()
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
 
+        logger.info(response);
     }
 
 }
