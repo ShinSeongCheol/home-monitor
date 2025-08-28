@@ -1,11 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './styles/Login.module.css'
 import type { FormEventHandler } from 'react';
 import { useAuth } from './contexts/AuthContext';
+import kakaoLogin from './assets/kakao/ko/kakao_login_medium_narrow.png'
 
 const Login = () => { 
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const {login} = useAuth();
 
@@ -44,15 +46,22 @@ const Login = () => {
     return(
         <main className={styles.main}>
             <section className={styles.section}>
-                <h2>로그인</h2>
+                <div className={styles.tabContainer}>
+                    <div className={location.pathname === '/login' ? `${styles.active}` : ``}><h2>로그인</h2></div>
+                    <div className={location.pathname === '/signup' ? `${styles.active}` : ``}><h2>회원가입</h2></div>
+                </div>
                 <form className={styles.loginForm} onSubmit={handleSubmit}>
-                    <label htmlFor="">아이디</label>
-                    <input type="text" name="login_id" id="login_id" />
-                    <label htmlFor="">비밀번호</label>
-                    <input type="password" name="login_password" id="login_password" />
+                    <div className={styles.inputContainer}>
+                        <label htmlFor="">아이디</label>
+                        <input type="text" name="login_id" id="login_id" placeholder='nickname'/>
+                    </div>
+                    <div className={styles.inputContainer}>
+                        <label htmlFor="">비밀번호</label>
+                        <input type="password" name="login_password" id="login_password" placeholder='••••••••'/>
+                    </div>
                     <input type="submit" value="로그인" />
-                    <div className={styles.signup}>
-                        <Link to={'/signup'}>회원가입</Link>
+                    <div className={styles.kakaoLoginContainer}>
+                        <img src={kakaoLogin} alt="카카오 로그인" />
                     </div>
                 </form>
             </section>
