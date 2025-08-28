@@ -16,7 +16,7 @@ spring:
 cors:
   allowed:
     origins:
-      - ${CORS_ALLOWED_ORINGS}
+      - ${CORS_ALLOWED_ORIGINS}
     methods:
       - GET
       - POST
