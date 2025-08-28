@@ -1,13 +1,15 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './styles/Login.module.css'
-import type { FormEventHandler } from 'react';
+import { useState, type FormEventHandler } from 'react';
 import { useAuth } from './contexts/AuthContext';
-import kakaoLogin from './assets/kakao/ko/kakao_login_medium_narrow.png'
+import LoginFormComponent from './components/LoginFormComponent';
+import SignupFormCompoenent from './components/SignupFormComponent';
 
 const Login = () => { 
 
     const navigate = useNavigate();
-    const location = useLocation();
+
+    const [path, setPath] = useState('login');
 
     const {login} = useAuth();
 
@@ -47,23 +49,16 @@ const Login = () => {
         <main className={styles.main}>
             <section className={styles.section}>
                 <div className={styles.tabContainer}>
-                    <div className={location.pathname === '/login' ? `${styles.active}` : ``}><h2>로그인</h2></div>
-                    <div className={location.pathname === '/signup' ? `${styles.active}` : ``}><h2>회원가입</h2></div>
+                    <div className={path === 'login' ? `${styles.active}` : ``} onClick={() => setPath('login')}><h2>로그인</h2></div>
+                    <div className={path === 'signup' ? `${styles.active}` : ``} onClick={() => {setPath('signup')}}><h2>회원가입</h2></div>
                 </div>
-                <form className={styles.loginForm} onSubmit={handleSubmit}>
-                    <div className={styles.inputContainer}>
-                        <label htmlFor="">아이디</label>
-                        <input type="text" name="login_id" id="login_id" placeholder='nickname'/>
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <label htmlFor="">비밀번호</label>
-                        <input type="password" name="login_password" id="login_password" placeholder='••••••••'/>
-                    </div>
-                    <input type="submit" value="로그인" />
-                    <div className={styles.kakaoLoginContainer}>
-                        <img src={kakaoLogin} alt="카카오 로그인" />
-                    </div>
-                </form>
+                {path === 'login' 
+                ? 
+                    (<LoginFormComponent handleSubmit={handleSubmit}></LoginFormComponent>) 
+                : 
+                    (<SignupFormCompoenent handleSubmit={handleSubmit}></SignupFormCompoenent>)
+                }
+                
             </section>
         </main>
     )
