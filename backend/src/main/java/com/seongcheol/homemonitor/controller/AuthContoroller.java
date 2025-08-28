@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.service.MemberService;
+import com.seongcheol.homemonitor.service.KakaoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,9 @@ public class AuthContoroller {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private KakaoService kakaoService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,4 +74,14 @@ public class AuthContoroller {
         return ResponseEntity.ok().body(user);
     }
 
+    @PostMapping("/kakao")
+    public ResponseEntity<String> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+        try {
+            kakaoService.requestToken(kaKaoAuthorizeDto);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(kaKaoAuthorizeDto.toString());
+    }
+    
 }

@@ -9,8 +9,16 @@ logging:
     root: INFO
     org:
       hibernate:
-        SQL: debug              # 실행된 SQL
+        SQL: INFO
         orm:
           jdbc:
-            bind: trace    # 바인드 값
-            extract: trace # 결과 추출(옵션)
+            bind: INFO
+            extract: INFO
+
+public:
+  data:
+    weather: ${PUBLIC_DATA_API_KEY}
+
+kakao:
+  client_id: ${KAKAO_CLIENT_ID}
+  redirect_uri: ${KAKAO_REDIRECT_URI}

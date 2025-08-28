@@ -23,7 +23,3 @@ cors:
       - PUT
     headers:
       - '*'
-
-public:
-  data:
-    weather: ${PUBLIC_DATA_API_KEY}
