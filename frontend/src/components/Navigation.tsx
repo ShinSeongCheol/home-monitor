@@ -1,7 +1,7 @@
 import styles from '../styles/Navigation.module.css'
 import { Link, useLocation } from 'react-router-dom';
-import DashboardSVG from '../assets/dashboard.svg?react';
-import SettingSVG from '../assets/settings.svg?react';
+import DashboardSVG from '../assets/icon/dashboard.svg?react';
+import SettingSVG from '../assets/icon/settings.svg?react';
 
 const navigation = () => {
 

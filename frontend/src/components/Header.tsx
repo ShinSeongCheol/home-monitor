@@ -1,10 +1,10 @@
 import styles from '../styles/Header.module.css';
-import DeviceThermometerSVG from '../assets/device_thermostat.svg?react';
-import LoginSVG from '../assets/login.svg?react';
-import AccountCircleSVG from '../assets/account_circle.svg?react';
-import KeyboardArrowDownSVG from '../assets/keyboard_arrow_down.svg?react';
-import LogoutSVG from '../assets/logout.svg?react';
-import SettingSVG from '../assets/settings.svg?react';
+import DeviceThermometerSVG from '../assets/icon/device_thermostat.svg?react';
+import LoginSVG from '../assets/icon/login.svg?react';
+import AccountCircleSVG from '../assets/icon/account_circle.svg?react';
+import KeyboardArrowDownSVG from '../assets/icon/keyboard_arrow_down.svg?react';
+import LogoutSVG from '../assets/icon/logout.svg?react';
+import SettingSVG from '../assets/icon/settings.svg?react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useRef, useState } from 'react';
