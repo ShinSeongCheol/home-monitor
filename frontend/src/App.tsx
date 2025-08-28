@@ -7,7 +7,6 @@ import MiddleForecastAreaDistrict from './MiddleForecastAreaDistrict';
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
-import Signup from './Signup';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './Profile';
 import AuthPage from './AuthPage';
@@ -25,9 +24,9 @@ function App() {
           <Route path="/" element={<Dashboard></Dashboard>}></Route>
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
-          <Route path="*" element={<div>Page Not Found</div>}></Route>
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
           <Route path="/profile" element={<ProtectedRoute><Profile></Profile></ProtectedRoute>}></Route>
+          <Route path="*" element={<div>Page Not Found</div>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
