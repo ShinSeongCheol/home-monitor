@@ -15,7 +15,7 @@ const Header = () => {
 
     const onClickLogin = () => {
         setIsProfileOpen(false);
-        navigate('/login');
+        navigate('/auth');
     }
 
     const { user, isAuthenticated, logout } = useAuth();
