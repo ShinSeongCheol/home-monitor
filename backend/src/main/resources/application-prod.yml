@@ -12,3 +12,18 @@ spring:
     properties:
       hibernate:
       "[format_sql]": true
+
+cors:
+  allowed:
+    origins:
+      - ${CORS_ALLOWED_ORINGS}
+    methods:
+      - GET
+      - POST
+      - PUT
+    headers:
+      - '*'
+
+public:
+  data:
+    weather: ${PUBLIC_DATA_API_KEY}
