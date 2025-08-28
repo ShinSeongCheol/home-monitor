@@ -1,5 +1,6 @@
 package com.seongcheol.homemonitor.service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -76,7 +78,14 @@ public class ForecastService {
             UltraSrtNcstResponseDto response = webClient.get()
                 .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType={dataType}&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, "JSON", currentDate, currentTime, x, y)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, clientResponse -> 
+                    clientResponse.bodyToMono(String.class).map(body -> {
+                        logger.error("API Error response: {}", body);
+                        return new RuntimeException("Forecast Scheduler Error" + body);
+                    })
+                )
                 .bodyToMono(UltraSrtNcstResponseDto.class)
+                .timeout(Duration.ofSeconds(60))
                 .block();
                 ;
 
