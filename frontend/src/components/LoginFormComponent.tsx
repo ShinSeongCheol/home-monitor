@@ -1,6 +1,6 @@
 import styles from '../styles/LoginFormComponent.module.css'
 import kakaoLogin from '../assets/kakao/ko/kakao_login_medium_narrow.png'
-import { useState, type FormEventHandler } from 'react';
+import { useState, type FormEventHandler, type MouseEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -38,7 +38,10 @@ const LoginFormComponent = () => {
                 }
             })
             .catch(error => console.error(error))
+    }
 
+    const handleKakaoLogin: MouseEventHandler<HTMLDivElement> = (event) => {
+        location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${location.origin}/auth&response_type=code`;
     }
 
     return (
@@ -52,7 +55,7 @@ const LoginFormComponent = () => {
                 <input type="password" name="password" id="password" required placeholder='••••••••' onChange={(event) => setPassword(event.target.value)}/>
             </div>
             <input type="submit" value="로그인" />
-            <div className={styles.kakaoLoginContainer}>
+            <div className={styles.kakaoLoginContainer} onClick={handleKakaoLogin}>
                 <img src={kakaoLogin} alt="카카오 로그인" />
             </div>
         </form>
