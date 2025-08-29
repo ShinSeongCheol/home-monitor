@@ -1,7 +1,11 @@
 package com.seongcheol.homemonitor.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,9 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.seongcheol.homemonitor.domain.MemberEntity;
+import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
+import com.seongcheol.homemonitor.dto.MemberDto;
+import com.seongcheol.homemonitor.dto.SocialAccountDto;
+import com.seongcheol.homemonitor.repository.MemberRepository;
+import com.seongcheol.homemonitor.repository.SocialAccountRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class KakaoService {
@@ -26,6 +38,12 @@ public class KakaoService {
     
     @Value("${kakao.redirect_uri}")
     private String KAKAO_REDIRECT_URI;
+
+    @Autowired
+    private SocialAccountRepository socialAccountRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
     
     
     public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
@@ -45,10 +63,11 @@ public class KakaoService {
             .bodyToMono(KakaoTokenDto.class)
             .block()
         ;
+
         return kakaoTokenDto;
     }
 
-    public void requestUserInfo(KakaoTokenDto kakaoTokenDto) {
+    public KakaoUserInfoDto requestUserInfo(KakaoTokenDto kakaoTokenDto) {
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_USER_INFO_URL)
             .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenDto.getTokenType() + " " + kakaoTokenDto.getAccessToken())
@@ -60,7 +79,50 @@ public class KakaoService {
             .bodyToMono(KakaoUserInfoDto.class)
             .block();
 
-        logger.info(kakaoUserInfoDto.toString());
+        return kakaoUserInfoDto;
+    }
+
+    @Transactional
+    public MemberDto loadOrCreateSocialAccount(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+        KakaoTokenDto kakaoTokenDto = requestToken(kaKaoAuthorizeDto);
+        KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
+
+        SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("KAKAO", kakaoUserInfoDto.getId())
+        .orElseGet(
+            () -> {
+
+                MemberEntity memberEntity = memberRepository.findByEmail(kakaoUserInfoDto.getKakaoAccount().getEmail())
+                    .orElseGet(
+                        () -> {
+
+                            MemberEntity newMemberEntity = MemberEntity.builder()
+                                .email(kakaoUserInfoDto.getKakaoAccount().getEmail())
+                                .name(kakaoUserInfoDto.getKakaoAccount().getProfile().getNickname())
+                                .role(Set.of("ROLE_USER"))
+                                .build()
+                            ;
+
+                            MemberEntity savedMemberEntity = memberRepository.save(newMemberEntity);
+
+                            return savedMemberEntity;
+                        }
+                    );
+                
+                SocialAccountEntity newSocialAccountEntity = SocialAccountEntity.builder()
+                    .member(memberEntity)
+                    .provider("KAKAO")
+                    .providerId(kakaoUserInfoDto.getId())
+                    .build()
+                ;
+                            
+                memberEntity.addSocialAccount(newSocialAccountEntity);
+
+                return socialAccountRepository.save(newSocialAccountEntity);
+            }  
+        );
+
+        return MemberDto.fromEntity(socialAccountEntity.getMember());
+
     }
 
 }

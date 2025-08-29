@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
-import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.service.KakaoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,13 +27,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/api/v1/auth")
 public class AuthContoroller {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private KakaoService kakaoService;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberDto memberDto) {
@@ -71,17 +65,6 @@ public class AuthContoroller {
 
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(user);
-    }
-
-    @PostMapping("/kakao")
-    public ResponseEntity<String> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
-        try {
-            KakaoTokenDto kakaoTokenDto = kakaoService.requestToken(kaKaoAuthorizeDto);
-            kakaoService.requestUserInfo(kakaoTokenDto);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(kaKaoAuthorizeDto.toString());
     }
     
 }

@@ -1,8 +1,12 @@
 package com.seongcheol.homemonitor.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.Fetch;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +51,13 @@ public class MemberEntity {
     @Column(name = "role", length = 16)
     @Builder.Default
     private Set<String> role = new HashSet<String>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<SocialAccountEntity> socialAccounts = new HashSet<>();
+
+    public void addSocialAccount(SocialAccountEntity socialAccountEntity) {
+        this.socialAccounts.add(socialAccountEntity);
+        socialAccountEntity.setMember(this);
+    }
 }

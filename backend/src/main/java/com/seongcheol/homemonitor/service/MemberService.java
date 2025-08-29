@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.seongcheol.homemonitor.domain.MemberEntity;
+import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.repository.MemberRepository;
+import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
 @Service
 public class MemberService {
@@ -23,54 +25,102 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
+    private SocialAccountRepository socialAccountRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Transactional
     public void initAdmin() {
-        if(memberRepository.existsByEmail("admin@admin.com")) {
-            throw new IllegalArgumentException("Admin 계정이 이미 존재합니다.");
+        if(memberRepository.existsByEmailAndSocialAccountsProvider("admin@admin.com", "LOCAL")) {
+            logger.info("ADMIN 계정이 존재합니다.");
+            return;
         };
-
-        Set<String> role = new HashSet<>();
-        role.add("ROLE_USER");
-        role.add("ROLE_ADMIN");
 
         MemberEntity memberEntity = MemberEntity.builder()
             .email("admin@admin.com")
             .name("admin")
             .password(passwordEncoder.encode("admin"))
-            .role(role)
+            .role(Set.of("ROLE_USER", "ROLE_ADMIN"))
             .build()
         ;
 
-        memberRepository.save(memberEntity);
+        MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+
+        SocialAccountEntity socialAccountEntity = SocialAccountEntity.builder()
+            .member(savedMemberEntity)
+            .provider("LOCAL")
+            .providerId(savedMemberEntity.getId())
+            .build()
+        ;
+
+        savedMemberEntity.addSocialAccount(socialAccountEntity);
     }
 
     @Transactional
     public MemberDto signup(MemberDto memberDto) {
-        if (memberRepository.existsByEmail(memberDto.getName())) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+
+        // 멤버 엔티티에 이메일이 존재
+        if (memberRepository.existsByEmail(memberDto.getEmail())) {
+            // 소셜 계정 엔티티에 Provider가 local이 있는지 확인 후 없으면 생성
+            MemberEntity memberEntity = memberRepository.findByEmail(memberDto.getEmail()).orElseThrow();
+
+            // Local 계정 있으면 에러 처리
+            if (socialAccountRepository.existsByProviderAndProviderId("LOCAL", memberEntity.getId())) {
+                throw new IllegalArgumentException("Invalid Email");
+            }
+
+            SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("LOCAL", memberEntity.getId())
+                .orElseGet(
+                    () -> {
+                        SocialAccountEntity newSocialAccountEntity = SocialAccountEntity.builder()
+                            .member(memberEntity)
+                            .provider("LOCAL")
+                            .providerId(memberEntity.getId())
+                            .build()
+                        ;
+                        
+                        return socialAccountRepository.save(newSocialAccountEntity);
+                    }
+                    );
+            
+            memberEntity.setName(memberDto.getName());
+            memberEntity.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+            memberEntity.addSocialAccount(socialAccountEntity);
+
+            return MemberDto.fromEntity(memberRepository.save(memberEntity));
+
+        // 없으면 계정 생성
+        }else {
+            MemberEntity memberEntity = MemberEntity.builder()
+                .email(memberDto.getEmail())
+                .name(memberDto.getName())
+                .password(passwordEncoder.encode(memberDto.getPassword()))
+                .role(Set.of("ROLE_USER"))
+                .build()
+            ;
+
+            MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+
+            SocialAccountEntity socialAccountEntity = SocialAccountEntity.builder()
+                .member(savedMemberEntity)
+                .provider("LOCAL")
+                .providerId(savedMemberEntity.getId())
+                .build()
+            ;
+
+            savedMemberEntity.addSocialAccount(socialAccountEntity);
+            socialAccountRepository.save(socialAccountEntity);
+
+            return MemberDto.fromEntity(socialAccountEntity.getMember());
         }
 
-        Set<String> roles = new HashSet<>();
-        roles.add("ROLE_USER");
-
-        MemberEntity memberEntity = MemberEntity.builder()
-            .email(memberDto.getEmail())
-            .name(memberDto.getName())
-            .password(passwordEncoder.encode(memberDto.getPassword()))
-            .role(roles)
-            .build();
-
-        MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
-
-        return MemberDto.fromEntity(savedMemberEntity);
     }
 
     @Transactional
     public MemberDto putMember(MemberDto memberDto) {
         // 유저와 비밀번호 확인
-        MemberEntity memberEntity = memberRepository.findByEmail(memberDto.getEmail()).orElseThrow();
+        MemberEntity memberEntity = memberRepository.findByEmailAndSocialAccountsProvider(memberDto.getEmail(), "LOCAL").orElseThrow();
 
         if (!passwordEncoder.matches(memberDto.getPassword(), memberEntity.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
