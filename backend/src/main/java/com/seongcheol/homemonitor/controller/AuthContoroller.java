@@ -41,15 +41,13 @@ public class AuthContoroller {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberDto memberDto) {
         try {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(memberDto.getName(),
-                    memberDto.getPassword());
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(memberDto.getEmail(), memberDto.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return ResponseEntity.ok("Login");
         } catch (AuthenticationException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
     }
 

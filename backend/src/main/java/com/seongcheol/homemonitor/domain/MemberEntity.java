@@ -32,8 +32,12 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 16, unique = true)
+    @Column(length = 128, unique = true)
+    private String email;
+
+    @Column(length = 16)
     private String name;
+
     @Column(length = 128)
     private String password;
 

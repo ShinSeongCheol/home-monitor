@@ -21,8 +21,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        MemberEntity memberEntity = memberRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
 
         return User.builder()
             .username(memberEntity.getName())

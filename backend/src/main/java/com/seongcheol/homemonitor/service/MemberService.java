@@ -36,10 +36,12 @@ public class MemberService {
         role.add("ROLE_ADMIN");
 
         MemberEntity memberEntity = MemberEntity.builder()
-        .name("admin")
-        .password(passwordEncoder.encode("admin"))
-        .role(role)
-        .build();
+            .email("admin@admin.com")
+            .name("admin")
+            .password(passwordEncoder.encode("admin"))
+            .role(role)
+            .build()
+        ;
 
         memberRepository.save(memberEntity);
     }
@@ -54,6 +56,7 @@ public class MemberService {
         roles.add("ROLE_USER");
 
         MemberEntity memberEntity = MemberEntity.builder()
+            .email(memberDto.getEmail())
             .name(memberDto.getName())
             .password(passwordEncoder.encode(memberDto.getPassword()))
             .role(roles)
@@ -67,12 +70,13 @@ public class MemberService {
     @Transactional
     public MemberDto putMember(MemberDto memberDto) {
         // 유저와 비밀번호 확인
-        MemberEntity memberEntity = memberRepository.findByName(memberDto.getName()).orElseThrow();
+        MemberEntity memberEntity = memberRepository.findByEmail(memberDto.getEmail()).orElseThrow();
 
         if (!passwordEncoder.matches(memberDto.getPassword(), memberEntity.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        memberEntity.setName(memberDto.getName());
         memberEntity.setPassword(passwordEncoder.encode(memberDto.getNewPassword()));
 
         return MemberDto.fromEntity(memberEntity);
