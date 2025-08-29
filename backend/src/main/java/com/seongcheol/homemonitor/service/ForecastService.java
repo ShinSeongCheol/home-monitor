@@ -11,11 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seongcheol.homemonitor.domain.AdministrativeDistrictEntity;
 import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
@@ -40,6 +41,9 @@ public class ForecastService {
     @Autowired
     private UltraShortNowCastRepository ultraShortNowCastRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public List<AdministrativeDistrictDto> getAdministrativeDistrict() {
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.findAll();
         return administrativeDistrictEntityList.stream().map(administrativeDistrictEntity -> AdministrativeDistrictDto.fromEntity(administrativeDistrictEntity)).toList();
@@ -58,7 +62,7 @@ public class ForecastService {
 
     // 초단기 실황 조회
     @Transactional
-    public void getUltraForecastNowCast() throws Exception {
+    public void getUltraForecastNowCast() {
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.getLevel2List();
 
         LocalDate localDate = LocalDate.now();
@@ -71,50 +75,56 @@ public class ForecastService {
         String currentTime = localTime.format(timeFormatter);
         
         for (AdministrativeDistrictEntity administrativeDistrictEntity : administrativeDistrictEntityList) {
-            int x = administrativeDistrictEntity.getX();
-            int y = administrativeDistrictEntity.getY();
-
-            WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
-            UltraSrtNcstResponseDto response = webClient.get()
-                .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType={dataType}&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, "JSON", currentDate, currentTime, x, y)
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, clientResponse -> 
-                    clientResponse.bodyToMono(String.class).map(body -> {
-                        logger.error("API Error response: {}", body);
-                        return new RuntimeException("Forecast Scheduler Error" + body);
-                    })
-                )
-                .bodyToMono(UltraSrtNcstResponseDto.class)
-                .timeout(Duration.ofSeconds(60))
-                .block();
+            try {
+                int x = administrativeDistrictEntity.getX();
+                int y = administrativeDistrictEntity.getY();
+    
+                WebClient webClient = WebClient.builder().baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0").defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
+                String response = webClient.get()
+                    .uri("/getUltraSrtNcst?serviceKey={serviceKey}&dataType={dataType}&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}", serviceKey, "JSON", currentDate, currentTime, x, y)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .timeout(Duration.ofSeconds(60))
+                    .block();
                 ;
-
-            logger.info(response.toString());
-
-            UltraShortNowCastEntity.UltraShortNowCastEntityBuilder builder = UltraShortNowCastEntity.builder()
-                .administrativeDistrict(administrativeDistrictEntity)
-                .baseDate(localDate)
-                .baseTime(localTime);
-
-            for (Item item : response.getResponse().getBody().getItems().getItemList()) {
-                String category = item.getCategory();
-                String value = item.getObsrValue();
-
-                switch(category) {
-                    case "T1H" -> builder.T1H(Double.parseDouble(value));
-                    case "RN1" -> builder.RN1(Double.parseDouble(value));
-                    case "UUU" -> builder.UUU(Double.parseDouble(value));
-                    case "VVV" -> builder.VVV(Double.parseDouble(value));
-                    case "REH" -> builder.REH(Double.parseDouble(value));
-                    case "PTY" -> builder.PTY(Byte.parseByte(value));
-                    case "VEC" -> builder.VEC(Double.parseDouble(value));
-                    case "WSD" -> builder.WSD(Double.parseDouble(value));
-                    default -> logger.warn("Unknown category: {}", category);
+    
+                logger.info(response.toString());
+    
+                UltraSrtNcstResponseDto ultraSrtNcstResponseDto;
+                try {
+                    ultraSrtNcstResponseDto = objectMapper.readValue(response, UltraSrtNcstResponseDto.class);
+                } catch (JsonProcessingException e) {
+                    logger.error("getUltraForecastNowCast Json Parse Error", e);
+                    throw new RuntimeException(e);
                 }
+    
+                UltraShortNowCastEntity.UltraShortNowCastEntityBuilder builder = UltraShortNowCastEntity.builder()
+                    .administrativeDistrict(administrativeDistrictEntity)
+                    .baseDate(localDate)
+                    .baseTime(localTime);
+    
+                for (Item item : ultraSrtNcstResponseDto.getResponse().getBody().getItems().getItemList()) {
+                    String category = item.getCategory();
+                    String value = item.getObsrValue();
+    
+                    switch(category) {
+                        case "T1H" -> builder.T1H(Double.parseDouble(value));
+                        case "RN1" -> builder.RN1(Double.parseDouble(value));
+                        case "UUU" -> builder.UUU(Double.parseDouble(value));
+                        case "VVV" -> builder.VVV(Double.parseDouble(value));
+                        case "REH" -> builder.REH(Double.parseDouble(value));
+                        case "PTY" -> builder.PTY(Byte.parseByte(value));
+                        case "VEC" -> builder.VEC(Double.parseDouble(value));
+                        case "WSD" -> builder.WSD(Double.parseDouble(value));
+                        default -> logger.warn("Unknown category: {}", category);
+                    }
+                }
+    
+                UltraShortNowCastEntity ultraShortNowCastEntity = builder.build();
+                ultraShortNowCastRepository.save(ultraShortNowCastEntity);
+            }catch(Exception e) {
+                logger.error("getUltraForecastNowCast Error", e);
             }
-
-            UltraShortNowCastEntity ultraShortNowCastEntity = builder.build();
-            ultraShortNowCastRepository.save(ultraShortNowCastEntity);
         }
     }
 }
