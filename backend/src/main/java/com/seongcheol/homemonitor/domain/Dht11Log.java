@@ -3,6 +3,7 @@ package com.seongcheol.homemonitor.domain;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,6 +20,8 @@ public class Dht11Log {
 	@Id
 	private LocalDateTime measurementTime;
 	
+	@Column(length = 8)
 	private String temperature;
+	@Column(length = 8)
 	private String humidity;
 }
