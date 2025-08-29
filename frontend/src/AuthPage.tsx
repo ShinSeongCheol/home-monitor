@@ -21,7 +21,7 @@ const AuthPage = () => {
 
         if(code) {
             // 토큰 요청
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/kakao`, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/v1/member/kakao`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

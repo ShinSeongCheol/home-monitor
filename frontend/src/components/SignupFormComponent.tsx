@@ -49,7 +49,7 @@ const SignupFormComponent = () => {
                 <input type="email" name="email" id="email" required placeholder='email@example.com' onChange={(event) => setEmail(event.target.value)}/>
             </div>
             <div className={styles.inputContainer}>
-                <label htmlFor="nickname">아이디</label>
+                <label htmlFor="nickname">이름</label>
                 <input type="text" name="nickname" id="nickname" required placeholder='Nickname' onChange={(event) => setNickname(event.target.value)}/>
             </div>
             <div className={styles.inputContainer}>

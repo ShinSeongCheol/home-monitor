@@ -53,10 +53,6 @@ const LoginFormComponent = () => {
                 <input type="email" name="email" id="email" required placeholder='email@example.com' onChange={(event) => setEmail(event.target.value)}/>
             </div>
             <div className={styles.inputContainer}>
-                <label htmlFor="nickname">이름</label>
-                <input type="text" name="nickname" id="nickname" required placeholder='Nickname' onChange={(event) => setNickname(event.target.value)}/>
-            </div>
-            <div className={styles.inputContainer}>
                 <label htmlFor="password">비밀번호</label>
                 <input type="password" name="password" id="password" required placeholder='••••••••' onChange={(event) => setPassword(event.target.value)}/>
             </div>
