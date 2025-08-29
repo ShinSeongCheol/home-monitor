@@ -40,5 +40,6 @@ public class MemberEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "role", length = 16)
+    @Builder.Default
     private Set<String> role = new HashSet<String>();
 }
