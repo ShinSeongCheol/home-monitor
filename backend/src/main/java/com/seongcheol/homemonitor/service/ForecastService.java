@@ -95,7 +95,8 @@ public class ForecastService {
                     ultraSrtNcstResponseDto = objectMapper.readValue(response, UltraSrtNcstResponseDto.class);
                 } catch (JsonProcessingException e) {
                     logger.error("getUltraForecastNowCast Json Parse Error", e);
-                    throw new RuntimeException(e);
+                    // throw new RuntimeException(e);
+                    continue;
                 }
     
                 UltraShortNowCastEntity.UltraShortNowCastEntityBuilder builder = UltraShortNowCastEntity.builder()
