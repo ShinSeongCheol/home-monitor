@@ -27,7 +27,7 @@ public class MemberService {
 
     @Transactional
     public void initAdmin() {
-        if(memberRepository.existsByName("admin")) {
+        if(memberRepository.existsByEmail("admin@admin.com")) {
             throw new IllegalArgumentException("Admin 계정이 이미 존재합니다.");
         };
 
@@ -48,7 +48,7 @@ public class MemberService {
 
     @Transactional
     public MemberDto signup(MemberDto memberDto) {
-        if (memberRepository.existsByName(memberDto.getName())) {
+        if (memberRepository.existsByEmail(memberDto.getName())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
