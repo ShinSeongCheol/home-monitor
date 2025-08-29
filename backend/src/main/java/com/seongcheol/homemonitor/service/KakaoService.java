@@ -1,6 +1,5 @@
 package com.seongcheol.homemonitor.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.dto.SocialAccountDto;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 

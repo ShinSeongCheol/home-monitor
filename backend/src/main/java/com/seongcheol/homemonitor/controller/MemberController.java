@@ -43,10 +43,10 @@ public class MemberController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<String> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
-        kakaoService.loadOrCreateSocialAccount(kaKaoAuthorizeDto);
+    public ResponseEntity<MemberDto> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+        MemberDto memberDto = kakaoService.loadOrCreateSocialAccount(kaKaoAuthorizeDto);
 
-        return ResponseEntity.ok(kaKaoAuthorizeDto.toString());
+        return ResponseEntity.ok(memberDto);
     }
 
 }

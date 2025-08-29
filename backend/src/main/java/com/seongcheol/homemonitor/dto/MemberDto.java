@@ -19,13 +19,13 @@ public class MemberDto {
     private String newPassword;
 
     @Builder
-    public MemberDto(String name) {
-        this.name = name;
+    public MemberDto(String email) {
+        this.email = email;
     }
 
     public static MemberDto fromEntity(MemberEntity memberEntity) {
         MemberDto memberDto = MemberDto.builder()
-            .name(memberEntity.getName())
+            .email(memberEntity.getEmail())
             .build();
 
         return memberDto;
