@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SignupFormComponent = () => {
 
+    const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -24,6 +25,7 @@ const SignupFormComponent = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                email: email,
                 name: nickname,
                 password,
             }),
@@ -42,6 +44,10 @@ const SignupFormComponent = () => {
 
     return (
         <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <div className={styles.inputContainer}>
+                <label htmlFor="email">이메일</label>
+                <input type="email" name="email" id="email" required placeholder='email@example.com' onChange={(event) => setEmail(event.target.value)}/>
+            </div>
             <div className={styles.inputContainer}>
                 <label htmlFor="nickname">아이디</label>
                 <input type="text" name="nickname" id="nickname" required placeholder='Nickname' onChange={(event) => setNickname(event.target.value)}/>

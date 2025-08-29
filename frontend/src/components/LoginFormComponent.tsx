@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 const LoginFormComponent = () => {
 
+    const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
 
@@ -22,6 +23,7 @@ const LoginFormComponent = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                email: email,
                 name: nickname,
                 password: password
             }),
@@ -29,7 +31,7 @@ const LoginFormComponent = () => {
             .then(res => {
                 if (res.ok) {
                     alert('로그인 성공');
-                    login(nickname, password);
+                    login(email, password);
                     navigate('/');
                 } else if (res.status == 401) {
                     alert('로그인 실패');
@@ -47,7 +49,11 @@ const LoginFormComponent = () => {
     return (
         <form className={styles.loginForm} onSubmit={handleSubmit}>
             <div className={styles.inputContainer}>
-                <label htmlFor="nickname">아이디</label>
+                <label htmlFor="email">이메일</label>
+                <input type="email" name="email" id="email" required placeholder='email@example.com' onChange={(event) => setEmail(event.target.value)}/>
+            </div>
+            <div className={styles.inputContainer}>
+                <label htmlFor="nickname">이름</label>
                 <input type="text" name="nickname" id="nickname" required placeholder='Nickname' onChange={(event) => setNickname(event.target.value)}/>
             </div>
             <div className={styles.inputContainer}>
