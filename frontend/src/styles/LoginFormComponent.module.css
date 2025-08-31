@@ -31,6 +31,8 @@
     color: white;
     background-color: black;
     border-radius: 12px;
+
+    cursor: pointer;
 }
 
 .kakaoLoginContainer {
@@ -39,4 +41,6 @@
 
     background-color: #FEE500;
     border-radius: 12px;
+
+    cursor: pointer;
 }
