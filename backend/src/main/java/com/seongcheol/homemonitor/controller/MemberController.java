@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.service.KakaoService;
+import com.seongcheol.homemonitor.dto.MemberRequestDto;
 import com.seongcheol.homemonitor.service.MemberService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,25 +25,15 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private KakaoService kakaoService;
-
     @PostMapping("/signup")
-    public ResponseEntity<MemberDto> signUp(@RequestBody MemberDto memberDto) {
-        MemberDto savedMemberDto = memberService.signup(memberDto);
-        return ResponseEntity.ok(savedMemberDto);
+    public ResponseEntity<MemberDto> signUp(@RequestBody MemberRequestDto memberRequestDto) {
+        MemberDto memberDto = memberService.signup(memberRequestDto);
+        return ResponseEntity.ok(memberDto);
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<MemberDto> putMember(@PathVariable("username") String username, @RequestBody MemberDto memberDto) {
-        MemberDto newMemberDto = memberService.putMember(memberDto);
-
-        return ResponseEntity.ok(newMemberDto);
-    }
-
-    @PostMapping("/kakao")
-    public ResponseEntity<MemberDto> kakaoAuth(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
-        MemberDto memberDto = kakaoService.loadOrCreateSocialAccount(kaKaoAuthorizeDto);
+    public ResponseEntity<MemberDto> putMember(@PathVariable("username") String username, @RequestBody MemberRequestDto memberRequestDto) {
+        MemberDto memberDto = memberService.putMember(memberRequestDto);
 
         return ResponseEntity.ok(memberDto);
     }

@@ -1,10 +1,8 @@
 package com.seongcheol.homemonitor.domain;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.Fetch;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -41,7 +39,7 @@ public class MemberEntity {
     private String email;
 
     @Column(length = 16)
-    private String name;
+    private String username;
 
     @Column(length = 128)
     private String password;

@@ -8,16 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.seongcheol.homemonitor.components.JwtUtilComponent;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
 import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
+import com.seongcheol.homemonitor.dto.LoginResponseDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
+import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
@@ -42,6 +46,12 @@ public class KakaoService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private JwtUtilComponent jwtUtilComponent;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     
     public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
@@ -81,10 +91,7 @@ public class KakaoService {
     }
 
     @Transactional
-    public MemberDto loadOrCreateSocialAccount(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
-        KakaoTokenDto kakaoTokenDto = requestToken(kaKaoAuthorizeDto);
-        KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
-
+    public MemberDto loadOrCreateSocialAccount(KakaoUserInfoDto kakaoUserInfoDto) {
         SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("KAKAO", kakaoUserInfoDto.getId())
         .orElseGet(
             () -> {
@@ -95,7 +102,8 @@ public class KakaoService {
 
                             MemberEntity newMemberEntity = MemberEntity.builder()
                                 .email(kakaoUserInfoDto.getKakaoAccount().getEmail())
-                                .name(kakaoUserInfoDto.getKakaoAccount().getProfile().getNickname())
+                                .username(kakaoUserInfoDto.getKakaoAccount().getProfile().getNickname())
+                                .password(passwordEncoder.encode(KAKAO_CLIENT_ID))
                                 .role(Set.of("ROLE_USER"))
                                 .build()
                             ;
@@ -120,7 +128,24 @@ public class KakaoService {
         );
 
         return MemberDto.fromEntity(socialAccountEntity.getMember());
+    }
 
+    @Transactional
+    public LoginResponseDto login(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+        KakaoTokenDto kakaoTokenDto = requestToken(kaKaoAuthorizeDto);
+        KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
+        MemberDto memberDto = loadOrCreateSocialAccount(kakaoUserInfoDto);
+
+        String accessToken = jwtUtilComponent.createAccessToken(memberDto);
+
+        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+            .email(memberDto.getEmail())
+            .name(memberDto.getNickname())
+            .accessToken(accessToken)
+            .build()
+        ;
+
+        return loginResponseDto;
     }
 
 }

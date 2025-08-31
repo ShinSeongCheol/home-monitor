@@ -9,25 +9,19 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class MemberDto {
     private String email;
-    private String name;
-    private String password;
-    private String newPassword;
-
-    @Builder
-    public MemberDto(String email) {
-        this.email = email;
-    }
+    private String nickname;
 
     public static MemberDto fromEntity(MemberEntity memberEntity) {
         MemberDto memberDto = MemberDto.builder()
             .email(memberEntity.getEmail())
+            .nickname(memberEntity.getUsername())
             .build();
-
         return memberDto;
     }
 }
