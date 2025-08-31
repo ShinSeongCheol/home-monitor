@@ -1,64 +1,160 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-type AuthContextType = {
-    auth: string | null;
-    isAuthenticated: boolean;
-    user: { username: string } | null;
-    isLoading: boolean;
-    login: (username: string, password: string) => void;
+type User = {
+    email: string;
+    name: string;
+}
+
+type AuthState = {
+    user: User | null;
+    accessToken: string | null;
+}
+
+type AuthContextType = AuthState & {
+    login: (email: string, password: string) => Promise<void>;
+    kakaoLogin: (code:string) => Promise<void>
     logout: () => void;
+    signup: (email: string, nickname: string, password: string) => Promise<void>;
+    isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [auth, setAuth] = useState<string | null>(sessionStorage.getItem('auth'));
-    const [user, setUser] = useState<{ username: string } | null>(null);
+
+    const [auth, setAuth] = useState<AuthState | null>(null);
+
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!auth) {
-            setIsLoading(false);
-            return;
+        console.log(auth);
+    }, [auth])
+
+    useEffect(() => {
+
+        const fetchAuth = async () => {
+            try {
+                const accessToken = localStorage.getItem('access_token');
+
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+    
+                if (!res.ok) {
+                    throw new Error(`Http Error ${res.status}`);
+                }
+    
+                const data = await res.json();
+    
+                const userEmail = data.email;
+                const userName = data.name;
+
+                console.log(data);
+    
+                setAuth({
+                    user: {email: userEmail, name: userName},
+                    accessToken: accessToken
+                });
+            } catch (err) {
+                setAuth(null);
+            } finally {
+                setIsLoading(false);
+            }
         }
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/isAuth`, {
-            method: "GET",
-            headers: {
-                Authorization: auth,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
-            })
-            .then((data) => {
-                setUser({ username: data.username });
-            })
-            .catch((err) => {
-                console.error(err);
-                sessionStorage.removeItem("auth");
-                setAuth(null);
-            })
-            .finally(() => setIsLoading(false));
-    }, [auth]);
+        fetchAuth();
+    }, [])
 
-    const login = (username: string, password: string) => {
-        const token = btoa(`${username}:${password}`);
-        const value = `Basic ${token}`;
-        sessionStorage.setItem("auth", value);
-        setAuth(value);
-    };
+    const login = async (email: string, password: string) => {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
+        })
+
+        if (!res.ok) throw new Error(`HTTP ERROR ${res.status}`);
+
+        const data = await res.json();
+
+        const userEmail = data.email;
+        const userName = data.name;
+        const accessToken = data.accessToken;
+
+        localStorage.setItem("access_token", data.accessToken);
+
+        setAuth({
+            user: { email: userEmail, name: userName },
+            accessToken: accessToken
+        });
+    }
+
+    const signup = async (email: string, nickname: string, password: string) => {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/member/signup`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                nickname: nickname,
+                password: password,
+            }),
+        })
+
+        if (!res.ok) throw new Error(`HTTP ERROR ${res.status}`);
+
+        const data = await res.json();
+    }
+
+    const kakaoLogin = async (code: string) => {
+        // 토큰 요청
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/kakao`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                code: code
+            })
+        });
+
+        if(!res.ok) {
+            throw new Error(`Http Error ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        const userEmail = data.email;
+        const userName = data.name;
+        const accessToken = data.accessToken;
+
+        localStorage.setItem("access_token", accessToken);
+
+        setAuth({
+            user: { email: userEmail, name: userName },
+            accessToken: accessToken
+        });
+    }
 
     const logout = () => {
-        sessionStorage.removeItem("auth");
-        setAuth(null);
-        alert('로그아웃 되었습니다');
-    };
+        setAuth({
+            user: { email: "", name: "" },
+            accessToken: null
+        });
+
+        localStorage.removeItem('access_token');
+    }
 
     return (
-        <AuthContext.Provider value={{ auth, isAuthenticated: !!auth, user, isLoading, login, logout }}>
-            {children}
+        <AuthContext.Provider value={{ user: auth?.user ?? null, accessToken: auth?.accessToken ?? null, login, kakaoLogin, logout, signup, isLoading}}>
+            {!isLoading && children}
         </AuthContext.Provider>
     )
 }

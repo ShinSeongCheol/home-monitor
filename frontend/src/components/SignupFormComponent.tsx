@@ -1,6 +1,7 @@
 import { useState, type FormEventHandler } from 'react';
 import styles from '../styles/SingupFormComponent.module.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const SignupFormComponent = () => {
 
@@ -11,6 +12,8 @@ const SignupFormComponent = () => {
 
     const navigate = useNavigate();
 
+    const {signup} = useAuth();
+
     const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
 
@@ -18,32 +21,19 @@ const SignupFormComponent = () => {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-        
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/member/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                name: nickname,
-                password,
-            }),
-        })
-        .then(res => {
-            if (res.ok) {
-                alert('회원 가입 성공하였습니다');
-                navigate('/');
-            }else {
-                throw new Error(`HTTP ERROR : ${res.status}`);
-            }
-        }).catch(error => {
-            console.error(error);
-        })
+
+        try{
+            signup(email, nickname, password);
+            alert('회원가입 되었습니다.');
+            navigate('/');
+        }catch(err) {
+            console.error(err);
+        }
+
     }
 
     return (
-        <form className={styles.loginForm} onSubmit={handleSubmit}>
+        <form className={styles.signupForm} onSubmit={handleSubmit}>
             <div className={styles.inputContainer}>
                 <label htmlFor="email">이메일</label>
                 <input type="email" name="email" id="email" required placeholder='email@example.com' onChange={(event) => setEmail(event.target.value)}/>

@@ -1,5 +1,5 @@
-import styles from './styles/Login.module.css'
-import { useEffect, useState } from 'react';
+import styles from './styles/AuthPage.module.css'
+import { useState } from 'react';
 import LoginFormComponent from './components/LoginFormComponent';
 import SignupFormCompoenent from './components/SignupFormComponent';
 
@@ -14,24 +14,6 @@ const AuthPage = () => {
     else if(path === 'signup'){
         content = <SignupFormCompoenent/>
     }
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('code');
-
-        if(code) {
-            // 토큰 요청
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/member/kakao`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    code: code
-                })
-            })
-        }
-    }, [])
 
     return(
         <main className={styles.main}>

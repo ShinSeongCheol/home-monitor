@@ -1,45 +1,44 @@
 import styles from '../styles/LoginFormComponent.module.css'
-import kakaoLogin from '../assets/kakao/ko/kakao_login_medium_narrow.png'
-import { useState, type FormEventHandler, type MouseEventHandler } from 'react';
+import kakaoLoginButton from '../assets/kakao/ko/kakao_login_medium_narrow.png'
+import { useEffect, useState, type FormEventHandler, type MouseEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const LoginFormComponent = () => {
 
     const [email, setEmail] = useState("");
-    const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
 
-    const {login} = useAuth();
+    const {login, kakaoLogin} = useAuth();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('code');
+
+        if(code) {
+            try{
+                kakaoLogin(code);
+                
+                alert('로그인 되었습니다.');
+                navigate('/');
+            }catch(err) {
+                console.error(err);
+            }
+        }
+    }, [])
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
-
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                name: nickname,
-                password: password
-            }),
-        })
-            .then(res => {
-                if (res.ok) {
-                    alert('로그인 성공');
-                    login(email, password);
-                    navigate('/');
-                } else if (res.status == 401) {
-                    alert('로그인 실패');
-                } else {
-                    throw new Error(`HTTP ERROR ${res.status}`);
-                }
-            })
-            .catch(error => console.error(error))
+        try {
+            login(email, password);
+            
+            alert('로그인 되었습니다.');
+            navigate('/');
+        }catch(err){
+            console.error(err);
+        }
     }
 
     const handleKakaoLogin: MouseEventHandler<HTMLDivElement> = (event) => {
@@ -58,7 +57,7 @@ const LoginFormComponent = () => {
             </div>
             <input type="submit" value="로그인" />
             <div className={styles.kakaoLoginContainer} onClick={handleKakaoLogin}>
-                <img src={kakaoLogin} alt="카카오 로그인" />
+                <img src={kakaoLoginButton} alt="카카오 로그인" />
             </div>
         </form>
     )
