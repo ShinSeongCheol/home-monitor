@@ -11,7 +11,7 @@ import com.seongcheol.homemonitor.service.ForecastService;
 
 @Component
 @Profile("prod")
-public class forecastScheduler {
+public class ForecastScheduler {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
