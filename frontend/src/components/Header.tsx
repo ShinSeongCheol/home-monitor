@@ -18,7 +18,7 @@ const Header = () => {
         navigate('/auth');
     }
 
-    const { user, isAuthenticated, logout } = useAuth();
+    const { user, accessToken, logout } = useAuth();
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const accountContainerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +33,12 @@ const Header = () => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
+    const handleLogout = () => {
+        logout();
+        alert('로그아웃 되었습니다.');
+        navigate('/');
+    }
+
     return (
         <header className={styles.header}>
             <div className={styles.container}>
@@ -41,22 +47,22 @@ const Header = () => {
                     <h1>ClimaHome</h1>
                 </div>
 
-                {isAuthenticated ? 
+                { accessToken ? 
                     (   
                         <div className={styles.accountContainer} ref={accountContainerRef}>
                             <div className={styles.account} onClick={() => setIsProfileOpen(!isProfileOpen)}>
                                 <AccountCircleSVG width={"24px"} height={"24px"} fill={"#789DE5"}></AccountCircleSVG>
-                                <span>{user?.username}</span>
+                                <span>{user?.name}</span>
                                 <KeyboardArrowDownSVG width={"16px"} height={"16px"} ></KeyboardArrowDownSVG>
                             </div>
                             { isProfileOpen && 
                                 (
                                     <div className={styles.profile}>
-                                        <p>{user?.username} 님 안녕하세요</p>
+                                        <p>{user?.name} 님 안녕하세요</p>
                                         <hr />
                                         <div className={styles.buttonContainer}>
                                             <button className={`${styles.button} ${styles.editProfile}`} onClick={() => navigate('/profile')}><SettingSVG width={'16px'} height={'16px'} fill='gray'></SettingSVG> 내 정보 수정</button>
-                                            <button className={`${styles.button} ${styles.logout}`} onClick={logout}><LogoutSVG width={'16px'} height={'16px'} fill='red'></LogoutSVG>로그아웃</button>
+                                            <button className={`${styles.button} ${styles.logout}`} onClick={handleLogout}><LogoutSVG width={'16px'} height={'16px'} fill='red'></LogoutSVG>로그아웃</button>
                                         </div>
                                     </div>
                                 )
