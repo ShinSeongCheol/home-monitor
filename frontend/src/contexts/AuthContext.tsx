@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 })
     
                 if (!res.ok) {
+                    localStorage.removeItem('access_token');
                     throw new Error(`Http Error ${res.status}`);
                 }
     
