@@ -21,7 +21,6 @@ import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
 import com.seongcheol.homemonitor.dto.LoginResponseDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 

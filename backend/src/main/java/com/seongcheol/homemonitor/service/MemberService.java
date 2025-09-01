@@ -1,6 +1,5 @@
 package com.seongcheol.homemonitor.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.MemberRequestDto;
-import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
