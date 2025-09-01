@@ -3,6 +3,11 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 type User = {
     email: string;
     name: string;
+    authorities: Authority;
+}
+
+type Authority = {
+    authority: string;
 }
 
 type AuthState = {
@@ -18,6 +23,7 @@ type AuthContextType = AuthState & {
     isLoading: boolean;
 }
 
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -25,10 +31,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [auth, setAuth] = useState<AuthState | null>(null);
 
     const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        console.log(auth);
-    }, [auth])
 
     useEffect(() => {
 
@@ -50,11 +52,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
                 const userEmail = data.email;
                 const userName = data.name;
-
-                console.log(data);
+                const userAuthorities = data.authorities.map((data: Authority) => data.authority);
     
                 setAuth({
-                    user: {email: userEmail, name: userName},
+                    user: {email: userEmail, name: userName, authorities: userAuthorities},
                     accessToken: accessToken
                 });
             } catch (err) {
