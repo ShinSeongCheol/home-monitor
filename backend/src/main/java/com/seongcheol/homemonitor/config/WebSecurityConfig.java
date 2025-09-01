@@ -10,18 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.seongcheol.filter.JwtFilter;
 import com.seongcheol.homemonitor.components.AuthenticationEntryPointComponent;
-import com.seongcheol.homemonitor.components.JwtUtilComponent;
-import com.seongcheol.homemonitor.service.UserDetailServiceImpl;
+import com.seongcheol.homemonitor.filter.JwtFilter;
 import com.seongcheol.homemonitor.components.AccessDeniedHandlerComponent;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -32,16 +26,19 @@ public class WebSecurityConfig {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
-	@Bean
-	public JwtFilter jwtFilter() {
-		return new JwtFilter(userDetailServiceImpl, jwtUtilComponent);
-	}
+	// @Bean
+	// public JwtFilter jwtFilter() {
+	// 	return new JwtFilter(userDetailServiceImpl, jwtUtilComponent);
+	// }
+
+	// @Autowired
+	// private UserDetailServiceImpl userDetailServiceImpl;
+
+	// @Autowired
+	// private JwtUtilComponent jwtUtilComponent;
 
 	@Autowired
-	private UserDetailServiceImpl userDetailServiceImpl;
-
-	@Autowired
-	private JwtUtilComponent jwtUtilComponent;
+	private JwtFilter jwtFilter;
 
 	@Autowired
 	private AuthenticationEntryPointComponent AuthenticationEntryPointComponent;
@@ -68,7 +65,7 @@ public class WebSecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		;
 
-		http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		http.exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(AuthenticationEntryPointComponent).accessDeniedHandler(accessDeniedHandlerComponent));
 
 		http
