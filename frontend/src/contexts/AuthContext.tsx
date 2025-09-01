@@ -38,6 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             try {
                 const accessToken = localStorage.getItem('access_token');
 
+                if(!accessToken) return;
+
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth`, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
