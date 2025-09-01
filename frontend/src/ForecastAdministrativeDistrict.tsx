@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
-import { themeBalham, type ColDef, type SizeColumnsToContentStrategy, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
+import { themeBalham, type ColDef, type SizeColumnsToContentStrategy } from 'ag-grid-community';
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
 import { useAuth } from "./contexts/AuthContext";
@@ -28,7 +28,7 @@ interface AdministartiveDistrict {
 const ForecastAdministrativeDistrict = () => {
     const agGridRef = useRef<AgGridReact | null>(null);
 
-    const { auth } = useAuth();
+    const { accessToken } = useAuth();
 
     const autoSizeStrategy = useMemo<SizeColumnsToContentStrategy>(() => {
         return {
@@ -68,7 +68,7 @@ const ForecastAdministrativeDistrict = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": auth ?? "",
+                "Authorization": `Bearer ${accessToken}`,
             },
             body: JSON.stringify(rowData)
         });
@@ -119,7 +119,7 @@ const ForecastAdministrativeDistrict = () => {
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`, {
             headers: {
                 "Content-type": "application/json",
-                "Authorization": auth ?? "",
+                "Authorization": `Bearer ${accessToken}`,
             }
         })
             .then(res => res.json())

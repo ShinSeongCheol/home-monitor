@@ -8,7 +8,7 @@ const Profile = () => {
     const { user, accessToken } = useAuth();
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState(user?.email ?? "");
+    const email = user?.email ?? "";
     const [nickname, setNickname] = useState(user?.name ?? "");
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -44,7 +44,7 @@ const Profile = () => {
             }
             return res.json();
         })
-        .then(data => {
+        .then(() => {
             alert('비밀번호가 변경되었습니다.');
             navigate('/');
         })
