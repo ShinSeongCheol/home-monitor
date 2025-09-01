@@ -21,10 +21,15 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const marginBottom = 20;
     const marginLeft = -20;
 
+    const data = datasets.map(dataset => dataset.data.map(item => item.y));
+    const flatedData = data.flat();
+    const yMax = d3.max(flatedData) ?? 100
+    
+
     const xDomain = [d3.timeDay.floor(new Date()), d3.timeHour.offset(d3.timeDay.ceil(new Date()), -1)]
     const xRange = [marginLeft, containerWidth - marginRight]
 
-    const yDomain = [100, 0]
+    const yDomain = [yMax, 0]
     const yRange = [marginBottom, containerHeight - marginTop]
 
     const xScale = useMemo(() => {
@@ -58,7 +63,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
             .range(yRange)
 
         const height = yRange[1] - yRange[0];
-        const pixelsPerTick = 10;
+        const pixelsPerTick = 30;
         const numberOfTicksTarget = Math.max(1, Math.floor(height / pixelsPerTick));
 
         return yScale.ticks(numberOfTicksTarget)
@@ -77,20 +82,27 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
             <h2>{icon} {title}</h2>
             <svg className={`${styles.svg}`} viewBox={`0 0 ${containerWidth} ${containerHeight}`} >
                 <g>
-                    <path d={["M", -6, yRange[0], "H", 0, "V", yRange[1], "H", -6].join(" ")} fill='none' stroke='currentColor' transform={`translate(${marginLeft}, 0)`}></path>
+                    {yTicks.map(({ value, yOffset }) => (
+                        <path d={`M ${xRange[0]} ${yRange[0] - marginBottom} H ${xRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(0, ${yOffset})`}/>
+                    ))}
+
+                    {/* <path d={["M", -6, yRange[0], "H", 0, "V", yRange[1], "H", -6].join(" ")} fill='none' stroke='currentColor' transform={`translate(${marginLeft}, 0)`}></path> */}
                     {yTicks.map(({ value, yOffset }) => (
                         <g key={value} transform={`translate(${marginLeft}, ${yOffset})`}>
-                            <line x2="-6" stroke='currentColor'></line>
+                            {/* <line x2="-6" stroke='currentColor'></line> */}
                             <text key={value} style={{ fontSize: "10px", textAnchor: "middle", transform: "translateX(-20px)" }}>{value}</text>
                         </g>
                     ))}
                 </g>
 
                 <g>
-                    <path d={["M", xRange[0], 6, "v", -6, "H", xRange[1], "v", 6].join(" ")} fill='none' stroke='currentColor' transform={`translate(0, ${containerHeight - marginBottom})`}></path>
+                    {xTicks.map(({ value, xOffset }) => (
+                        <path d={`M ${xRange[0] - marginLeft} ${yRange[0]} V ${yRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(${xOffset}, 0)`}></path>
+                    ))}
+                    {/* <path d={["M", xRange[0], 6, "v", -6, "H", xRange[1], "v", 6].join(" ")} fill='none' stroke='currentColor' transform={`translate(0, ${containerHeight - marginBottom})`}></path> */}
                     {xTicks.map(({ value, xOffset }) => (
                         <g key={value} transform={`translate(${xOffset}, ${containerHeight - marginBottom})`}>
-                            <line y2="6" stroke='currentColor'></line>
+                            {/* <line y2="6" stroke='currentColor'></line> */}
                             <text key={value} style={{ fontSize: "10px", textAnchor: "middle", transform: "translateY(20px)" }}>{value}</text>
                         </g>
                     ))}
