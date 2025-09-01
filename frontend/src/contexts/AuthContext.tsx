@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 type User = {
     email: string;
     name: string;
-    authorities: Authority;
+    authorities: string[];
 }
 
 type Authority = {
@@ -111,8 +111,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
 
         if (!res.ok) throw new Error(`HTTP ERROR ${res.status}`);
-
-        const data = await res.json();
     }
 
     const kakaoLogin = async (code: string) => {
@@ -148,7 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = () => {
         setAuth({
-            user: { email: "", name: "", authorities: { authority: "" } },
+            user: { email: "", name: "", authorities: [] },
             accessToken: null
         });
 
