@@ -29,7 +29,7 @@ public class JwtUtilComponent {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public JwtUtilComponent(@Value("${jwt.secret}") final String secret, @Value("${jwt.expire_time}") final long accessTokenExpireTime) {
+    public JwtUtilComponent(@Value("${JWT_SECRET}") final String secret, @Value("${jwt.expire_time}") final long accessTokenExpireTime) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpireTime = accessTokenExpireTime;
