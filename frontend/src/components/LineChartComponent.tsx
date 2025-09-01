@@ -82,7 +82,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
             <h2>{icon} {title}</h2>
             <svg className={`${styles.svg}`} viewBox={`0 0 ${containerWidth} ${containerHeight}`} >
                 <g>
-                    {yTicks.map(({ value, yOffset }) => (
+                    {yTicks.map(({ yOffset }) => (
                         <path d={`M ${xRange[0]} ${yRange[0] - marginBottom} H ${xRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(0, ${yOffset})`}/>
                     ))}
 
@@ -96,7 +96,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
                 </g>
 
                 <g>
-                    {xTicks.map(({ value, xOffset }) => (
+                    {xTicks.map(({ xOffset }) => (
                         <path d={`M ${xRange[0] - marginLeft} ${yRange[0]} V ${yRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(${xOffset}, 0)`}></path>
                     ))}
                     {/* <path d={["M", xRange[0], 6, "v", -6, "H", xRange[1], "v", 6].join(" ")} fill='none' stroke='currentColor' transform={`translate(0, ${containerHeight - marginBottom})`}></path> */}
