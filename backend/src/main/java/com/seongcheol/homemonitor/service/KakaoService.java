@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,6 +23,7 @@ import com.seongcheol.homemonitor.dto.KakaoTokenDto;
 import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
 import com.seongcheol.homemonitor.dto.LoginResponseDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
+import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
@@ -51,7 +54,9 @@ public class KakaoService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
+    @Autowired
+    private UserDetailServiceImpl userDetailServiceImpl;
     
     public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
         WebClient webClient = WebClient.builder()
@@ -135,11 +140,17 @@ public class KakaoService {
         KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
         MemberDto memberDto = loadOrCreateSocialAccount(kakaoUserInfoDto);
 
+        UserDetailsImpl userDetailsImpl  = (UserDetailsImpl) userDetailServiceImpl.loadUserByUsername(memberDto.getEmail());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetailsImpl, null, userDetailsImpl.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
         String accessToken = jwtUtilComponent.createAccessToken(memberDto);
 
         LoginResponseDto loginResponseDto = LoginResponseDto.builder()
             .email(memberDto.getEmail())
             .name(memberDto.getNickname())
+            .authorities(userDetailsImpl.getAuthorities())
             .accessToken(accessToken)
             .build()
         ;
