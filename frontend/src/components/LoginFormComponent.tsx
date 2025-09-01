@@ -16,27 +16,28 @@ const LoginFormComponent = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
-
+        
         if(code) {
             try{
                 kakaoLogin(code);
-                
                 alert('로그인 되었습니다.');
                 navigate('/');
             }catch(err) {
+                alert('로그인 실패했습니다.')
                 console.error(err);
             }
         }
     }, [])
 
-    const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
         try {
-            login(email, password);
+            await login(email, password);
             
             alert('로그인 되었습니다.');
             navigate('/');
         }catch(err){
+            alert('로그인 실패했습니다.')
             console.error(err);
         }
     }
