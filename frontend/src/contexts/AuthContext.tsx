@@ -87,11 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userEmail = data.email;
         const userName = data.name;
         const accessToken = data.accessToken;
+        const userAuthorities = data.authorities.map((data: Authority) => data.authority);
 
         localStorage.setItem("access_token", data.accessToken);
 
         setAuth({
-            user: { email: userEmail, name: userName },
+            user: { email: userEmail, name: userName, authorities: userAuthorities },
             accessToken: accessToken
         });
     }
@@ -135,18 +136,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userEmail = data.email;
         const userName = data.name;
         const accessToken = data.accessToken;
+        const userAuthorities = data.authorities.map((data: Authority) => data.authority);
 
         localStorage.setItem("access_token", accessToken);
 
         setAuth({
-            user: { email: userEmail, name: userName },
+            user: { email: userEmail, name: userName, authorities: userAuthorities },
             accessToken: accessToken
         });
     }
 
     const logout = () => {
         setAuth({
-            user: { email: "", name: "" },
+            user: { email: "", name: "", authorities: { authority: "" } },
             accessToken: null
         });
 
