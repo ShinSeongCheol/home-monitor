@@ -119,3 +119,10 @@
     background-color: rgb(255, 194, 194);
     cursor: pointer;
 }
+
+@media screen and (max-width: 1024px) {
+    .container {
+        width: auto;
+        padding: 0px 4px;
+    }
+}

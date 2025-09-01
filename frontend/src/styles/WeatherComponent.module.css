@@ -36,3 +36,16 @@
     margin-top: 8px;
     font-size: 12px;
 }
+
+@media screen and (max-width: 1024px) {
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        gap: 4px;
+    }
+
+    .card {
+        width: auto;
+    }
+}
