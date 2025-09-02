@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../styles/LineChartComponent.module.css';
 import * as d3 from 'd3';
 import type { Data, Datasets } from '../Dashboard';
@@ -17,9 +17,9 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const containerHeight = containerRef.current?.offsetHeight ?? 300;
 
     const marginTop = 20;
-    const marginRight = -20;
+    const marginRight = 0;
     const marginBottom = 20;
-    const marginLeft = -20;
+    const marginLeft = 0;
 
     const data = datasets.map(dataset => dataset.data.map(item => item.y));
     const flatedData = data.flat();
@@ -81,32 +81,19 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
         <div className={styles.container} ref={containerRef}>
             <h2>{icon} {title}</h2>
             <svg className={`${styles.svg}`} viewBox={`0 0 ${containerWidth} ${containerHeight}`} >
-                <g>
-                    {yTicks.map(({ yOffset }) => (
-                        <path d={`M ${xRange[0]} ${yRange[0] - marginBottom} H ${xRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(0, ${yOffset})`}/>
-                    ))}
+                {yTicks.map(({ value, yOffset }) => (
+                    <g key={value} transform={`translate(${xRange[0]}, ${yOffset})`}>
+                        <path d={`M ${xRange[0]} ${yRange[0]} H ${xRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(0, -${yRange[0]})`} />
+                        <text style={{ fontSize: "10px", textAnchor: "middle" }} transform={`translate(-20, 0)`}>{value}</text>
+                    </g>
+                ))}
 
-                    {/* <path d={["M", -6, yRange[0], "H", 0, "V", yRange[1], "H", -6].join(" ")} fill='none' stroke='currentColor' transform={`translate(${marginLeft}, 0)`}></path> */}
-                    {yTicks.map(({ value, yOffset }) => (
-                        <g key={value} transform={`translate(${marginLeft}, ${yOffset})`}>
-                            {/* <line x2="-6" stroke='currentColor'></line> */}
-                            <text key={value} style={{ fontSize: "10px", textAnchor: "middle", transform: "translateX(-20px)" }}>{value}</text>
-                        </g>
-                    ))}
-                </g>
-
-                <g>
-                    {xTicks.map(({ xOffset }) => (
-                        <path d={`M ${xRange[0] - marginLeft} ${yRange[0]} V ${yRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(${xOffset}, 0)`}></path>
-                    ))}
-                    {/* <path d={["M", xRange[0], 6, "v", -6, "H", xRange[1], "v", 6].join(" ")} fill='none' stroke='currentColor' transform={`translate(0, ${containerHeight - marginBottom})`}></path> */}
-                    {xTicks.map(({ value, xOffset }) => (
-                        <g key={value} transform={`translate(${xOffset}, ${containerHeight - marginBottom})`}>
-                            {/* <line y2="6" stroke='currentColor'></line> */}
-                            <text key={value} style={{ fontSize: "10px", textAnchor: "middle", transform: "translateY(20px)" }}>{value}</text>
-                        </g>
-                    ))}
-                </g>
+                {xTicks.map(({ value, xOffset }) => (
+                    <g key={value} transform={`translate(${xOffset}, ${yRange[0]})`} >
+                        <path d={`M ${xRange[0]} ${yRange[0]} V ${yRange[1]}`} fill='none' stroke='#e4dcdcff' transform={`translate(0, -${yRange[0]})`} ></path>
+                        <text style={{ fontSize: "10px", textAnchor: "middle" }} transform={`translate(0, ${yRange[1]})`}>{value}</text>
+                    </g>
+                ))}
 
                 {datasets.map((data) => {
                     return <path key={data.name} d={lineGenerator(data.data) ?? ""} fill='none' stroke={data.color} strokeWidth={'2'}></path>
