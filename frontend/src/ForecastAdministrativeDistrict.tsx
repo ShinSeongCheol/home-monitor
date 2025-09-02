@@ -88,25 +88,24 @@ const ForecastAdministrativeDistrict = () => {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: "A", range: 1 }) as { [key: string]: any }[]
                     const mappedData: AdministartiveDistrict[] = jsonData.map((data) => {
                         return {
-                            type: data['A'],
-                            code: data['B'],
-                            level1: data['C'],
-                            level2: data['D'],
-                            level3: data['E'],
-                            x: data['F'],
-                            y: data['G'],
-                            longitude_degrees: data['H'],
-                            longitude_minutes: data['I'],
-                            longitude_seconds: data['J'],
-                            latitude_degrees: data['K'],
-                            latitude_minutes: data['L'],
-                            latitude_seconds: data['M'],
-                            longitude: data['N'],
-                            latitude: data['O'],
+                            type: data['A'] ? String(data['A']) : '',
+                            code: data['B'] ? Number(data['B']) : '',
+                            level1: data['C'] ? String(data['C']) : '',
+                            level2: data['D'] ? String(data['D']) : '',
+                            level3: data['E'] ? String(data['E']) : '',
+                            x: data['F'] ? Number(data['F']) : '',
+                            y: data['G'] ? Number(data['G']) : '',
+                            longitude_degrees: data['H'] ? Number(data['H']) : '',
+                            longitude_minutes: data['I'] ? Number(data['I']) : '',
+                            longitude_seconds: data['J'] ? Number(data['J']) : '',
+                            latitude_degrees: data['K'] ? Number(data['K']) : '',
+                            latitude_minutes: data['L'] ? Number(data['L']) : '',
+                            latitude_seconds: data['M'] ? Number(data['M']) : '',
+                            longitude: data['N'] ? Number(data['N']) : '',
+                            latitude: data['O'] ? Number(data['O']) : '',
                             updatedAt: data['P'] ? String(data['P']) : '',
                         }
                     });
-
 
                     setRowData(mappedData);
                 })
