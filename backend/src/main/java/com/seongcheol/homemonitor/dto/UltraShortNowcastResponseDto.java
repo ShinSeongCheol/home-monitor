@@ -21,28 +21,28 @@ public class UltraShortNowcastResponseDto {
     private AdministrativeDistrictDto administrativeDistrict;
     private LocalDate baseDate;
     private LocalTime baseTime;
-    private Double T1H;
-    private Double RN1;
-    private Double UUU;
-    private Double VVV;
-    private Double REH;
-    private Byte PTY;
-    private Double VEC;
-    private Double WSD;
+    private Double t1h;
+    private Double rn1;
+    private Double uuu;
+    private Double vvv;
+    private Double reh;
+    private Byte pty;
+    private Double vec;
+    private Double wsd;
 
     public static UltraShortNowcastResponseDto fromEntity(UltraShortNowCastEntity ultraShortNowCastEntity) {
         return UltraShortNowcastResponseDto.builder()
             .administrativeDistrict(AdministrativeDistrictDto.fromEntity(ultraShortNowCastEntity.getAdministrativeDistrict()))
             .baseDate(ultraShortNowCastEntity.getBaseDate())
             .baseTime(ultraShortNowCastEntity.getBaseTime())
-            .T1H(ultraShortNowCastEntity.getT1H())
-            .RN1(ultraShortNowCastEntity.getRN1())
-            .UUU(ultraShortNowCastEntity.getUUU())
-            .VVV(ultraShortNowCastEntity.getVVV())
-            .REH(ultraShortNowCastEntity.getREH())
-            .PTY(ultraShortNowCastEntity.getPTY())
-            .VEC(ultraShortNowCastEntity.getVEC())
-            .WSD(ultraShortNowCastEntity.getWSD())
+            .t1h(ultraShortNowCastEntity.getT1H())
+            .rn1(ultraShortNowCastEntity.getRN1())
+            .uuu(ultraShortNowCastEntity.getUUU())
+            .vvv(ultraShortNowCastEntity.getVVV())
+            .reh(ultraShortNowCastEntity.getREH())
+            .pty(ultraShortNowCastEntity.getPTY())
+            .vec(ultraShortNowCastEntity.getVEC())
+            .wsd(ultraShortNowCastEntity.getWSD())
             .build()
         ;
     }
