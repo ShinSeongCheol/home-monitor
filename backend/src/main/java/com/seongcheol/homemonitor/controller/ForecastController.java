@@ -29,7 +29,7 @@ public class ForecastController {
 
     @GetMapping("/region/latest")
     public UltraShortNowcastResponseDto getRegionLatest() {
-        return forecastService.findUltraShortNowCastByRegionAndBaseDate();
+        return forecastService.findLatestUltraShortNowCastByRegion();
     }
     
 

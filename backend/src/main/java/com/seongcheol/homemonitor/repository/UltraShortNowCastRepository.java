@@ -20,5 +20,5 @@ public interface UltraShortNowCastRepository extends JpaRepository<UltraShortNow
                 AND ad.level2 = :level2
             ORDER BY usn.id DESC LIMIT 1
             """)
-    public UltraShortNowCastEntity findUltraShortNowCastByRegionAndBaseDate(@Param("level1") String level1, @Param("level2") String level2, @Param("baseDate") String baseDate);
+    public UltraShortNowCastEntity findLatestUltraShortNowCastByRegion(@Param("level1") String level1, @Param("level2") String level2);
 }

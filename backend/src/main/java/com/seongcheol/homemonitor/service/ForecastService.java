@@ -131,12 +131,8 @@ public class ForecastService {
         }
     }
 
-    public UltraShortNowcastResponseDto findUltraShortNowCastByRegionAndBaseDate() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        String baseDate = localDateTime.format(dateTimeFormatter);
-        UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findUltraShortNowCastByRegionAndBaseDate("경상북도", "경산시", baseDate));
+    public UltraShortNowcastResponseDto findLatestUltraShortNowCastByRegion() {
+        UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findLatestUltraShortNowCastByRegion("경상북도", "경산시"));
         
         return administrativeDistrictDto;
     }
