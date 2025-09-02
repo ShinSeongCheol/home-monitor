@@ -131,9 +131,19 @@ public class ForecastService {
         }
     }
 
+    // 지역별 최신 초단기 실황 정보 조회
     public UltraShortNowcastResponseDto findLatestUltraShortNowCastByRegion() {
         UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findLatestUltraShortNowCastByRegion("경상북도", "경산시"));
         
         return administrativeDistrictDto;
+    }
+
+    // 지역별 하루치 초단기 실황 정보 조회
+    public List<UltraShortNowcastResponseDto> findTodayUltraShortNowCastByRegionAndBaseDate() {
+        LocalDate baseDate = LocalDate.now();
+
+        List<UltraShortNowcastResponseDto> administrativeDistrictDtoList = ultraShortNowCastRepository.findTodayUltraShortNowCastByRegionAndBaseDate("경상북도", "경산시", baseDate).stream().map(ultraShrotNowCastEntity -> UltraShortNowcastResponseDto.fromEntity(ultraShrotNowCastEntity)).toList();
+        
+        return administrativeDistrictDtoList;
     }
 }

@@ -31,6 +31,11 @@ public class ForecastController {
     public UltraShortNowcastResponseDto getRegionLatest() {
         return forecastService.findLatestUltraShortNowCastByRegion();
     }
+
+    @GetMapping("/region/today")
+    public List<UltraShortNowcastResponseDto> getRegionToday() {
+        return forecastService.findTodayUltraShortNowCastByRegionAndBaseDate();
+    }
     
 
     @GetMapping("/administrativeDistrict")

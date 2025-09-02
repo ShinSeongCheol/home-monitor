@@ -59,7 +59,7 @@ public class WebSecurityConfig {
 
 		http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-				.requestMatchers("/api/v1/forecast/region/latest").permitAll()
+				.requestMatchers("/api/v1/forecast/region/**").permitAll()
 				.requestMatchers("/api/v1/forecast/**").hasRole("ADMIN")
 				.requestMatchers("/api/v1/member/signup").permitAll()
 				.requestMatchers("/api/v1/member/**").authenticated()
