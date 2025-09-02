@@ -2,6 +2,7 @@ package com.seongcheol.homemonitor.service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seongcheol.homemonitor.domain.AdministrativeDistrictEntity;
 import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
+import com.seongcheol.homemonitor.dto.UltraShortNowcastResponseDto;
 import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto;
 import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto.Item;
 import com.seongcheol.homemonitor.repository.AdministrativeDistrictRepository;
@@ -127,5 +129,15 @@ public class ForecastService {
                 logger.error("getUltraForecastNowCast Error", e);
             }
         }
+    }
+
+    public UltraShortNowcastResponseDto findUltraShortNowCastByRegionAndBaseDate() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String baseDate = localDateTime.format(dateTimeFormatter);
+        UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findUltraShortNowCastByRegionAndBaseDate("경상북도", "경산시", baseDate));
+        
+        return administrativeDistrictDto;
     }
 }

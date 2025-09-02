@@ -26,17 +26,6 @@ public class WebSecurityConfig {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
-	// @Bean
-	// public JwtFilter jwtFilter() {
-	// 	return new JwtFilter(userDetailServiceImpl, jwtUtilComponent);
-	// }
-
-	// @Autowired
-	// private UserDetailServiceImpl userDetailServiceImpl;
-
-	// @Autowired
-	// private JwtUtilComponent jwtUtilComponent;
-
 	@Autowired
 	private JwtFilter jwtFilter;
 
@@ -70,6 +59,7 @@ public class WebSecurityConfig {
 
 		http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+				.requestMatchers("/api/v1/forecast/region/latest").permitAll()
 				.requestMatchers("/api/v1/forecast/**").hasRole("ADMIN")
 				.requestMatchers("/api/v1/member/signup").permitAll()
 				.requestMatchers("/api/v1/member/**").authenticated()

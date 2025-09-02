@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
+import com.seongcheol.homemonitor.dto.UltraShortNowcastResponseDto;
 import com.seongcheol.homemonitor.service.ForecastService;
 
 
-@RequestMapping("/api/v1")
+
+@RequestMapping("/api/v1/forecast")
 @RestController
 public class ForecastController {
 
@@ -25,12 +27,18 @@ public class ForecastController {
     @Autowired
     private ForecastService forecastService;
 
-    @GetMapping("/forecast/administrativeDistrict")
+    @GetMapping("/region/latest")
+    public UltraShortNowcastResponseDto getRegionLatest() {
+        return forecastService.findUltraShortNowCastByRegionAndBaseDate();
+    }
+    
+
+    @GetMapping("/administrativeDistrict")
     public List<AdministrativeDistrictDto> getAdministrativeDistrict() {
         return forecastService.getAdministrativeDistrict();
     }
 
-    @PostMapping("/forecast/administrativeDistrict")
+    @PostMapping("/administrativeDistrict")
     public ResponseEntity<String> postAdministrativeDistrict(@RequestBody List<AdministrativeDistrictDto> administrativeDisctrictDtoList) {
         forecastService.postAdministrativeDistrict(administrativeDisctrictDtoList);
 
