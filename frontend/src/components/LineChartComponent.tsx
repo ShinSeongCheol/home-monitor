@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../styles/LineChartComponent.module.css';
 import * as d3 from 'd3';
 import type { Data, Datasets } from '../Dashboard';
@@ -13,8 +13,8 @@ type LineChartComponentProps = {
 const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) => {
 
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const containerWidth = containerRef.current?.offsetWidth ?? 1024;
-    const containerHeight = containerRef.current?.offsetHeight ?? 300;
+    const [containerWidth, setContainerWidth] = useState(containerRef.current?.offsetWidth ?? 1024);
+    const [containerHeight, setContainerHeight] = useState(containerRef.current?.offsetHeight ?? 300);
 
     const marginTop = 20;
     const marginRight = 0;
@@ -75,6 +75,23 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const lineGenerator = d3.line<Data>()
         .x(d => xScale(d.x))
         .y(d => yScale(d.y));
+
+    // 리사이즈 옵저버 추가
+    useEffect(() => {
+        const container = containerRef.current;
+
+        const resizeObserver = new ResizeObserver((entries) => {
+            for(let entry of entries) {
+                const {width, height} = entry.contentRect;
+                setContainerWidth(width);
+                setContainerHeight(height);
+            }
+        })
+
+        if(container) resizeObserver.observe(container);
+
+        return () => resizeObserver.disconnect();
+    }, [])
 
     return (
         <div className={styles.container} ref={containerRef}>
