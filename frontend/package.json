@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@ag-grid-community/locale": "^34.1.1",
+    "@ckeditor/ckeditor5-react": "^11.0.0",
     "ag-grid-community": "^34.1.1",
     "ag-grid-react": "^34.1.1",
+    "ckeditor5": "^46.0.2",
     "d3": "^7.9.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
