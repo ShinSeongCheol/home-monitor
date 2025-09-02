@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import styles from '../styles/LineChartComponent.module.css';
 import * as d3 from 'd3';
 import type { Data, Datasets } from '../Dashboard';
@@ -24,7 +24,6 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     const data = datasets.map(dataset => dataset.data.map(item => item.y));
     const flatedData = data.flat();
     const yMax = d3.max(flatedData) ?? 100
-    
 
     const xDomain = [d3.timeDay.floor(new Date()), d3.timeHour.offset(d3.timeDay.ceil(new Date()), -1)]
     const xRange = [marginLeft, containerWidth - marginRight]
@@ -34,11 +33,11 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
 
     const xScale = useMemo(() => {
         return d3.scaleTime().domain(xDomain).range(xRange);
-    }, [containerWidth])
+    }, [xDomain, containerWidth])
 
     const yScale = useMemo(() => {
         return d3.scaleLinear().domain(yDomain).range(yRange);
-    }, [containerHeight])
+    }, [yDomain, containerHeight])
 
     const xTicks = useMemo(() => {
         const xScale = d3.scaleTime()
@@ -55,7 +54,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
                 value: timeFormatter(value),
                 xOffset: xScale(value)
             }));
-    }, [containerWidth])
+    }, [xRange, containerWidth])
 
     const yTicks = useMemo(() => {
         const yScale = d3.scaleLinear()
@@ -71,7 +70,7 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
                 value,
                 yOffset: yScale(value)
             }));
-    }, [containerHeight])
+    }, [yRange, containerHeight])
 
     const lineGenerator = d3.line<Data>()
         .x(d => xScale(d.x))

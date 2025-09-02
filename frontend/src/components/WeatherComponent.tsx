@@ -70,7 +70,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>실내 온도</p>
-                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#ffa2a2ff'></TemeratureSVG></span>
+                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#FFB266'></TemeratureSVG></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${insideTemperature ?? ""}°C`}</span>
@@ -80,7 +80,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>외부 온도</p>
-                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#ffa2a2ff'></TemeratureSVG></span>
+                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#E74C3C'></TemeratureSVG></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${outsideTemperature ?? ""}°C`}</span>
@@ -90,7 +90,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>실내 습도</p>
-                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#99ddfdff'></HumiditySVG></span>
+                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#85C1E9'></HumiditySVG></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${insideHumidity ?? ""}%`}</span>
@@ -100,7 +100,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>외부 습도</p>
-                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#99ddfdff'></HumiditySVG></span>
+                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#3498DB'></HumiditySVG></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${outsideHumidity ?? ""}%`}</span>

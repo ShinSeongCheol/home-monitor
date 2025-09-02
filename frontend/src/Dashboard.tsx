@@ -22,13 +22,26 @@ type Dht11Log = {
     humidity: number;
 }
 
+type UltraShortNowcast = {
+    adminiStrativeDistrict: string;
+    baseDate: string;
+    baseTime: string;
+    pty: number;
+    reh: number;
+    rn1: number;
+    t1h: number;
+    uuu: number;
+    vec: number;
+    vvv: number;
+    wsd: number;
+}
+
 const Dashboard = () => {
 
     const [temperatureDatasets, setTemperatureDatasets] = useState<Datasets[]>([]);
     const [humidityDatasets, setHumidityDatasets] = useState<Datasets[]>([]);
 
     useEffect(() => {
-
         const fetchData = () => {
             fetch(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/today`)
             .then(res => {
@@ -45,13 +58,13 @@ const Dashboard = () => {
                 const insideTemperature = {
                     name: "inside temperature",
                     data: temperature,
-                    color: "tomato"
+                    color: "#FFB266"
                 }
         
                 const insideHumidity = {
                     name: "inside humidity",
                     data: humidity,
-                    color: "steelblue"
+                    color: "#85C1E9"
                 }
 
                 setTemperatureDatasets(prev => [
@@ -69,6 +82,50 @@ const Dashboard = () => {
         fetchData();
 
         const interval = setInterval(fetchData, 1000 * 60);
+
+        return () => clearInterval(interval);
+    }, [])
+
+    useEffect(() => {
+        const fetchData = () => {
+            fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/region/today`)
+            .then(res => {
+                if(!res.ok) throw new Error(`Http Error ${res.status}`);
+                return res.json();
+            })
+            .then(data => {
+                const temperature: Data[] = data.map((d: UltraShortNowcast) => {return ({x: new Date(`${d.baseDate} ${d.baseTime}`), y: d.t1h})});
+                const humidity: Data[] = data.map((d: UltraShortNowcast) => {return ({x: new Date(`${d.baseDate} ${d.baseTime}`), y: d.reh})});
+
+                const outsideTemperature = {
+                    name: "outside temperature",
+                    data: temperature,
+                    color: "#E74C3C"
+                }
+        
+                const outsideHumidity = {
+                    name: "outside humidity",
+                    data: humidity,
+                    color: "#3498DB"
+                }
+
+                setTemperatureDatasets(prev => [
+                    ...prev.filter(data => data.name !== outsideTemperature.name),
+                    outsideTemperature]
+                );
+
+                setHumidityDatasets(prev => [
+                    ...prev.filter(data => data.name !== outsideHumidity.name),
+                    outsideHumidity]
+                );
+            })
+            .catch(err => console.log(err));
+        }
+        
+        fetchData();
+
+        const interval = setInterval(fetchData, 1000 * 60);
+
         return () => clearInterval(interval);
     }, [])
     
