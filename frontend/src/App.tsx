@@ -11,7 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './Profile';
 import AuthPage from './AuthPage';
 import CkEditorComponent from './components/CkEditorComponent';
-import BoardPostCreateComponent from './components/BoardPostCreateComponent';
+import BoardPostCreateComponent from './BoardPostCreate';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

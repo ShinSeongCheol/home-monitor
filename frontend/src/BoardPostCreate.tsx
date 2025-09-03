@@ -1,5 +1,5 @@
-import CkEditorComponent from "./CkEditorComponent";
-import styles from '../styles/BoardPostCreateComponent.module.css';
+import CkEditorComponent from "./components/CkEditorComponent";
+import styles from './styles/BoardPostCreateComponent.module.css';
 import { useNavigate } from "react-router-dom";
 import type { FormEventHandler } from "react";
 
