@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.config;
+package com.seongcheol.homemonitor.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

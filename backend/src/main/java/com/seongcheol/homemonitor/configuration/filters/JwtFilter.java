@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.filter;
+package com.seongcheol.homemonitor.configuration.filters;
 
 import java.io.IOException;
 

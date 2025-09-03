@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.components;
+package com.seongcheol.homemonitor.configuration.components;
 
 import java.io.IOException;
 

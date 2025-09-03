@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.config;
+package com.seongcheol.homemonitor.configuration;
 
 import java.util.List;
 

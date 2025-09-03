@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.config;
+package com.seongcheol.homemonitor.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.seongcheol.homemonitor.components.AuthenticationEntryPointComponent;
-import com.seongcheol.homemonitor.filter.JwtFilter;
-import com.seongcheol.homemonitor.components.AccessDeniedHandlerComponent;
+import com.seongcheol.homemonitor.configuration.components.AccessDeniedHandlerComponent;
+import com.seongcheol.homemonitor.configuration.components.AuthenticationEntryPointComponent;
+import com.seongcheol.homemonitor.configuration.filters.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
