@@ -12,6 +12,7 @@ import Profile from './Profile';
 import AuthPage from './AuthPage';
 import CkEditorComponent from './components/CkEditorComponent';
 import BoardPostCreateComponent from './BoardPostCreate';
+import Board from './Board';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -25,11 +26,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard></Dashboard>}></Route>
           {/* 게시판 종류 목록 */}
-          <Route path="/boards/" element={<CkEditorComponent value='게시판 종류 목록' onChange={() => console.log('h')}/>}></Route>
+          <Route path="/boards/" element={<Board/>}></Route>
           {/* 게시판 글 목록 */}
-          <Route path="/boards/:boardId" element={<CkEditorComponent value='게시판 글 목록' onChange={() => console.log('h')}/>}></Route>
+          <Route path="/boards/:categoryId" element={<CkEditorComponent value='게시판 글 목록' onChange={() => console.log('h')}/>}></Route>
           {/* 게시판 글 추가 */}
-          <Route path="/boards/:boardId/post" element={<BoardPostCreateComponent/>}></Route>
+          <Route path="/boards/:categoryId/post" element={<BoardPostCreateComponent/>}></Route>
           {/* 게시판 글 조회 */}
           <Route path="/boards/:boardId/:postId" element={<CkEditorComponent value='게시판 글 조회' onChange={() => console.log('h')}/>}></Route>
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
