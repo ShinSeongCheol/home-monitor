@@ -5,18 +5,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seongcheol.homemonitor.dto.Dht11LogDto;
 import com.seongcheol.homemonitor.repository.Dht11LogRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class Dht11LogService {
 	
-	private final Dht11LogRepository dht11LogRepository;
+    @Autowired
+	private Dht11LogRepository dht11LogRepository;
 	
 	// 전체 조회
 	public List<Dht11LogDto> getAllLogs() {

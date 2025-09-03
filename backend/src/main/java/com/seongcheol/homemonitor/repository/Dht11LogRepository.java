@@ -18,7 +18,7 @@ public interface Dht11LogRepository extends JpaRepository<Dht11LogEntity, LocalD
 			SELECT
 				log
 			FROM
-				Dht11Log log
+				Dht11LogEntity log
 			WHERE
 				:startOfDay <= log.measurementTime AND log.measurementTime < :endOfDay
 				AND FUNCTION('HOUR', log.measurementTime) IS NOT NULL
