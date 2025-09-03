@@ -1,0 +1,85 @@
+.main {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    min-height: 0;
+}
+
+.section {
+    width: 1024px;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 0;
+}
+
+.form {
+    margin-top: 16px;
+    
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+    flex: 1;
+    
+    min-height: 0;
+}
+
+.inputTitle {
+    border: none;
+    background-color: transparent;
+    font-size: 30px;
+}
+
+.form hr {
+    margin: 2px;
+    width: 100%;
+}
+
+
+.buttonContainer {
+    display: flex;
+    justify-content: end;
+    gap: 16px;
+
+    padding: 20px 0px;
+}
+
+.buttonContainer input {
+    border: none;
+
+    width: 80px;
+    height: 30px;
+}
+
+.cancleButton {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.cancleButton:hover {
+    background: #bdbdbd;
+    cursor: pointer;
+}
+
+.submitButton {
+    background: #1976d2;
+    color: white;
+}
+
+.submitButton:hover {
+    background: #1560ab;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+        .section {
+            width: 100%;
+            padding: 0px 8px;
+        }
+}
