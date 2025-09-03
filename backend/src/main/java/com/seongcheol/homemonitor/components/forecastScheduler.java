@@ -20,6 +20,7 @@ public class ForecastScheduler {
     
     @Scheduled(cron = "0 30 * * * *")
     public void getUltraForecastNowCast() {
+        logger.debug("초단기 실황 조회 데이터 조회 시작");
         forecastService.getUltraForecastNowCast();
     }
 

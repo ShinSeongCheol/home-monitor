@@ -2,7 +2,6 @@ package com.seongcheol.homemonitor.service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,17 +46,25 @@ public class ForecastService {
     private ObjectMapper objectMapper;
 
     public List<AdministrativeDistrictDto> getAdministrativeDistrict() {
+
+        logger.debug("기상청 행정구역 코드 조회 서비스");
+
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.findAll();
         return administrativeDistrictEntityList.stream().map(administrativeDistrictEntity -> AdministrativeDistrictDto.fromEntity(administrativeDistrictEntity)).toList();
     }
 
     public void postAdministrativeDistrict(List<AdministrativeDistrictDto> administrativeDistrictDtoList) {
+
+        logger.debug("기상청 행정구역 코드 추가 서비스");
+
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictDtoList.stream().map((administrativeDistrictDto) -> AdministrativeDistrictDto.toEntity(administrativeDistrictDto)).toList();
         administrativeDistrictRepository.saveAll(administrativeDistrictEntityList);
     }
 
-    // level2 지점 행정 구역 코드 조회
     public List<AdministrativeDistrictDto> getAdministrativeDistrictLevel2() {
+
+        logger.debug("기상청 행정구역 코드 level2 조회 서비스");
+
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.getLevel2List();
         return administrativeDistrictEntityList.stream().map(administrativeDistrictEntity -> AdministrativeDistrictDto.fromEntity((administrativeDistrictEntity))).toList();
     }
@@ -65,6 +72,9 @@ public class ForecastService {
     // 초단기 실황 조회
     @Transactional
     public void getUltraForecastNowCast() {
+
+        logger.debug("초단기 실황 조회 데이터 요청 서비스");
+
         List<AdministrativeDistrictEntity> administrativeDistrictEntityList = administrativeDistrictRepository.getLevel2List();
 
         LocalDate localDate = LocalDate.now();
@@ -131,15 +141,19 @@ public class ForecastService {
         }
     }
 
-    // 지역별 최신 초단기 실황 정보 조회
     public UltraShortNowcastResponseDto findLatestUltraShortNowCastByRegion() {
+
+        logger.debug("최신 지역별 초단기 실황 데이터 조회 서비스");
+
         UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findLatestUltraShortNowCastByRegion("경상북도", "경산시"));
         
         return administrativeDistrictDto;
     }
 
-    // 지역별 하루치 초단기 실황 정보 조회
     public List<UltraShortNowcastResponseDto> findTodayUltraShortNowCastByRegionAndBaseDate() {
+
+        logger.debug("최신 지역별 하루 초단기 실황 데이터 조회 서비스");
+
         LocalDate baseDate = LocalDate.now();
 
         List<UltraShortNowcastResponseDto> administrativeDistrictDtoList = ultraShortNowCastRepository.findTodayUltraShortNowCastByRegionAndBaseDate("경상북도", "경산시", baseDate).stream().map(ultraShrotNowCastEntity -> UltraShortNowcastResponseDto.fromEntity(ultraShrotNowCastEntity)).toList();

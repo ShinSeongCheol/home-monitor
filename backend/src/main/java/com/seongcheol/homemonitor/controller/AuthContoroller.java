@@ -44,12 +44,14 @@ public class AuthContoroller {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        logger.debug("유저 로그인 컨트롤러 요청");
         LoginResponseDto loginResponseDto = authService.login(loginRequestDto);
         return ResponseEntity.ok(loginResponseDto);
     }
 
     @PostMapping("/kakao")
     public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+        logger.debug("카카오 로그인 컨트롤러 요청");
         LoginResponseDto loginResponseDto = kakaoService.login(kaKaoAuthorizeDto);
         return ResponseEntity.ok(loginResponseDto);
     }

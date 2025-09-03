@@ -29,22 +29,29 @@ public class ForecastController {
 
     @GetMapping("/region/latest")
     public UltraShortNowcastResponseDto getRegionLatest() {
+        logger.debug("지역 초단기 실황 데이터 조회 컨트롤러 요청");
         return forecastService.findLatestUltraShortNowCastByRegion();
     }
 
     @GetMapping("/region/today")
     public List<UltraShortNowcastResponseDto> getRegionToday() {
+        logger.debug("지역 초단기 실황 하루 데이터 조회 컨트롤러 요청");
+
         return forecastService.findTodayUltraShortNowCastByRegionAndBaseDate();
     }
     
 
     @GetMapping("/administrativeDistrict")
     public List<AdministrativeDistrictDto> getAdministrativeDistrict() {
+        logger.debug("기상청 행정 구역 코드 조회 컨트롤러 요청");
+
         return forecastService.getAdministrativeDistrict();
     }
 
     @PostMapping("/administrativeDistrict")
     public ResponseEntity<String> postAdministrativeDistrict(@RequestBody List<AdministrativeDistrictDto> administrativeDisctrictDtoList) {
+        logger.debug("기상청 행정 구역 코드 추가 컨트롤러 요청");
+
         forecastService.postAdministrativeDistrict(administrativeDisctrictDtoList);
 
         return ResponseEntity.ok().build();

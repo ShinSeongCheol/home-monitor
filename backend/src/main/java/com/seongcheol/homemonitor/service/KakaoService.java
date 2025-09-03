@@ -59,6 +59,9 @@ public class KakaoService {
     private UserDetailServiceImpl userDetailServiceImpl;
     
     public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+
+        logger.debug("카카오 토큰 요청 서비스");
+
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_OAUTH_URL)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -80,6 +83,9 @@ public class KakaoService {
     }
 
     public KakaoUserInfoDto requestUserInfo(KakaoTokenDto kakaoTokenDto) {
+
+        logger.debug("카카오 유저 정보 요청 서비스");
+
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_USER_INFO_URL)
             .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenDto.getTokenType() + " " + kakaoTokenDto.getAccessToken())
@@ -96,6 +102,9 @@ public class KakaoService {
 
     @Transactional
     public MemberDto loadOrCreateSocialAccount(KakaoUserInfoDto kakaoUserInfoDto) {
+
+        logger.debug("카카오 소셜 계정 생성 서비스");
+
         SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("KAKAO", kakaoUserInfoDto.getId())
         .orElseGet(
             () -> {
@@ -136,6 +145,9 @@ public class KakaoService {
 
     @Transactional
     public LoginResponseDto login(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+
+        logger.debug("카카오 소셜 로그인 서비스");
+
         KakaoTokenDto kakaoTokenDto = requestToken(kaKaoAuthorizeDto);
         KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
         MemberDto memberDto = loadOrCreateSocialAccount(kakaoUserInfoDto);

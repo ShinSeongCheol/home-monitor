@@ -29,6 +29,9 @@ public class AuthService {
     private JwtUtilComponent jwtUtilComponent;
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+
+        logger.debug("유저 로그인 서비스");
+
         try {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);
@@ -57,6 +60,8 @@ public class AuthService {
     }
 
     public LoginResponseDto getAuth() {
+
+        logger.debug("유저 인증 정보 조회 서비스");
 
         LoginResponseDto.LoginResponseDtoBuilder loginResponseDtoBuilder = LoginResponseDto.builder();
 

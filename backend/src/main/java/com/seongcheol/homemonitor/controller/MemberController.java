@@ -27,12 +27,16 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<MemberDto> signUp(@RequestBody MemberRequestDto memberRequestDto) {
+        logger.debug("유저 회원가입 컨트롤러 요청");
+
         MemberDto memberDto = memberService.signup(memberRequestDto);
         return ResponseEntity.ok(memberDto);
     }
 
     @PutMapping("/{username}")
     public ResponseEntity<MemberDto> putMember(@PathVariable("username") String username, @RequestBody MemberRequestDto memberRequestDto) {
+        logger.debug("유저 정보 수정 컨트롤러 요청");
+
         MemberDto memberDto = memberService.putMember(memberRequestDto);
 
         return ResponseEntity.ok(memberDto);

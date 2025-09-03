@@ -28,6 +28,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        logger.debug("스프링 시큐리티 userDetailService 구현체");
+
         MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
 
         String[] roles = memberEntity.getRole().toArray(new String[0]);
