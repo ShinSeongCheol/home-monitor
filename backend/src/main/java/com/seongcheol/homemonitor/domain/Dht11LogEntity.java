@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dht11Log {
+public class Dht11LogEntity {
 	@Id
 	private LocalDateTime measurementTime;
 	
