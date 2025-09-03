@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,11 +142,10 @@ public class ForecastService {
         }
     }
 
-    public UltraShortNowcastResponseDto findLatestUltraShortNowCastByRegion() {
-
+    public UltraShortNowcastResponseDto findLatestUltraShortNowCastByRegion() throws NoSuchElementException {
         logger.debug("최신 지역별 초단기 실황 데이터 조회 서비스");
-
-        UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastRepository.findLatestUltraShortNowCastByRegion("경상북도", "경산시"));
+        UltraShortNowCastEntity ultraShortNowCastEntity = ultraShortNowCastRepository.findLatestUltraShortNowCastByRegion("경상북도", "경산시").orElseThrow(() -> new NoSuchElementException("해당 지역 최신 초단기 실황 데이터가 없습니다."));
+        UltraShortNowcastResponseDto administrativeDistrictDto = UltraShortNowcastResponseDto.fromEntity(ultraShortNowCastEntity);
         
         return administrativeDistrictDto;
     }

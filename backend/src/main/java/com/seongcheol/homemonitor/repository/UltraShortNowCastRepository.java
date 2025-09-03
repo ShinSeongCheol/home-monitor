@@ -2,6 +2,7 @@ package com.seongcheol.homemonitor.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +24,7 @@ public interface UltraShortNowCastRepository extends JpaRepository<UltraShortNow
                 AND ad.level2 = :level2
             ORDER BY usn.id DESC LIMIT 1
             """)
-    public UltraShortNowCastEntity findLatestUltraShortNowCastByRegion(@Param("level1") String level1, @Param("level2") String level2);
+    public Optional<UltraShortNowCastEntity> findLatestUltraShortNowCastByRegion(@Param("level1") String level1, @Param("level2") String level2);
 
     @Query("""
         SELECT
