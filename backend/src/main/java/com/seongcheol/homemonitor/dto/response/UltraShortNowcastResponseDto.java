@@ -1,9 +1,10 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
+import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

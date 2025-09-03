@@ -20,9 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seongcheol.homemonitor.domain.AdministrativeDistrictEntity;
 import com.seongcheol.homemonitor.domain.UltraShortNowCastEntity;
 import com.seongcheol.homemonitor.dto.AdministrativeDistrictDto;
-import com.seongcheol.homemonitor.dto.UltraShortNowcastResponseDto;
-import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto;
-import com.seongcheol.homemonitor.dto.UltraSrtNcstResponseDto.Item;
+import com.seongcheol.homemonitor.dto.response.UltraShortNowcastResponseDto;
+import com.seongcheol.homemonitor.dto.response.UltraSrtNcstResponseDto;
+import com.seongcheol.homemonitor.dto.response.UltraSrtNcstResponseDto.Item;
 import com.seongcheol.homemonitor.repository.AdministrativeDistrictRepository;
 import com.seongcheol.homemonitor.repository.UltraShortNowCastRepository;
 

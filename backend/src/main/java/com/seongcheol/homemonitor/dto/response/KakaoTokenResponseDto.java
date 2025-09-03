@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoTokenDto {
+public class KakaoTokenResponseDto {
     @JsonProperty("token_type")
     private String tokenType;
     @JsonProperty("access_token")

@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.dto.response;
 
 import java.util.List;
 

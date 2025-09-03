@@ -12,10 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.seongcheol.homemonitor.components.JwtUtilComponent;
-import com.seongcheol.homemonitor.dto.LoginRequestDto;
-import com.seongcheol.homemonitor.dto.LoginResponseDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
+import com.seongcheol.homemonitor.dto.request.LoginRequestDto;
+import com.seongcheol.homemonitor.dto.response.LoginResponseDto;
 
 @Service
 public class AuthService {

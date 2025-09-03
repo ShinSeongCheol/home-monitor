@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class KakaoUserInfoDto {
+public class KakaoUserInfoResponseDto {
     @JsonProperty(value = "id")
     private Long id;
 

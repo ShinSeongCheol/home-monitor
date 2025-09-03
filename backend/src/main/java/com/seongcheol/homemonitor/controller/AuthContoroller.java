@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
-import com.seongcheol.homemonitor.dto.LoginRequestDto;
-import com.seongcheol.homemonitor.dto.LoginResponseDto;
+import com.seongcheol.homemonitor.dto.request.KaKaoAuthorizeRequestDto;
+import com.seongcheol.homemonitor.dto.request.LoginRequestDto;
+import com.seongcheol.homemonitor.dto.response.LoginResponseDto;
 import com.seongcheol.homemonitor.service.AuthService;
 import com.seongcheol.homemonitor.service.KakaoService;
 
@@ -50,9 +50,9 @@ public class AuthContoroller {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestBody KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+    public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestBody KaKaoAuthorizeRequestDto kaKaoAuthorizeRequestDto) {
         logger.debug("카카오 로그인 컨트롤러 요청");
-        LoginResponseDto loginResponseDto = kakaoService.login(kaKaoAuthorizeDto);
+        LoginResponseDto loginResponseDto = kakaoService.login(kaKaoAuthorizeRequestDto);
         return ResponseEntity.ok(loginResponseDto);
     }
 

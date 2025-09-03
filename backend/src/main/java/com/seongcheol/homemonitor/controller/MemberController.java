@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seongcheol.homemonitor.dto.MemberDto;
-import com.seongcheol.homemonitor.dto.MemberRequestDto;
+import com.seongcheol.homemonitor.dto.request.MemberRequestDto;
 import com.seongcheol.homemonitor.service.MemberService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;

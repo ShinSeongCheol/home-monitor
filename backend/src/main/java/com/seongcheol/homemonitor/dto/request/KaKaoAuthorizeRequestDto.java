@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class KaKaoAuthorizeDto {
+public class KaKaoAuthorizeRequestDto {
     private String code;
 }

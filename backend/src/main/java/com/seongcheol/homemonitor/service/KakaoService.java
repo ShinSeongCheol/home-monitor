@@ -18,12 +18,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.seongcheol.homemonitor.components.JwtUtilComponent;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
-import com.seongcheol.homemonitor.dto.KaKaoAuthorizeDto;
-import com.seongcheol.homemonitor.dto.KakaoTokenDto;
-import com.seongcheol.homemonitor.dto.KakaoUserInfoDto;
-import com.seongcheol.homemonitor.dto.LoginResponseDto;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
+import com.seongcheol.homemonitor.dto.request.KaKaoAuthorizeRequestDto;
+import com.seongcheol.homemonitor.dto.response.KakaoTokenResponseDto;
+import com.seongcheol.homemonitor.dto.response.KakaoUserInfoResponseDto;
+import com.seongcheol.homemonitor.dto.response.LoginResponseDto;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
@@ -58,7 +58,7 @@ public class KakaoService {
     @Autowired
     private UserDetailServiceImpl userDetailServiceImpl;
     
-    public KakaoTokenDto requestToken(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+    public KakaoTokenResponseDto requestToken(KaKaoAuthorizeRequestDto kaKaoAuthorizeRequestDto) {
 
         logger.debug("카카오 토큰 요청 서비스");
 
@@ -67,55 +67,55 @@ public class KakaoService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
 
-        KakaoTokenDto kakaoTokenDto = webClient.post()
+        KakaoTokenResponseDto kakaoTokenResponseDto = webClient.post()
             .body(
                 BodyInserters.fromFormData("grant_type", "authorization_code")
                 .with("client_id", KAKAO_CLIENT_ID)
                 .with("redirect_uri", KAKAO_REDIRECT_URI)
-                .with("code", kaKaoAuthorizeDto.getCode())
+                .with("code", kaKaoAuthorizeRequestDto.getCode())
             )
             .retrieve()
-            .bodyToMono(KakaoTokenDto.class)
+            .bodyToMono(KakaoTokenResponseDto.class)
             .block()
         ;
 
-        return kakaoTokenDto;
+        return kakaoTokenResponseDto;
     }
 
-    public KakaoUserInfoDto requestUserInfo(KakaoTokenDto kakaoTokenDto) {
+    public KakaoUserInfoResponseDto requestUserInfo(KakaoTokenResponseDto kakaoTokenResponseDto) {
 
         logger.debug("카카오 유저 정보 요청 서비스");
 
         WebClient webClient = WebClient.builder()
             .baseUrl(KAKAO_USER_INFO_URL)
-            .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenDto.getTokenType() + " " + kakaoTokenDto.getAccessToken())
+            .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoTokenResponseDto.getTokenType() + " " + kakaoTokenResponseDto.getAccessToken())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
         
-        KakaoUserInfoDto kakaoUserInfoDto = webClient.get()
+        KakaoUserInfoResponseDto kakaoUserInfoResponseDto = webClient.get()
             .retrieve()
-            .bodyToMono(KakaoUserInfoDto.class)
+            .bodyToMono(KakaoUserInfoResponseDto.class)
             .block();
 
-        return kakaoUserInfoDto;
+        return kakaoUserInfoResponseDto;
     }
 
     @Transactional
-    public MemberDto loadOrCreateSocialAccount(KakaoUserInfoDto kakaoUserInfoDto) {
+    public MemberDto loadOrCreateSocialAccount(KakaoUserInfoResponseDto kakaoUserInfoResponseDto) {
 
         logger.debug("카카오 소셜 계정 생성 서비스");
 
-        SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("KAKAO", kakaoUserInfoDto.getId())
+        SocialAccountEntity socialAccountEntity = socialAccountRepository.findByProviderAndProviderId("KAKAO", kakaoUserInfoResponseDto.getId())
         .orElseGet(
             () -> {
 
-                MemberEntity memberEntity = memberRepository.findByEmail(kakaoUserInfoDto.getKakaoAccount().getEmail())
+                MemberEntity memberEntity = memberRepository.findByEmail(kakaoUserInfoResponseDto.getKakaoAccount().getEmail())
                     .orElseGet(
                         () -> {
 
                             MemberEntity newMemberEntity = MemberEntity.builder()
-                                .email(kakaoUserInfoDto.getKakaoAccount().getEmail())
-                                .username(kakaoUserInfoDto.getKakaoAccount().getProfile().getNickname())
+                                .email(kakaoUserInfoResponseDto.getKakaoAccount().getEmail())
+                                .username(kakaoUserInfoResponseDto.getKakaoAccount().getProfile().getNickname())
                                 .password(passwordEncoder.encode(KAKAO_CLIENT_ID))
                                 .role(Set.of("ROLE_USER"))
                                 .build()
@@ -130,7 +130,7 @@ public class KakaoService {
                 SocialAccountEntity newSocialAccountEntity = SocialAccountEntity.builder()
                     .member(memberEntity)
                     .provider("KAKAO")
-                    .providerId(kakaoUserInfoDto.getId())
+                    .providerId(kakaoUserInfoResponseDto.getId())
                     .build()
                 ;
                             
@@ -144,13 +144,13 @@ public class KakaoService {
     }
 
     @Transactional
-    public LoginResponseDto login(KaKaoAuthorizeDto kaKaoAuthorizeDto) {
+    public LoginResponseDto login(KaKaoAuthorizeRequestDto kaKaoAuthorizRequesteDto) {
 
         logger.debug("카카오 소셜 로그인 서비스");
 
-        KakaoTokenDto kakaoTokenDto = requestToken(kaKaoAuthorizeDto);
-        KakaoUserInfoDto kakaoUserInfoDto = requestUserInfo(kakaoTokenDto);
-        MemberDto memberDto = loadOrCreateSocialAccount(kakaoUserInfoDto);
+        KakaoTokenResponseDto kakaoTokenDto = requestToken(kaKaoAuthorizRequesteDto);
+        KakaoUserInfoResponseDto kakaoUserInfoResponseDto = requestUserInfo(kakaoTokenDto);
+        MemberDto memberDto = loadOrCreateSocialAccount(kakaoUserInfoResponseDto);
 
         UserDetailsImpl userDetailsImpl  = (UserDetailsImpl) userDetailServiceImpl.loadUserByUsername(memberDto.getEmail());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetailsImpl, null, userDetailsImpl.getAuthorities());
