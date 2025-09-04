@@ -26,4 +26,11 @@ public class BoardService {
         return boardResponseDtos;
     }
 
+    public BoardResponseDto getBoard(String categoryCode) {
+        logger.debug("게시판 데이터 조회 서비스");
+        BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode);
+        BoardResponseDto boardResponseDto = BoardResponseDto.fromEntity(boardEntity);
+        return boardResponseDto;
+    }
+
 }

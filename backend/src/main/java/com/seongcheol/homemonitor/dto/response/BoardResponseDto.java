@@ -1,8 +1,11 @@
 package com.seongcheol.homemonitor.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.seongcheol.homemonitor.domain.BoardEntity;
+import com.seongcheol.homemonitor.dto.PostDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +24,7 @@ public class BoardResponseDto {
     private String comment;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Set<PostDto> posts;
 
     public static BoardResponseDto fromEntity(BoardEntity boardEntity) {
         return BoardResponseDto.builder()
@@ -29,6 +33,7 @@ public class BoardResponseDto {
             .comment(boardEntity.getComment())
             .createdAt(boardEntity.getCreatedAt())
             .updatedAt(boardEntity.getUpdatedAt())
+            .posts(boardEntity.getPosts().stream().map(post -> PostDto.fromEntity(post)).collect(Collectors.toSet()))
             .build()
         ;
     }
