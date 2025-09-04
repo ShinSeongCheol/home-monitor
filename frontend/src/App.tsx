@@ -13,6 +13,7 @@ import AuthPage from './AuthPage';
 import CkEditorComponent from './components/CkEditorComponent';
 import BoardPostCreateComponent from './BoardPostCreate';
 import Board from './Board';
+import BoardList from './BoardList';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -28,7 +29,7 @@ function App() {
           {/* 게시판 종류 목록 */}
           <Route path="/boards/" element={<Board/>}></Route>
           {/* 게시판 글 목록 */}
-          <Route path="/boards/:categoryId" element={<CkEditorComponent value='게시판 글 목록' onChange={() => console.log('h')}/>}></Route>
+          <Route path="/boards/:categoryId" element={<BoardList />}></Route>
           {/* 게시판 글 추가 */}
           <Route path="/boards/:categoryId/post" element={<BoardPostCreateComponent/>}></Route>
           {/* 게시판 글 조회 */}

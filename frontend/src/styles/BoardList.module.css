@@ -1,0 +1,108 @@
+.main {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    min-height: 0;
+}
+
+.section {
+    width: 1024px;
+    margin: 16px 0px;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.listContainer {
+    height: 100%;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.listContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.contentListContainer {
+    min-height: 0;
+    height: 100%;
+
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.board_list {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 200px 80px; 
+  align-items: center;
+  padding: 8px 12px;
+  
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.board_list > li{
+    font-size: small;
+    text-align: center;
+}
+
+.board_list:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}   
+
+.first_list {
+  background: #f5f5f5;
+  font-weight: bold;
+}
+
+.first_list:hover {
+    cursor: auto;
+    background-color: #f5f5f5;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: end;
+    gap: 16px;
+
+    padding: 20px 0px;
+}
+
+.buttonContainer input {
+    border: none;
+
+    width: 80px;
+    height: 30px;
+}
+
+.cancleButton {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.cancleButton:hover {
+    background: #bdbdbd;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submitButton {
+    background: #1976d2;
+    color: white;
+}
+
+.submitButton:hover {
+    background: #1560ab;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
