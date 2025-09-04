@@ -29,11 +29,11 @@ function App() {
           {/* 게시판 종류 목록 */}
           <Route path="/boards/" element={<Board/>}></Route>
           {/* 게시판 글 목록 */}
-          <Route path="/boards/:categoryId" element={<BoardList />}></Route>
+          <Route path="/boards/:categoryCode" element={<BoardList />}></Route>
           {/* 게시판 글 추가 */}
-          <Route path="/boards/:categoryId/post" element={<BoardPostCreateComponent/>}></Route>
+          <Route path="/boards/:categoryCode/post" element={<BoardPostCreateComponent/>}></Route>
           {/* 게시판 글 조회 */}
-          <Route path="/boards/:boardId/:postId" element={<CkEditorComponent value='게시판 글 조회' onChange={() => console.log('h')}/>}></Route>
+          <Route path="/boards/:categoryCode/:postId" element={<CkEditorComponent value='게시판 글 조회' onChange={() => console.log('h')}/>}></Route>
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
