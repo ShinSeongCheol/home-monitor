@@ -8,6 +8,20 @@ type Board = {
     comment: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    posts: Post[];
+}
+
+type Post = {
+    id: number;
+    title: string | null;
+    content: string | null;
+    view: number | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    member: {
+        email: string | null;
+        nickname: string | null;
+    }
 }
 
 const Board = () => {
@@ -26,10 +40,6 @@ const Board = () => {
         .catch(err => console.error(err));
     }, [])
 
-    useEffect(() => {
-        console.log(boardList);
-    }, [boardList])
-
     return(
         <main className={styles.main}>
             <section className={styles.section}>
@@ -39,7 +49,12 @@ const Board = () => {
                 </div>
 
                 <div className={styles.gridContainer}>
-                    {boardList.map(board => <BoardCardComponent categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""}/>)}
+                    {boardList.map(board => <BoardCardComponent categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.reduce((latest, post) => {
+                        if (!latest) return post;
+                        if (!post.createdAt) return latest;
+                        if (!latest.createdAt) return post;
+                        return post.createdAt > latest.createdAt ? post: latest;
+                    })}/>)}
                 </div>
             </section>
         </main>

@@ -1,17 +1,40 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './styles/BoardList.module.css';
+import { useEffect, useState } from 'react';
+import Board from './Board';
 
 const BoardList = () => {
 
     const naviagte = useNavigate();
     const location = useLocation();
+    const params = useParams();
+
+    const [board, setBoard] = useState<Board>();
+
+    useEffect(() => {
+        const categoryCode = params.categoryCode;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            setBoard(data);
+        })
+        .catch(err => console.error(err));
+    }, [])
+
+    useEffect(() => {
+        console.log(board);
+    }, [board])
 
     return (
         <main className={styles.main}>
             <section className={styles.section}>
                 <div className={styles.title}>
-                    <h2>업데이트 공지</h2>
-                    <p>시스템 업데이트와 새로운 기능 소개</p>
+                    <h2>{board?.categoryName ?? ""}</h2>
+                    <p>{board?.comment ?? ""}</p>
                 </div>
                 <div className={styles.listContainer}>
                     <ul className={`${styles.board_list} ${styles.first_list}`}>
@@ -23,29 +46,15 @@ const BoardList = () => {
                     </ul>
 
                     <div className={styles.contentListContainer}>
-                        <ul className={`${styles.board_list}`}>
-                            <li>3</li>
-                            <li>제목3 입니다.</li>
-                            <li>작성자3</li>
-                            <li>2025-09-04 13:10:27</li>
-                            <li>3</li>
-                        </ul>
-
-                        <ul className={`${styles.board_list}`}>
-                            <li>2</li>
-                            <li>제목2 입니다.</li>
-                            <li>작성자2</li>
-                            <li>2025-09-04 12:00:00</li>
-                            <li>2</li>
-                        </ul>
-
-                        <ul className={`${styles.board_list}`}>
-                            <li>1</li>
-                            <li>제목1 입니다.</li>
-                            <li>작성자1</li>
-                            <li>2025-09-04 11:00:00</li>
-                            <li>1</li>
-                        </ul>
+                        {board?.posts.sort((a, b) => b.id - a.id).map(post => 
+                            <ul className={`${styles.board_list}`}>
+                                <li>{post.id}</li>
+                                <li>{post.title}</li>
+                                <li>{post.member.nickname}</li>
+                                <li>{new Date(post.createdAt ?? "").toLocaleString()}</li>
+                                <li>{post.view}</li>
+                            </ul>
+                        )}
                     </div>
                 </div>
                 <div className={styles.buttonContainer}>

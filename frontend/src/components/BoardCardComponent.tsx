@@ -6,9 +6,24 @@ type BoardCardComponentProps = {
     categoryCode: string,
     categoryName: string | null,
     comment: string | null,
+    count: number;
+    latestPost: Post;
 }
 
-const BoardCardComponent = ({ categoryCode, categoryName, comment }: BoardCardComponentProps) => {
+type Post = {
+    id: number;
+    title: string | null;
+    content: string | null;
+    view: number | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    member: {
+        email: string | null;
+        nickname: string | null;
+    }
+}
+
+const BoardCardComponent = ({ categoryCode, categoryName, comment, count, latestPost }: BoardCardComponentProps) => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,7 +38,7 @@ const BoardCardComponent = ({ categoryCode, categoryName, comment }: BoardCardCo
         <div className={styles.card} id={categoryCode} onClick={handleClick}>
             <div className={styles.cardHeader}>
                 <h2>{categoryName}</h2>
-                <p>18개 게시글</p>
+                <p>{count}개 게시글</p>
             </div>
 
             <hr />
@@ -36,7 +51,7 @@ const BoardCardComponent = ({ categoryCode, categoryName, comment }: BoardCardCo
 
             <div className={styles.cardFooter}>
                 <h2>최근게시글</h2>
-                <p>데이터 시각화 차트 개선 사항</p>
+                <p>{latestPost.title}</p>
             </div>
         </div>
     )
