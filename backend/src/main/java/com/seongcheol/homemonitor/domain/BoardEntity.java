@@ -36,6 +36,9 @@ public class BoardEntity {
     @Column(length = 16)
     String categoryName;
 
+    @Column(length = 32)
+    String comment;
+
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
