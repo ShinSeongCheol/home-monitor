@@ -1,7 +1,35 @@
+import { useEffect, useState } from 'react';
 import BoardCardComponent from './components/BoardCardComponent';
 import styles from './styles/Board.module.css';
 
+type Board = {
+    categoryCode: string;
+    categoryName: string | null;
+    comment: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+}
+
 const Board = () => {
+
+    const [boardList, setBoardList] = useState<Board[]>([]);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            setBoardList(data);
+        })
+        .catch(err => console.error(err));
+    }, [])
+
+    useEffect(() => {
+        console.log(boardList);
+    }, [boardList])
+
     return(
         <main className={styles.main}>
             <section className={styles.section}>
@@ -11,12 +39,7 @@ const Board = () => {
                 </div>
 
                 <div className={styles.gridContainer}>
-                    <BoardCardComponent categoryCode='1' categoryName='업데이트 공지'/>
-                    <BoardCardComponent categoryCode='2' categoryName='공지사항'/>
-                    <BoardCardComponent categoryCode='3' categoryName='기술 블로그'/>
-                    <BoardCardComponent categoryCode='4' categoryName='보안 업데이트'/>
-                    <BoardCardComponent categoryCode='5' categoryName='커뮤니티'/>
-                    <BoardCardComponent categoryCode='6' categoryName='설정 가이드'/>
+                    {boardList.map(board => <BoardCardComponent categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""}/>)}
                 </div>
             </section>
         </main>

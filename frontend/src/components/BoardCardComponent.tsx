@@ -4,10 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 type BoardCardComponentProps = {
     categoryCode: string,
-    categoryName: string,
+    categoryName: string | null,
+    comment: string | null,
 }
 
-const BoardCardComponent = ({ categoryCode, categoryName }: BoardCardComponentProps) => {
+const BoardCardComponent = ({ categoryCode, categoryName, comment }: BoardCardComponentProps) => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -28,7 +29,7 @@ const BoardCardComponent = ({ categoryCode, categoryName }: BoardCardComponentPr
             <hr />
 
             <div className={styles.cardBody}>
-                <p>시스템 업데이트와 새로운 기능 소개</p>
+                <p>{comment}</p>
             </div>
 
             <hr />
