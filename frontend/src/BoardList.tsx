@@ -25,10 +25,6 @@ const BoardList = () => {
         .catch(err => console.error(err));
     }, [])
 
-    useEffect(() => {
-        console.log(board);
-    }, [board])
-
     return (
         <main className={styles.main}>
             <section className={styles.section}>
