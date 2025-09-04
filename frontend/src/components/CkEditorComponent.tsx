@@ -7,10 +7,10 @@ import styles from '../styles/CkEditorComponent.module.css'
 
 type CkEditorProps = {
     value: string;
-    onChange: Dispatch<SetStateAction<string>>;
+    handleChange: Dispatch<SetStateAction<string>>;
 }
 
-const CkEditorComponent = ({ value, onChange }: CkEditorProps) => {
+const CkEditorComponent = ({ value, handleChange }: CkEditorProps) => {
 
     return (
         <div className={styles.editor}>
@@ -67,7 +67,7 @@ const CkEditorComponent = ({ value, onChange }: CkEditorProps) => {
                     ],
                 }}
                 onChange={(event, editor) => {
-                    onChange(editor.getData())
+                    handleChange(editor.getData())
                 }}
                 data={value}
             />
