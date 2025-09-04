@@ -18,7 +18,7 @@ const navigation = () => {
                         <DashboardSVG width={"16px"} height={"16px"} fill={"gray"}></DashboardSVG>
                         <Link to={"/"} >대시보드</Link>
                     </li>
-                    <li className={location.pathname === '/boards' ? `${styles.active}` : ""}>
+                    <li className={location.pathname.includes('boards') ? `${styles.active}` : ""}>
                         <EditNoteSVG width={"16px"} height={"16px"} fill={"gray"}></EditNoteSVG>
                         <Link to={"/boards"} >게시판</Link>
                     </li>
