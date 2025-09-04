@@ -30,15 +30,15 @@ public class PostEntity {
     private Long id;
     
     @Column(length = 32)
-    String title;
+    private String title;
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    String content;
+    private String content;
 
-    int view;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private int view;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

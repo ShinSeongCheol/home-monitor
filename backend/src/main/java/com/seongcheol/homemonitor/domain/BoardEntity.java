@@ -28,19 +28,19 @@ import lombok.ToString;
 @AllArgsConstructor
 public class BoardEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(unique = true, length = 16)
-    String categoryCode;
+    private String categoryCode;
 
     @Column(length = 16)
-    String categoryName;
+    private String categoryName;
 
     @Column(length = 32)
-    String comment;
+    private String comment;
 
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
