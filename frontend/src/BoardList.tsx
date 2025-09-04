@@ -9,6 +9,10 @@ const BoardList = () => {
     return (
         <main className={styles.main}>
             <section className={styles.section}>
+                <div className={styles.title}>
+                    <h2>업데이트 공지</h2>
+                    <p>시스템 업데이트와 새로운 기능 소개</p>
+                </div>
                 <div className={styles.listContainer}>
                     <ul className={`${styles.board_list} ${styles.first_list}`}>
                         <li>번호</li>
