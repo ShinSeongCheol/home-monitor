@@ -43,7 +43,7 @@ const BoardList = () => {
 
                     <div className={styles.contentListContainer}>
                         {board?.posts.sort((a, b) => b.id - a.id).map(post => 
-                            <ul className={`${styles.board_list}`}>
+                            <ul key={post.id} className={`${styles.board_list}`}>
                                 <li>{post.id}</li>
                                 <li>{post.title}</li>
                                 <li>{post.member.nickname}</li>
