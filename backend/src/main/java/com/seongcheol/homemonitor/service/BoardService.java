@@ -22,12 +22,12 @@ import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class BoardService {
     
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private BoardRepository boardRepository;
 
@@ -38,14 +38,14 @@ public class BoardService {
     private MemberRepository memberRepository;
 
     public List<BoardResponseDto> getBoards() {
-        logger.debug("게시판 종류 조회 서비스");
+        log.debug("게시판 종류 조회 서비스");
         List<BoardEntity> BoardEntities = boardRepository.findAll();
         List<BoardResponseDto> boardResponseDtos = BoardEntities.stream().map(boardEntity -> BoardResponseDto.fromEntity(boardEntity)).toList();
         return boardResponseDtos;
     }
 
     public BoardResponseDto getBoard(String categoryCode) {
-        logger.debug("게시판 데이터 조회 서비스");
+        log.debug("게시판 데이터 조회 서비스");
         BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode);
         BoardResponseDto boardResponseDto = BoardResponseDto.fromEntity(boardEntity);
         return boardResponseDto;
@@ -53,7 +53,7 @@ public class BoardService {
 
     @Transactional
     public PostResponseDto postBoard(String categoryCode, PostRequestDto postRequestDto) throws IllegalArgumentException{
-        logger.debug("게시판 {} 글쓰기 {}", categoryCode, postRequestDto.toString());
+        log.debug("게시판 {} 글쓰기 {}", categoryCode, postRequestDto.toString());
 
         LocalDateTime currentDateTime = LocalDateTime.now();
 
@@ -89,6 +89,15 @@ public class BoardService {
         PostEntity savedPostEntity = postRepository.save(postEntity);
 
         return PostResponseDto.fromEntity(savedPostEntity);
+    }
+
+    public PostResponseDto getPost(String categoryCode, Long postId) {
+        log.info("게시글 {} 글 {} 조회 서비스", categoryCode, postId);
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
+
+        return postResponseDto;
     }
 
 }
