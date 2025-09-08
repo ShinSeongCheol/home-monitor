@@ -49,12 +49,7 @@ const Board = () => {
                 </div>
 
                 <div className={styles.gridContainer}>
-                    {boardList.map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.reduce((latest, post) => {
-                        if (!latest) return post;
-                        if (!post.createdAt) return latest;
-                        if (!latest.createdAt) return post;
-                        return post.createdAt > latest.createdAt ? post: latest;
-                    })}/>)}
+                    {boardList.filter((board) => board.posts.length !== 0).map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)}
                 </div>
             </section>
         </main>
