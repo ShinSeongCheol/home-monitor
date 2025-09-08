@@ -50,7 +50,6 @@ const Board = () => {
 
                 <div className={styles.gridContainer}>
                     {boardList
-                    .filter((board) => board.posts.length !== 0)
                     .map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)}
                 </div>
             </section>

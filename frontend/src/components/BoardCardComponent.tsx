@@ -7,7 +7,7 @@ type BoardCardComponentProps = {
     categoryName: string | null,
     comment: string | null,
     count: number;
-    latestPost: Post;
+    latestPost: Post | null;
 }
 
 type Post = {
@@ -51,7 +51,7 @@ const BoardCardComponent = ({ categoryCode, categoryName, comment, count, latest
 
             <div className={styles.cardFooter}>
                 <h2>최근게시글</h2>
-                <p>{latestPost.title}</p>
+                <p>{latestPost?.title ?? ""}</p>
             </div>
         </div>
     )
