@@ -1,7 +1,7 @@
 import CkEditorComponent from "./components/CkEditorComponent";
 import styles from './styles/BoardPostCreateComponent.module.css';
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, type FormEventHandler,  type ChangeEventHandler } from "react";
 import { useAuth } from "./contexts/AuthContext";
 
 const BoardPostCreateComponent = () => {
@@ -9,7 +9,7 @@ const BoardPostCreateComponent = () => {
     const {accessToken} = useAuth();
 
     const navigate = useNavigate();
-    const location = useLocation();
+    const {categoryCode} = useParams();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -23,7 +23,7 @@ const BoardPostCreateComponent = () => {
     const handleSubmit:FormEventHandler = (e) => {
         e.preventDefault()
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1${location.pathname}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/post`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
