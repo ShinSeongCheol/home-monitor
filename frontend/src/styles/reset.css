@@ -50,3 +50,7 @@ table {
 html, body, #root {
 	height: 100%;
 }
+
+.ck-content * {
+  all: revert;
+}

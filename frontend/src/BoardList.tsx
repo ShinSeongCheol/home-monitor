@@ -25,6 +25,10 @@ const BoardList = () => {
         .catch(err => console.error(err));
     }, [])
 
+    const handleClick = (postId: number) => {
+        naviagte(`${location.pathname}/${postId}`);
+    }
+
     return (
         <main className={styles.main}>
             <section className={styles.section}>
@@ -43,7 +47,7 @@ const BoardList = () => {
 
                     <div className={styles.contentListContainer}>
                         {board?.posts.sort((a, b) => b.id - a.id).map(post => 
-                            <ul key={post.id} className={`${styles.board_list}`}>
+                            <ul key={post.id} className={`${styles.board_list}`} onClick={() => handleClick(post.id)}>
                                 <li>{post.id}</li>
                                 <li>{post.title}</li>
                                 <li>{post.member.nickname}</li>

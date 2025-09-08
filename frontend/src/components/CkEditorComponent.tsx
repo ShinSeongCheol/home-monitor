@@ -64,6 +64,9 @@ const CkEditorComponent = ({ handleChange }: CkEditorProps) => {
                     translations: [
                         coreTransitions,
                     ],
+                    mediaEmbed: {
+                        previewsInData: true
+                    }
                 }}
                 onChange={(event, editor) => {
                     handleChange(editor.getData())
