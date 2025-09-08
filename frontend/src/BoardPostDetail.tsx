@@ -49,9 +49,9 @@ const BoardPostDetail = () => {
     return(
         <main className={styles.main}>
             <section className={styles.section}>
+                <div className={styles.title}>{title}</div>
+                <hr />
                 <div className={styles.container}>
-                    <div className={styles.title}>{title}</div>
-                    <hr />
                     <div className="ck-content" dangerouslySetInnerHTML={{__html: content}}></div>
                 </div>
 
