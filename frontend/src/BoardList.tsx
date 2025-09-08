@@ -48,11 +48,11 @@ const BoardList = () => {
                     <div className={styles.contentListContainer}>
                         {board?.posts.sort((a, b) => b.id - a.id).map(post => 
                             <ul key={post.id} className={`${styles.board_list}`} onClick={() => handleClick(post.id)}>
-                                <li>{post.id}</li>
-                                <li>{post.title}</li>
-                                <li>{post.member.nickname}</li>
-                                <li>{new Date(post.createdAt ?? "").toLocaleString()}</li>
-                                <li>{post.view}</li>
+                                <li title={`${post.id}`}>{post.id}</li>
+                                <li title={`${post.title}`}>{post.title}</li>
+                                <li title={`${post.member.nickname}`}>{post.member.nickname}</li>
+                                <li title={`${new Date(post.createdAt ?? "").toLocaleString()}`}>{new Date(post.createdAt ?? "").toLocaleString()}</li>
+                                <li title={`${post.view}`}>{post.view}</li>
                             </ul>
                         )}
                     </div>
