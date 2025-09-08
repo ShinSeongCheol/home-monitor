@@ -3,7 +3,6 @@ package com.seongcheol.homemonitor.dto.response;
 import java.time.LocalDateTime;
 
 import com.seongcheol.homemonitor.domain.PostEntity;
-import com.seongcheol.homemonitor.dto.MemberDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,6 @@ public class PostResponseDto {
     private int view;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private MemberDto member;
 
     public static PostResponseDto fromEntity(PostEntity postEntity) {
         return PostResponseDto.builder()
@@ -31,7 +29,6 @@ public class PostResponseDto {
             .view(postEntity.getView())
             .createdAt(postEntity.getCreatedAt())
             .updatedAt(postEntity.getUpdatedAt())
-            .member(MemberDto.fromEntity(postEntity.getMember()))
             .build()
         ;
     }
