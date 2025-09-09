@@ -4,44 +4,39 @@
 
     display: flex;
     justify-content: center;
-    min-height: 0;
 }
 
 .section {
     width: 1024px;
-    margin: 16px 0px;
-    padding: 8px;
-    
-    min-height: 0;
-
-    display: flex;
-    flex-direction: column;
+    height: 100%;
 }
 
 .title {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 8px;
+    margin-top: 16px;    
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .title > h2 {
-  font-size: 32px;
-  font-weight: 300px;
+    font-size: 32px;
+    font-weight: 300px;
 }
 
 .title > p {
-  font-size: 14px;
-  color: #666;
+    font-size: 16x;
+    color: #666
 }
 
 .listContainer {
-    height: 100%;
-    margin-top: 16px;
+    height: 700px;
+    margin-top: 8px;
+    
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: 8px;
-    min-height: 0;
+
     display: flex;
     flex-direction: column;
 }
@@ -50,23 +45,14 @@
     display: none;
 }
 
-.contentListContainer {
-    min-height: 0;
-    height: 100%;
-
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
 .board_list {
-  display: grid;
-  grid-template-columns: 80px 1fr 120px 200px 80px; 
-  align-items: center;
-  padding: 8px 12px;
-  
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
+    display: grid;
+    grid-template-columns: 80px 1fr 120px 200px 80px; 
+    align-items: center;
+    padding: 8px 12px;
+    
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
 }
 
 .board_list > li{
@@ -89,19 +75,20 @@
 }   
 
 .first_list {
-  background: #f5f5f5;
-  font-weight: bold;
+    background: #f5f5f5;
+    font-weight: bold;
 }
 
-.first_list:hover {
-    cursor: auto;
-    background-color: #f5f5f5;
+.contentListContainer {
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .buttonContainer {
     display: flex;
     justify-content: end;
-    gap: 16px;
+    gap: 8px;
 
     padding: 20px 0px;
 }
@@ -138,14 +125,17 @@
 @media screen and (max-width: 1024px) {
     .section {
         width: 100%;
-    }
-
-    .title {
-        display: block;
         padding: 0px 8px;
+
+        display: flex;
+        flex-direction: column;
     }
 
     .board_list {
         grid-template-columns: 30px 1fr 50px 1fr 40px; 
+    }
+
+    .listContainer {
+        height: 600px;
     }
 }
