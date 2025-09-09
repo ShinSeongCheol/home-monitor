@@ -3,6 +3,7 @@ package com.seongcheol.homemonitor.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,6 +61,9 @@ public class WebSecurityConfig {
 		http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 				.requestMatchers("/api/v1/boards/*/post").authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/boards/**").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/api/v1/boards/**").authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/api/v1/boards/**").authenticated()
 				.requestMatchers("/api/v1/forecast/region/**").permitAll()
 				.requestMatchers("/api/v1/forecast/**").hasRole("ADMIN")
 				.requestMatchers("/api/v1/member/signup").permitAll()
