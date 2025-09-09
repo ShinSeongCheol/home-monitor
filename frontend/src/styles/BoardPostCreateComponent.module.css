@@ -4,30 +4,21 @@
 
     display: flex;
     justify-content: center;
-
-    min-height: 0;
 }
 
 .section {
     width: 1024px;
     height: 100%;
-
-    display: flex;
-    flex-direction: column;
-
-    min-height: 0;
 }
 
 .form {
     margin-top: 16px;
+    height: 800px;
     
     display: flex;
     flex-direction: column;
 
     gap: 4px;
-    flex: 1;
-    
-    min-height: 0;
 }
 
 .inputTitle {
@@ -48,8 +39,6 @@
     gap: 16px;
 
     padding: 20px 0px;
-
-    flex: 0.1;
 }
 
 .buttonContainer input {
@@ -82,8 +71,12 @@
 }
 
 @media screen and (max-width: 1024px) {
-        .section {
-            width: 100%;
-            padding: 0px 8px;
-        }
+    .section {
+        width: 100%;
+        padding: 0px 8px;
+    }
+
+    .form {
+        height: 700px;
+    }
 }
