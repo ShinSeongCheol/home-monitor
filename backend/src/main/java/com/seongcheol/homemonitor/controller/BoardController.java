@@ -1,11 +1,15 @@
 package com.seongcheol.homemonitor.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.seongcheol.homemonitor.dto.request.PostRequestDto;
 import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
+import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
 import com.seongcheol.homemonitor.service.BoardService;
 
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Slf4j
@@ -55,6 +60,18 @@ public class BoardController {
         PostResponseDto postResponseDto = boardService.getPost(categoryCode, postId);
 
         return ResponseEntity.ok(postResponseDto);
+    }
+    
+    @PostMapping("/image")
+    public ResponseEntity<ImageResponseDto> uploadImage(@RequestParam("upload") MultipartFile file) {
+        log.debug("게시글 사진 저장 컨트롤러");
+        try {
+            ImageResponseDto imageResponseDto = boardService.uploadImage(file);
+            return ResponseEntity.ok(imageResponseDto);
+        } catch (MultipartException | IOException e) {
+            log.error("Image Uplaod Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
     
 }

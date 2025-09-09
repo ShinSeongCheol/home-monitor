@@ -3,6 +3,11 @@ spring:
     name: HomeMonitor
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+        
 
 logging:
   level:
@@ -22,3 +27,9 @@ public:
 kakao:
   client_id: ${KAKAO_CLIENT_ID}
   redirect_uri: ${KAKAO_REDIRECT_URI}
+
+host: ${HOST}
+
+image:
+  upload_dir: ${IMAGE_UPLOAD_DIR}
+  url_prefix: ${IMAGE_URL_PREFIX}
