@@ -3,11 +3,16 @@ import styles from './styles/BoardPostDetail.module.css';
 import DOMPurify from "dompurify";
 import { useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
+import { useAuth } from './contexts/AuthContext';
 
 const BoardPostDetail = () => {
 
+    const {user} = useAuth();
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+
+    const [memberEmail, setMemberEmail] = useState("");
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
@@ -42,6 +47,8 @@ const BoardPostDetail = () => {
             
             setTitle(DOMPurify.sanitize(data.title));
             setContent(santiizedContent);
+
+            setMemberEmail(data.member.email);
         })
         .catch(err => console.error(err));
     }, [])
@@ -57,6 +64,15 @@ const BoardPostDetail = () => {
 
                 <div className={styles.buttonContainer}>
                     <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
+                    {memberEmail === user?.email 
+                    ? 
+                    <>
+                        <input className={styles.editButton} type="button" value="수정" onClick={() => navigate(-1)} />
+                        <input className={styles.deleteButton} type="button" value="삭제" onClick={() => navigate(-1)} />
+                    </>
+                    :
+                    ""
+                    } 
                 </div>
             </section>
         </main>

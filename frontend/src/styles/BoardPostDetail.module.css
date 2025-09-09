@@ -28,6 +28,7 @@
     justify-content: end;
 
     margin-top: 8px;
+    gap: 8px;
 }
 
 .buttonContainer input {
@@ -43,6 +44,28 @@
 
 .cancleButton:hover {
     background: #bdbdbd;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.editButton {
+    background: #1976d2;
+    color: white;
+}
+
+.editButton:hover {
+    background: #1560ab;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.deleteButton {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+.deleteButton:hover {
+    background: #c82333;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
