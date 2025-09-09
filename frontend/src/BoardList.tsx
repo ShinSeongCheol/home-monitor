@@ -36,6 +36,7 @@ const BoardList = () => {
                     <h2>{board?.categoryName ?? ""}</h2>
                     <p>{board?.comment ?? ""}</p>
                 </div>
+
                 <div className={styles.listContainer}>
                     <ul className={`${styles.board_list} ${styles.first_list}`}>
                         <li>번호</li>
@@ -57,6 +58,7 @@ const BoardList = () => {
                         )}
                     </div>
                 </div>
+                
                 <div className={styles.buttonContainer}>
                     <input className={styles.cancleButton} type="button" value="뒤로가기" onClick={() => naviagte(-1)} />
                     <input className={styles.submitButton} type="button" value="글쓰기" onClick={() => naviagte(`${location.pathname}/post`)} />

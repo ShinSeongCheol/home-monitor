@@ -1,5 +1,5 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock, Essentials, Font, Heading, HorizontalLine, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, Indent, IndentBlock, Italic, Link, List, MediaEmbed, Paragraph, Strikethrough, Subscript, Superscript, Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar, TextTransformation, TodoList, Underline, ImageInsert, Base64UploadAdapter, ImageUpload } from "ckeditor5";
+import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock, Essentials, Font, Heading, HorizontalLine, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, Indent, IndentBlock, Italic, Link, List, MediaEmbed, Paragraph, Strikethrough, Subscript, Superscript, Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar, TextTransformation, TodoList, Underline, ImageInsert, Base64UploadAdapter } from "ckeditor5";
 import 'ckeditor5/ckeditor5.css';
 import coreTransitions from "ckeditor5/translations/ko.js";
 import type { Dispatch, SetStateAction } from "react";
@@ -69,7 +69,8 @@ const CkEditorComponent = ({ handleChange }: CkEditorProps) => {
                     }
                 }}
                 onChange={(event, editor) => {
-                    handleChange(editor.getData())
+                    console.debug(event);
+                    handleChange(editor.getData());
                 }}
             />
         </div>

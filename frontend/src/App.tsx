@@ -10,7 +10,6 @@ import Navigation from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './Profile';
 import AuthPage from './AuthPage';
-import CkEditorComponent from './components/CkEditorComponent';
 import BoardPostCreateComponent from './BoardPostCreate';
 import Board from './Board';
 import BoardList from './BoardList';

@@ -49,7 +49,7 @@ const BoardPostDetail = () => {
     return(
         <main className={styles.main}>
             <section className={styles.section}>
-                <div className={styles.title}>{title}</div>
+                <h2 className={styles.title}>{title}</h2>
                 <hr />
                 <div className={styles.container}>
                     <div className="ck-content" dangerouslySetInnerHTML={{__html: content}}></div>
