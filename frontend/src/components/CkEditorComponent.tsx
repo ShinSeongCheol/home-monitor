@@ -2,7 +2,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock, Essentials, Font, Heading, HorizontalLine, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, Indent, IndentBlock, Italic, Link, List, MediaEmbed, Paragraph, Strikethrough, Subscript, Superscript, Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar, TextTransformation, TodoList, Underline, ImageInsert, SimpleUploadAdapter } from "ckeditor5";
 import 'ckeditor5/ckeditor5.css';
 import coreTransitions from "ckeditor5/translations/ko.js";
-import { useEffect, useRef, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import styles from '../styles/CkEditorComponent.module.css'
 import { useAuth } from "../contexts/AuthContext";
 
