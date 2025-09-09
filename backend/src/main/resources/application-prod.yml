@@ -21,6 +21,7 @@ cors:
       - GET
       - POST
       - PUT
+      - DELETE
     headers:
       - '*'
 
