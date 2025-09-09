@@ -91,10 +91,13 @@ public class BoardService {
         return PostResponseDto.fromEntity(savedPostEntity);
     }
 
+    @Transactional
     public PostResponseDto getPost(String categoryCode, Long postId) {
         log.info("게시글 {} 글 {} 조회 서비스", categoryCode, postId);
 
         PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        postEntity.setView(postEntity.getView() + 1);
+
         PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
 
         return postResponseDto;
