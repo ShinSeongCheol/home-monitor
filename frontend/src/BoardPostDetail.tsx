@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import styles from './styles/BoardPostDetail.module.css';
 import DOMPurify from "dompurify";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from './contexts/AuthContext';
 
 const BoardPostDetail = () => {
 
-    const {user} = useAuth();
+    const {user, accessToken} = useAuth();
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -16,6 +16,7 @@ const BoardPostDetail = () => {
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
 
     DOMPurify.addHook('uponSanitizeElement', (node, data) => {
         if(data.tagName === 'iframe') {
@@ -53,6 +54,31 @@ const BoardPostDetail = () => {
         .catch(err => console.error(err));
     }, [])
 
+    const handleEdit = () => {
+        if(!confirm('글을 수정하시겠습니까?')) return;
+        navigate(`${location.pathname}/edit`);
+    }
+
+    const handleDelete = () => {
+        if(!confirm('글을 삭제하시겠습니까?')) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}`,{
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        .then((res) =>{
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            alert('글이 삭제되었습니다.');
+            navigate(-1);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+    }
+
     return(
         <main className={styles.main}>
             <section className={styles.section}>
@@ -67,8 +93,8 @@ const BoardPostDetail = () => {
                     {memberEmail === user?.email 
                     ? 
                     <>
-                        <input className={styles.editButton} type="button" value="수정" onClick={() => navigate(-1)} />
-                        <input className={styles.deleteButton} type="button" value="삭제" onClick={() => navigate(-1)} />
+                        <input className={styles.editButton} type="button" value="수정" onClick={handleEdit} />
+                        <input className={styles.deleteButton} type="button" value="삭제" onClick={handleDelete} />
                     </>
                     :
                     ""

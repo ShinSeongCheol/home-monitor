@@ -14,6 +14,7 @@ import BoardPostCreateComponent from './BoardPostCreate';
 import Board from './Board';
 import BoardList from './BoardList';
 import BoardPostDetail from './BoardPostDetail';
+import BoardPostEditComponent from './BoardPostEdit';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -34,6 +35,8 @@ function App() {
           <Route path="/boards/:categoryCode/post" element={<ProtectedRoute><BoardPostCreateComponent/></ProtectedRoute>}></Route>
           {/* 게시판 글 조회 */}
           <Route path="/boards/:categoryCode/:postId" element={<BoardPostDetail/>}></Route>
+          {/* 게시판 글 수정 */}
+          <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><BoardPostEditComponent/></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>

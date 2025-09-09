@@ -51,7 +51,7 @@ const BoardPostCreateComponent = () => {
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <input className={styles.inputTitle} type="text" name="title" id="title" placeholder="제목을 입력하세요." maxLength={32} required value={title} onChange={handleTitleChange}/>
                     <hr />
-                    <CkEditorComponent handleChange={(content) => setContent(content)}/>
+                    <CkEditorComponent data="내용을 입력해주세요!" handleChange={(content) => setContent(content)}/>
                     <div className={styles.buttonContainer}>
                         <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
                         <input className={styles.submitButton} type="submit" value="등록"/>
