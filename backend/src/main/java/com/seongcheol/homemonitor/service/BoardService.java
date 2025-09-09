@@ -1,6 +1,7 @@
 package com.seongcheol.homemonitor.service;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -117,6 +118,37 @@ public class BoardService {
         PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
 
         return postResponseDto;
+    }
+
+    @Transactional
+    public PostResponseDto putPost(String categoryCode, Long postId, PostRequestDto postRequestDto) throws IllegalArgumentException, AccessDeniedException{
+        log.debug("게시판 {} 글 수정 {}", categoryCode, postRequestDto.toString());
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // member entity 연관 관계 설정
+        if (authentication != null && authentication.isAuthenticated()) {
+            
+            if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+                String userEmail = userDetailsImpl.getEmail();
+                
+                MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
+                
+                PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                if (!memberEntity.getEmail().equals(postEntity.getMember().getEmail())) throw new AccessDeniedException("작성자가 아니므로 수정할 수 없습니다.");
+
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                postEntity.setTitle(postRequestDto.getTitle());
+                postEntity.setContent(postRequestDto.getContent());
+                postEntity.setUpdatedAt(currentDateTime);
+
+                return PostResponseDto.fromEntity(postEntity);
+            }
+            
+        }
+
+        throw new AccessDeniedException("인증되지 않은 사용자입니다.");
     }
 
     @Transactional

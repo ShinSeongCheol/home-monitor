@@ -1,6 +1,7 @@
 package com.seongcheol.homemonitor.controller;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,6 +63,20 @@ public class BoardController {
         PostResponseDto postResponseDto = boardService.getPost(categoryCode, postId);
 
         return ResponseEntity.ok(postResponseDto);
+    }
+
+    @PutMapping("/{categoryCode}/{postId}")
+    public ResponseEntity<PostResponseDto> putPostBy(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody PostRequestDto postRequestDto) {
+        log.info("게시판 {} 글 {} 수정 컨트롤러", categoryCode, postId);
+
+        try {
+            PostResponseDto postResponseDto  = boardService.putPost(categoryCode, postId, postRequestDto);
+            return ResponseEntity.ok(postResponseDto);
+        } catch (AccessDeniedException | IllegalArgumentException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+
     }
 
     @DeleteMapping("/{categoryCode}/{postId}")
