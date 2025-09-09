@@ -11,10 +11,6 @@
     height: 100%;
 }
 
-.section > hr {
-    width: 100%;
-}
-
 .title {
     margin-top: 16px;
     font-size: 32px;
@@ -49,4 +45,10 @@
     background: #bdbdbd;
     cursor: pointer;
     transition: background-color 0.2s ease;
+}
+
+@media screen and (max-width: 1024px) {
+    .section {
+        padding: 0px 8px;
+    }
 }
