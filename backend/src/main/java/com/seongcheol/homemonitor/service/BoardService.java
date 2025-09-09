@@ -119,6 +119,12 @@ public class BoardService {
         return postResponseDto;
     }
 
+    @Transactional
+    public void deletePost(String categoryCode, Long postId) {
+        log.debug("게시판 글 삭제 서비스");
+        postRepository.deleteById(postId);
+    }
+
     public ImageResponseDto uploadImage(MultipartFile file) throws IOException, MultipartException {
         log.debug("이미지 파일 저장 서비스");
 

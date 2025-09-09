@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,13 @@ public class BoardController {
         PostResponseDto postResponseDto = boardService.getPost(categoryCode, postId);
 
         return ResponseEntity.ok(postResponseDto);
+    }
+
+    @DeleteMapping("/{categoryCode}/{postId}")
+    public ResponseEntity<String> deletePostBy(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId) {
+        log.info("게시판 {} 글 {} 삭제 컨트롤러", categoryCode, postId);
+        boardService.deletePost(categoryCode, postId);
+        return ResponseEntity.ok(null);
     }
     
     @PostMapping("/image")
