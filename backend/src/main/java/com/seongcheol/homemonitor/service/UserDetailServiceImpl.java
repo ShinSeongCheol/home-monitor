@@ -32,9 +32,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         logger.debug("스프링 시큐리티 userDetailService 구현체");
 
         MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
-
-        String[] roles = memberEntity.getRole().toArray(new String[0]);
-        List<GrantedAuthority> authorities = Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = memberEntity.getRole().stream().map(memberRole -> new SimpleGrantedAuthority(memberRole.getRole())).collect(Collectors.toList());
 
         return UserDetailsImpl.builder()
             .email(memberEntity.getEmail())

@@ -5,15 +5,12 @@ import java.util.Set;
 
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -44,15 +41,18 @@ public class MemberEntity {
     @Column(length = 128)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"))
-    @Column(name = "role", length = 16)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<String> role = new HashSet<String>();
+    private Set<MemberRoleEntity> role = new HashSet<MemberRoleEntity>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<SocialAccountEntity> socialAccounts = new HashSet<>();
+
+    public void addMemberRole(MemberRoleEntity memberRoleEntity) {
+        this.role.add(memberRoleEntity);
+        memberRoleEntity.setMember(this);
+    }
 
     public void addSocialAccount(SocialAccountEntity socialAccountEntity) {
         this.socialAccounts.add(socialAccountEntity);

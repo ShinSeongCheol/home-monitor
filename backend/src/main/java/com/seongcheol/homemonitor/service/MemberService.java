@@ -1,7 +1,5 @@
 package com.seongcheol.homemonitor.service;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.seongcheol.homemonitor.domain.MemberEntity;
+import com.seongcheol.homemonitor.domain.MemberRoleEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.request.MemberRequestDto;
@@ -41,11 +40,25 @@ public class MemberService {
             .email("admin@admin.com")
             .username("admin")
             .password(passwordEncoder.encode("admin"))
-            .role(Set.of("ROLE_USER", "ROLE_ADMIN"))
             .build()
         ;
 
         MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+
+        MemberRoleEntity memberRoleUserEntity = MemberRoleEntity.builder()
+            .member(savedMemberEntity)
+            .role("ROLE_USER")
+            .build()
+        ;
+
+         MemberRoleEntity memberRoleAdminEntity = MemberRoleEntity.builder()
+            .member(savedMemberEntity)
+            .role("ROLE_ADMIN")
+            .build()
+        ;
+
+        savedMemberEntity.addMemberRole(memberRoleUserEntity);
+        savedMemberEntity.addMemberRole(memberRoleAdminEntity);
 
         SocialAccountEntity socialAccountEntity = SocialAccountEntity.builder()
             .member(savedMemberEntity)
@@ -96,11 +109,18 @@ public class MemberService {
                 .email(memberRequestDto.getEmail())
                 .username(memberRequestDto.getNickname())
                 .password(passwordEncoder.encode(memberRequestDto.getPassword()))
-                .role(Set.of("ROLE_USER"))
                 .build()
             ;
 
             MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+
+            MemberRoleEntity memberRoleEntity = MemberRoleEntity.builder()
+                .member(savedMemberEntity)
+                .role("ROLE_USER")
+                .build()
+            ;
+
+            savedMemberEntity.addMemberRole(memberRoleEntity);
 
             SocialAccountEntity socialAccountEntity = SocialAccountEntity.builder()
                 .member(savedMemberEntity)
@@ -110,7 +130,6 @@ public class MemberService {
             ;
 
             savedMemberEntity.addSocialAccount(socialAccountEntity);
-            socialAccountRepository.save(socialAccountEntity);
 
             return MemberDto.fromEntity(socialAccountEntity.getMember());
         }

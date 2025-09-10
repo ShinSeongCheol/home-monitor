@@ -1,7 +1,5 @@
 package com.seongcheol.homemonitor.service;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.seongcheol.homemonitor.components.JwtUtilComponent;
 import com.seongcheol.homemonitor.domain.MemberEntity;
+import com.seongcheol.homemonitor.domain.MemberRoleEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
@@ -117,11 +116,18 @@ public class KakaoService {
                                 .email(kakaoUserInfoResponseDto.getKakaoAccount().getEmail())
                                 .username(kakaoUserInfoResponseDto.getKakaoAccount().getProfile().getNickname())
                                 .password(passwordEncoder.encode(KAKAO_CLIENT_ID))
-                                .role(Set.of("ROLE_USER"))
                                 .build()
                             ;
 
                             MemberEntity savedMemberEntity = memberRepository.save(newMemberEntity);
+                            
+                            MemberRoleEntity memberRoleEntity = MemberRoleEntity.builder()
+                                .member(savedMemberEntity)
+                                .role("ROLE_USER")
+                                .build()
+                            ;
+
+                            savedMemberEntity.addMemberRole(memberRoleEntity);
 
                             return savedMemberEntity;
                         }
