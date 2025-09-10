@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.seongcheol.homemonitor.service.MemberService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class ApplicationRunnerImpl implements ApplicationRunner {
 
@@ -18,7 +21,11 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     private MemberService memberService;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
+        log.info("{} : {}", this.getClass().getSimpleName(), "초기화");
+
+        memberService.initMemberRoleCode();
+
         try {
             memberService.initAdmin();    
         } catch (IllegalArgumentException e) {

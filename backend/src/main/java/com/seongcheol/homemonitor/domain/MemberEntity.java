@@ -48,14 +48,4 @@ public class MemberEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<SocialAccountEntity> socialAccounts = new HashSet<>();
-
-    public void addMemberRole(MemberRoleEntity memberRoleEntity) {
-        this.role.add(memberRoleEntity);
-        memberRoleEntity.setMember(this);
-    }
-
-    public void addSocialAccount(SocialAccountEntity socialAccountEntity) {
-        this.socialAccounts.add(socialAccountEntity);
-        socialAccountEntity.setMember(this);
-    }
 }

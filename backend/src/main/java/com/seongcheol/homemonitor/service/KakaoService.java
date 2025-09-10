@@ -1,5 +1,7 @@
 package com.seongcheol.homemonitor.service;
 
+import java.util.NoSuchElementException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.seongcheol.homemonitor.components.JwtUtilComponent;
 import com.seongcheol.homemonitor.domain.MemberEntity;
+import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleEntity;
 import com.seongcheol.homemonitor.domain.SocialAccountEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
@@ -24,6 +27,8 @@ import com.seongcheol.homemonitor.dto.response.KakaoTokenResponseDto;
 import com.seongcheol.homemonitor.dto.response.KakaoUserInfoResponseDto;
 import com.seongcheol.homemonitor.dto.response.LoginResponseDto;
 import com.seongcheol.homemonitor.repository.MemberRepository;
+import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
+import com.seongcheol.homemonitor.repository.MemberRoleRepository;
 import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,6 +49,12 @@ public class KakaoService {
 
     @Autowired
     private SocialAccountRepository socialAccountRepository;
+
+    @Autowired
+    private MemberRoleRepository memberRoleRepository;
+
+    @Autowired
+    private MemberRoleCodeRepository memberRoleCodeRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -120,14 +131,15 @@ public class KakaoService {
                             ;
 
                             MemberEntity savedMemberEntity = memberRepository.save(newMemberEntity);
+                            MemberRoleCodeEntity memberRoleCodeUserEntity = memberRoleCodeRepository.findByCode("ROLE_USER").orElseThrow(() -> new NoSuchElementException("유저 권한이 없습니다."));
                             
                             MemberRoleEntity memberRoleEntity = MemberRoleEntity.builder()
                                 .member(savedMemberEntity)
-                                .role("ROLE_USER")
+                                .memberRoleCode(memberRoleCodeUserEntity)
                                 .build()
                             ;
 
-                            savedMemberEntity.addMemberRole(memberRoleEntity);
+                            memberRoleRepository.save(memberRoleEntity);
 
                             return savedMemberEntity;
                         }
@@ -139,8 +151,8 @@ public class KakaoService {
                     .providerId(kakaoUserInfoResponseDto.getId())
                     .build()
                 ;
-                            
-                memberEntity.addSocialAccount(newSocialAccountEntity);
+                
+                socialAccountRepository.save(newSocialAccountEntity);
 
                 return socialAccountRepository.save(newSocialAccountEntity);
             }  
