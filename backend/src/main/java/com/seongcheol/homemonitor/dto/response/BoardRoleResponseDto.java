@@ -14,13 +14,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardRoleResponseDto {
-    private BoardRoleCodeResponseDto boardRoleCodes;
-    private MemberRoleCodeResponseDto memberRoleCodes;
+    private BoardRoleCodeResponseDto boardRoleCode;
+    private MemberRoleCodeResponseDto memberRoleCode;
 
     public static BoardRoleResponseDto fromEntity(BoardRoleEntity boardRoleEntity) {
         return BoardRoleResponseDto.builder()
-            .boardRoleCodes(BoardRoleCodeResponseDto.fromEntity(boardRoleEntity.getBoardRoleCode()))
-            .memberRoleCodes(MemberRoleCodeResponseDto.fromEntity(boardRoleEntity.getMemberRoleCode()))
+            .boardRoleCode(BoardRoleCodeResponseDto.fromEntity(boardRoleEntity.getBoardRoleCode()))
+            .memberRoleCode(MemberRoleCodeResponseDto.fromEntity(boardRoleEntity.getMemberRoleCode()))
             .build()
         ;
     }
