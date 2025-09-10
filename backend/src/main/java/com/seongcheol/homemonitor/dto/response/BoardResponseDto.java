@@ -25,6 +25,7 @@ public class BoardResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Set<PostDto> posts;
+    private Set<BoardRoleResponseDto> boardRoles;
 
     public static BoardResponseDto fromEntity(BoardEntity boardEntity) {
         return BoardResponseDto.builder()
@@ -34,6 +35,7 @@ public class BoardResponseDto {
             .createdAt(boardEntity.getCreatedAt())
             .updatedAt(boardEntity.getUpdatedAt())
             .posts(boardEntity.getPosts().stream().map(post -> PostDto.fromEntity(post)).collect(Collectors.toSet()))
+            .boardRoles(boardEntity.getBoardRoles().stream().map(boardRole -> BoardRoleResponseDto.fromEntity(boardRole)).collect(Collectors.toSet()))
             .build()
         ;
     }

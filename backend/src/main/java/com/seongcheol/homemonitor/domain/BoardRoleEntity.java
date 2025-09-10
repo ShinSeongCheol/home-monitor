@@ -35,7 +35,7 @@ public class BoardRoleEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private BoardEntity boardEntity;
+    private BoardEntity board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_role_code_id")

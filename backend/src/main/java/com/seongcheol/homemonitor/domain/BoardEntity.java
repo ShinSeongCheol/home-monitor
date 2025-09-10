@@ -46,4 +46,8 @@ public class BoardEntity {
     @Builder.Default
     @ToString.Exclude
     private Set<PostEntity> posts = new HashSet<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<BoardRoleEntity> boardRoles = new HashSet<>();
 }
