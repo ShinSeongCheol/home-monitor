@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.seongcheol.homemonitor.domain.BoardEntity;
+import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
@@ -26,6 +27,7 @@ import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
 import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
+import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
 
@@ -38,6 +40,9 @@ public class BoardService {
     
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardRoleCodeRepository boardRoleCodeRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -53,6 +58,51 @@ public class BoardService {
 
     @Value("${image.url_prefix}")
     private String IMAGE_URL_PREFIX;
+
+    @Transactional
+    public void initBoardRoleCode() {
+        log.info("게시판 역할 코드 초기화 서비스");
+
+        log.info("게시판 읽기 권한 초기화");
+        boardRoleCodeRepository.findByCode("READ").orElseGet(() -> {
+            BoardRoleCodeEntity boardRoleCodeEntity = BoardRoleCodeEntity.builder()
+                .code("READ")
+                .name("읽기")
+                .build()
+            ;
+            return boardRoleCodeRepository.save(boardRoleCodeEntity);
+        });
+
+        log.info("게시판 쓰기 권한 초기화");
+        boardRoleCodeRepository.findByCode("WRITE").orElseGet(() -> {
+            BoardRoleCodeEntity boardRoleCodeEntity = BoardRoleCodeEntity.builder()
+                .code("WRITE")
+                .name("쓰기")
+                .build()
+            ;
+            return boardRoleCodeRepository.save(boardRoleCodeEntity);
+        });
+
+        log.info("게시판 수정 권한 초기화");
+        boardRoleCodeRepository.findByCode("MODIFY").orElseGet(() -> {
+            BoardRoleCodeEntity boardRoleCodeEntity = BoardRoleCodeEntity.builder()
+                .code("MODIFY")
+                .name("수정")
+                .build()
+            ;
+            return boardRoleCodeRepository.save(boardRoleCodeEntity);
+        });
+
+        log.info("게시판 삭제 권한 초기화");
+        boardRoleCodeRepository.findByCode("DELETE").orElseGet(() -> {
+            BoardRoleCodeEntity boardRoleCodeEntity = BoardRoleCodeEntity.builder()
+                .code("DELETE")
+                .name("삭제")
+                .build()
+            ;
+            return boardRoleCodeRepository.save(boardRoleCodeEntity);
+        });
+    }
 
     public List<BoardResponseDto> getBoards() {
         log.debug("게시판 종류 조회 서비스");

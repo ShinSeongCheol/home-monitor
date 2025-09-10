@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.seongcheol.homemonitor.service.BoardService;
 import com.seongcheol.homemonitor.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,17 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private BoardService boardService;
+
     @Override
     public void run(ApplicationArguments args) {
         log.info("{} : {}", this.getClass().getSimpleName(), "초기화");
 
+        log.info("Member Role Code 초기화");
         memberService.initMemberRoleCode();
+        log.info("Board Role Code 초기화");
+        boardService.initBoardRoleCode();
 
         try {
             memberService.initAdmin();    
