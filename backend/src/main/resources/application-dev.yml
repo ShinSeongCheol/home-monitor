@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -18,6 +18,17 @@ spring:
       enabled: true
     restart:
       enabled: true
+
+logging:
+  level:
+    root: DEBUG
+    org:
+      hibernate:
+        SQL: INFO
+        orm:
+          jdbc:
+            bind: INFO
+            extract: INFO
 
 cors:
   allowed:

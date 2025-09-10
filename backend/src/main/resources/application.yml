@@ -7,18 +7,6 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 100MB
-        
-
-logging:
-  level:
-    root: INFO
-    org:
-      hibernate:
-        SQL: INFO
-        orm:
-          jdbc:
-            bind: INFO
-            extract: INFO
 
 public:
   data:
