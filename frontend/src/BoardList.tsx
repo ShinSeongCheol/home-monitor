@@ -2,14 +2,16 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './styles/BoardList.module.css';
 import { useEffect, useState } from 'react';
 import Board from './Board';
+import { useAuth } from './contexts/AuthContext';
 
 const BoardList = () => {
 
-    const naviagte = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
 
     const [board, setBoard] = useState<Board>();
+    const {user} = useAuth();
 
     useEffect(() => {
         const categoryCode = params.categoryCode;
@@ -25,8 +27,18 @@ const BoardList = () => {
         .catch(err => console.error(err));
     }, [])
 
+    useEffect(() => {
+        const boardRoles = board?.boardRoles;
+        if (!boardRoles) return;
+
+        if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
+            alert('읽기 권한이 없습니다.');
+            navigate(-1);
+        };
+    }, [board])
+
     const handleClick = (postId: number) => {
-        naviagte(`${location.pathname}/${postId}`);
+        navigate(`${location.pathname}/${postId}`);
     }
 
     return (
@@ -60,8 +72,14 @@ const BoardList = () => {
                 </div>
                 
                 <div className={styles.buttonContainer}>
-                    <input className={styles.cancleButton} type="button" value="뒤로가기" onClick={() => naviagte(-1)} />
-                    <input className={styles.submitButton} type="button" value="글쓰기" onClick={() => naviagte(`${location.pathname}/post`)} />
+                    <input className={styles.cancleButton} type="button" value="뒤로가기" onClick={() => navigate(-1)} />
+                    {
+                    board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'WRITE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
+                        ?
+                        <input className={styles.submitButton} type="button" value="글쓰기" onClick={() => navigate(`${location.pathname}/post`)} />
+                        :
+                        ""
+                    }
                 </div>
             </section>
         </main>

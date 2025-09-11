@@ -1,18 +1,42 @@
 import CkEditorComponent from "./components/CkEditorComponent";
 import styles from './styles/BoardPostCreateComponent.module.css';
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, type FormEventHandler,  type ChangeEventHandler } from "react";
+import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
+import type Board from "./Board";
 
 const BoardPostCreateComponent = () => {
 
-    const {accessToken} = useAuth();
+    const {user,accessToken} = useAuth();
 
     const navigate = useNavigate();
     const {categoryCode} = useParams();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [board, setBoard] = useState<Board>();
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            setBoard(data);
+        })
+        .catch(err => console.error(err));
+    }, [])
+
+    useEffect(() => {
+        const boardRoles = board?.boardRoles;
+        if (!boardRoles) return;
+
+        if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'WRITE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
+            alert('쓰기 권한이 없습니다.');
+            navigate(-1);
+        };
+    }, [board])
 
     //title 변경
     const handleTitleChange:ChangeEventHandler<HTMLInputElement> = (e) => {

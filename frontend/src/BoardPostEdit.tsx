@@ -4,16 +4,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import DOMPurify from "dompurify";
+import type Board from "./Board";
 
 const BoardPostEditComponent = () => {
 
-    const {accessToken} = useAuth();
+    const {user, accessToken} = useAuth();
 
     const navigate = useNavigate();
     const {categoryCode, postId} = useParams();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [board, setBoard] = useState<Board>();
 
     DOMPurify.addHook('uponSanitizeElement', (node, data) => {
         if(data.tagName === 'iframe') {
@@ -45,9 +47,21 @@ const BoardPostEditComponent = () => {
             
             setTitle(DOMPurify.sanitize(data.title));
             setContent(santiizedContent);
+
+            setBoard(data.board);
         })
         .catch(err => console.error(err));
     }, [])
+
+    useEffect(() => {
+        const boardRoles = board?.boardRoles;
+        if (!boardRoles) return;
+
+        if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'MODIFY' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
+            alert('수정 권한이 없습니다.');
+            navigate(-1);
+        };
+    }, [board])
 
     //title 변경
     const handleTitleChange:ChangeEventHandler<HTMLInputElement> = (e) => {

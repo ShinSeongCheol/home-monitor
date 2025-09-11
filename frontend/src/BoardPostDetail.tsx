@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from './contexts/AuthContext';
+import Board from './Board';
 
 const BoardPostDetail = () => {
 
@@ -13,6 +14,7 @@ const BoardPostDetail = () => {
     const [content, setContent] = useState("");
 
     const [memberEmail, setMemberEmail] = useState("");
+    const [board, setBoard] = useState<Board>();
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
@@ -50,9 +52,20 @@ const BoardPostDetail = () => {
             setContent(santiizedContent);
 
             setMemberEmail(data.member.email);
+            setBoard(data.board);
         })
         .catch(err => console.error(err));
     }, [])
+
+    useEffect(() => {
+        const boardRoles = board?.boardRoles;
+        if (!boardRoles) return;
+
+        if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
+            alert('읽기 권한이 없습니다.');
+            navigate(-1);
+        };
+    }, [board])
 
     const handleEdit = () => {
         if(!confirm('글을 수정하시겠습니까?')) return;
@@ -90,14 +103,23 @@ const BoardPostDetail = () => {
 
                 <div className={styles.buttonContainer}>
                     <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
-                    {memberEmail === user?.email 
-                    ? 
-                    <>
-                        <input className={styles.editButton} type="button" value="수정" onClick={handleEdit} />
-                        <input className={styles.deleteButton} type="button" value="삭제" onClick={handleDelete} />
-                    </>
-                    :
-                    ""
+                    {
+                    memberEmail === user?.email && board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'MODIFY' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
+                        ? 
+                        <>
+                            <input className={styles.editButton} type="button" value="수정" onClick={handleEdit} />
+                        </>
+                        :
+                        ""
+                    } 
+                    {
+                    memberEmail === user?.email && board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'DELETE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
+                        ? 
+                        <>
+                            <input className={styles.deleteButton} type="button" value="삭제" onClick={handleDelete} />
+                        </>
+                        :
+                        ""
                     } 
                 </div>
             </section>
