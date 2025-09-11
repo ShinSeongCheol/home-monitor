@@ -1,6 +1,8 @@
 package com.seongcheol.homemonitor.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.MemberDto;
@@ -24,6 +26,7 @@ public class PostResponseDto {
     private LocalDateTime updatedAt;
     private MemberDto member;
     private BoardResponseDto board;
+    private Set<CommentResponseDto> comments;
 
     public static PostResponseDto fromEntity(PostEntity postEntity) {
         return PostResponseDto.builder()
@@ -34,6 +37,7 @@ public class PostResponseDto {
             .updatedAt(postEntity.getUpdatedAt())
             .member(MemberDto.fromEntity(postEntity.getMember()))
             .board(BoardResponseDto.fromEntity(postEntity.getBoard()))
+            .comments(postEntity.getComments().stream().map(comment -> CommentResponseDto.fromEntity(comment)).collect(Collectors.toSet()))
             .build()
         ;
     }

@@ -3,13 +3,16 @@ package com.seongcheol.homemonitor.controller;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.seongcheol.homemonitor.dto.request.CommentRequestDto;
 import com.seongcheol.homemonitor.dto.request.PostRequestDto;
 import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
+import com.seongcheol.homemonitor.dto.response.CommentResponseDto;
 import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
 import com.seongcheol.homemonitor.service.BoardService;
@@ -97,5 +100,46 @@ public class BoardController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
+
+    @PostMapping("/{categoryCode}/{postId}/comment")
+    public ResponseEntity<CommentResponseDto> postComment(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody CommentRequestDto commentRequestDto) {
+        log.info("게시판 {} 글 {} 댓글 등록 컨트롤러", categoryCode, postId);
+
+        try {
+            CommentResponseDto commentResponseDto = boardService.postComment(categoryCode, postId, commentRequestDto);
+            return ResponseEntity.ok(commentResponseDto);
+        } catch (AccessDeniedException | NoSuchElementException | IllegalArgumentException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+        
+    }
     
+    @PutMapping("/{categoryCode}/{postId}/comment/{commentId}")
+    public ResponseEntity<CommentResponseDto> putCommentBy(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @PathVariable(value = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
+        log.info("게시판 {} 글 {} 댓글 {} 수정 컨트롤러", categoryCode, postId, commentId);
+
+        try {
+            CommentResponseDto commentResponseDto = boardService.putComment(categoryCode, postId, commentId, commentRequestDto);
+            return ResponseEntity.ok(commentResponseDto);
+        } catch (AccessDeniedException | NoSuchElementException | IllegalArgumentException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+
+    }
+    
+    @DeleteMapping("/{categoryCode}/{postId}/comment/{commentId}")
+    public ResponseEntity<String> deleteCommentBy(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @PathVariable(value = "commentId") Long commentId) {
+        log.info("게시판 {} 글 {} 댓글 {} 삭제 컨트롤러", categoryCode, postId, commentId);
+
+        try {
+            boardService.deleteComment(categoryCode, postId, commentId);
+            return ResponseEntity.ok(null);
+        } catch (AccessDeniedException | NoSuchElementException | IllegalArgumentException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+        
+    }
 }

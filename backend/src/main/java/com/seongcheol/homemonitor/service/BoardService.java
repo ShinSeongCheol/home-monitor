@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.seongcheol.homemonitor.domain.BoardEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
+import com.seongcheol.homemonitor.domain.CommentEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
+import com.seongcheol.homemonitor.dto.request.CommentRequestDto;
 import com.seongcheol.homemonitor.dto.request.PostRequestDto;
 import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
+import com.seongcheol.homemonitor.dto.response.CommentResponseDto;
 import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
+import com.seongcheol.homemonitor.repository.CommentRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
 
@@ -46,6 +51,9 @@ public class BoardService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -231,6 +239,93 @@ public class BoardService {
 
         ImageResponseDto imageResponseDto = ImageResponseDto.builder().url(url).build();
         return imageResponseDto;
+    }
+
+    @Transactional
+    public CommentResponseDto postComment(String categoryCode, Long postId, CommentRequestDto commentRequestDto) throws AccessDeniedException, NoSuchElementException, IllegalArgumentException {
+        log.info("게시판 {} 게시글 {} 댓글 추가 서비스", categoryCode, postId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // member entity 연관 관계 설정
+        if (authentication != null && authentication.isAuthenticated()) {
+            
+            if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+                String userEmail = userDetailsImpl.getEmail();
+                
+                MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
+                PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당하는 게시글이 없습니다."));
+
+                CommentEntity commentEntity = CommentEntity.builder()
+                    .content(commentRequestDto.getComment())
+                    .post(postEntity)
+                    .member(memberEntity)
+                    .build()
+                ;
+
+                CommentEntity savedCommentResponseEntity = commentRepository.save(commentEntity);
+
+                return CommentResponseDto.fromEntity(savedCommentResponseEntity);
+            }
+            
+        }
+
+        throw new AccessDeniedException("인증되지 않은 사용자입니다.");
+    }
+
+    @Transactional
+    public CommentResponseDto putComment(String categoryCode, Long postId, Long commentId, CommentRequestDto commentRequestDto) throws AccessDeniedException, NoSuchElementException, IllegalArgumentException {
+        log.info("게시판 {} 게시글 {} 댓글 {} 수정 서비스", categoryCode, postId, commentId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // member entity 연관 관계 설정
+        if (authentication != null && authentication.isAuthenticated()) {
+            
+            if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+                String userEmail = userDetailsImpl.getEmail();
+                
+                MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
+                CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 없습니다."));
+
+                if (!memberEntity.getEmail().equals(commentEntity.getMember().getEmail())) throw new AccessDeniedException("작성자가 아니므로 수정할 수 없습니다.");
+
+                commentEntity.setContent(commentRequestDto.getComment());
+
+                return CommentResponseDto.fromEntity(commentEntity);
+            }
+            
+        }
+
+        throw new AccessDeniedException("인증되지 않은 사용자입니다.");
+    }
+
+    @Transactional
+    public void deleteComment(String categoryCode, Long postId, Long commentId) throws AccessDeniedException, NoSuchElementException, IllegalArgumentException {
+        log.info("게시판 {} 게시글 {} 댓글 {} 삭제 서비스", categoryCode, postId, commentId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // member entity 연관 관계 설정
+        if (authentication != null && authentication.isAuthenticated()) {
+            
+            if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+                String userEmail = userDetailsImpl.getEmail();
+                
+                MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
+                CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 없습니다."));
+
+                if (!memberEntity.getEmail().equals(commentEntity.getMember().getEmail())) throw new AccessDeniedException("작성자가 아니므로 삭제할 수 없습니다.");
+
+                commentRepository.deleteById(commentId);
+                return;
+            }
+            
+        }
+        throw new AccessDeniedException("인증되지 않은 사용자입니다.");
     }
 
 }
