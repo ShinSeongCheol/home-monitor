@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BoardCardComponent from './components/BoardCardComponent';
 import styles from './styles/Board.module.css';
+import { useAuth } from './contexts/AuthContext';
 
 type Board = {
     categoryCode: string;
@@ -9,6 +10,7 @@ type Board = {
     createdAt: Date | null;
     updatedAt: Date | null;
     posts: Post[];
+    boardRoles: BoardRole[];
 }
 
 type Post = {
@@ -24,8 +26,24 @@ type Post = {
     }
 }
 
+type BoardRole = {
+    boardRoleCode: BoardRoleCode;
+    memberRoleCode: MemberRoleCode | null;
+}
+
+type BoardRoleCode = {
+    code: string;
+    name: string;
+}
+
+type MemberRoleCode = {
+    code: string;
+    name: string;
+}
+
 const Board = () => {
 
+    const {user} = useAuth();
     const [boardList, setBoardList] = useState<Board[]>([]);
 
     useEffect(() => {
@@ -49,8 +67,11 @@ const Board = () => {
                 </div>
 
                 <div className={styles.gridContainer}>
-                    {boardList
-                    .map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)}
+                    {
+                        [...boardList.filter(board => board.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ')), ...boardList.filter(board => board.boardRoles.some(boardRole => user?.authorities.includes(boardRole.memberRoleCode?.code ?? "")))]
+                        .filter((board, index, self) => index === self.findIndex(b => b.categoryCode === board.categoryCode))
+                        .map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)
+                    }
                 </div>
             </section>
         </main>

@@ -23,6 +23,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private MemberDto member;
+    private BoardResponseDto board;
 
     public static PostResponseDto fromEntity(PostEntity postEntity) {
         return PostResponseDto.builder()
@@ -32,6 +33,7 @@ public class PostResponseDto {
             .createdAt(postEntity.getCreatedAt())
             .updatedAt(postEntity.getUpdatedAt())
             .member(MemberDto.fromEntity(postEntity.getMember()))
+            .board(BoardResponseDto.fromEntity(postEntity.getBoard()))
             .build()
         ;
     }
