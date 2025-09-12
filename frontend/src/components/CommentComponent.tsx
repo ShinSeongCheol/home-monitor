@@ -53,7 +53,7 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
                     <div className={styles.comments} key={value.id}>
                         <div>{value.member.nickname}</div>
                         <p>{value.content}</p>
-                        <div>{value.createdAt.toLocaleString()}</div>
+                        <div>{new Date(value.createdAt).toLocaleString()}</div>
                     </div>
                 ))
             }
