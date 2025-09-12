@@ -68,7 +68,12 @@
 }
 
 @media screen and (max-width: 1024px) {
+    .main {
+        width: 100%;
+        padding:8px;
+        box-sizing: border-box;
+    }
     .section {
-        padding: 0px 8px;
+        width: 100%;
     }
 }

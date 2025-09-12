@@ -31,6 +31,9 @@
 
 .comments > div:last-child {
     flex:3;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
 }
 
 .comments > p {
@@ -69,4 +72,17 @@
     background: #1560ab;
     cursor: pointer;
     transition: background-color 0.2s ease;
+}
+
+@media screen and (max-width: 1024px) {
+    .section {
+        width: 100%;
+    }
+
+    .comments > div:last-child {
+        flex:5;
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+    }
 }
