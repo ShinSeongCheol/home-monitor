@@ -1,5 +1,8 @@
 package com.seongcheol.homemonitor.domain;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +29,11 @@ import lombok.ToString;
 public class CommentEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(length = 128)
     private String content;
-    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private PostEntity post;

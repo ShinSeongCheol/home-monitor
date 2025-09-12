@@ -257,8 +257,12 @@ public class BoardService {
                 MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
                 PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당하는 게시글이 없습니다."));
 
+                LocalDateTime localDateTime = LocalDateTime.now();
+
                 CommentEntity commentEntity = CommentEntity.builder()
                     .content(commentRequestDto.getComment())
+                    .createdAt(localDateTime)
+                    .updatedAt(localDateTime)
                     .post(postEntity)
                     .member(memberEntity)
                     .build()
@@ -292,7 +296,10 @@ public class BoardService {
 
                 if (!memberEntity.getEmail().equals(commentEntity.getMember().getEmail())) throw new AccessDeniedException("작성자가 아니므로 수정할 수 없습니다.");
 
+                LocalDateTime localDateTime = LocalDateTime.now();
+
                 commentEntity.setContent(commentRequestDto.getComment());
+                commentEntity.setUpdatedAt(localDateTime);
 
                 return CommentResponseDto.fromEntity(commentEntity);
             }

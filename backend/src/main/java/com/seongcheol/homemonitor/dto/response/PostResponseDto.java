@@ -1,6 +1,8 @@
 package com.seongcheol.homemonitor.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ public class PostResponseDto {
             .updatedAt(postEntity.getUpdatedAt())
             .member(MemberDto.fromEntity(postEntity.getMember()))
             .board(BoardResponseDto.fromEntity(postEntity.getBoard()))
-            .comments(postEntity.getComments().stream().map(comment -> CommentResponseDto.fromEntity(comment)).collect(Collectors.toSet()))
+            .comments(Optional.ofNullable(postEntity.getComments()).orElse(Collections.emptySet()).stream().map(comment -> CommentResponseDto.fromEntity(comment)).collect(Collectors.toSet()))
             .build()
         ;
     }
