@@ -1,0 +1,72 @@
+.section {
+    width: 1024px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.section > h2 {
+    font-size: 16px;
+
+    padding: 4px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.section > h2 > span {
+    color: red;
+}
+
+.comments {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.comments > div {
+    flex: 1;
+    padding:4px;
+}
+
+.comments > div:last-child {
+    flex:3;
+}
+
+.comments > p {
+    flex: 9;
+    padding:4px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form > textarea {
+    resize: none;
+    height: 60px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: end;
+
+    margin-top: 8px;
+    gap: 8px;
+}
+
+.buttonContainer > input {
+    background: #1976d2;
+    color: white;
+
+    border: none;
+    width: 80px;
+    height: 30px;
+}
+
+.buttonContainer > input:hover {
+    background: #1560ab;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}

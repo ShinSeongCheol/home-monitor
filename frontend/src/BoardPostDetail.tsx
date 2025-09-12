@@ -5,6 +5,18 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from './contexts/AuthContext';
 import Board from './Board';
+import Comment from './components/CommentComponent'
+
+export type PostComment = {
+    id: number;
+    content: string;
+    createdAt: Date;
+    updatedAt: Date;
+    member: {
+        email: string;
+        nickname: string;
+    }   
+}
 
 const BoardPostDetail = () => {
 
@@ -15,6 +27,7 @@ const BoardPostDetail = () => {
 
     const [memberEmail, setMemberEmail] = useState("");
     const [board, setBoard] = useState<Board>();
+    const [comments, setComments] = useState<PostComment[]>([]);
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
@@ -53,6 +66,7 @@ const BoardPostDetail = () => {
 
             setMemberEmail(data.member.email);
             setBoard(data.board);
+            setComments(data.comments);
         })
         .catch(err => console.error(err));
     }, [])
@@ -123,6 +137,7 @@ const BoardPostDetail = () => {
                     } 
                 </div>
             </section>
+            <Comment comments={comments} setComments={setComments}></Comment>
         </main>
     )
 }
