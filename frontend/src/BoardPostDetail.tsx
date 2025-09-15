@@ -15,7 +15,8 @@ export type PostComment = {
     member: {
         email: string;
         nickname: string;
-    }   
+    };
+    children_comment: PostComment[]
 }
 
 const BoardPostDetail = () => {

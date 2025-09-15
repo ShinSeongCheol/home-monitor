@@ -1,4 +1,4 @@
-import { useState, type FormEventHandler, type MouseEventHandler } from "react";
+import { useState, type FormEvent, type FormEventHandler, type MouseEventHandler } from "react";
 import type { PostComment } from "../BoardPostDetail";
 import styles from '../styles/Comment.module.css'
 import { useParams } from "react-router-dom";
@@ -16,6 +16,8 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
     const [comment, setComment] = useState("");
     const [editCommentId, setEditCommentId] = useState<number| null>(null);
     const [editComment, setEditComment] = useState<string | null>(null);
+    const [replyingId, setReplyingId] = useState<number | null>(null);
+    const [replyComment, setReplyComment] = useState<string | null>(null);
 
     const handleSubmit:FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
@@ -90,6 +92,45 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
         .catch(err => console.error(err))
     }
 
+    // 댓글 달기
+    const handleReply = (value: PostComment) => {
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/comment/${value.id}/reply`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify(
+                {
+                    comment: replyComment
+                }
+            )
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+            .then(res => {
+                setReplyingId(null);
+                setReplyComment(null);
+                setComments(
+                    (prev) => prev.map((comment) =>
+                        comment.id === value.id
+                            ? {
+                                ...comment,
+                                children_comment: [...comment.children_comment, res]
+                            }
+                            : comment
+                    )
+                )
+            alert('댓글이 등록되었습니다!');
+        })
+        .catch((err: Response) => {
+            if (err.status === 401) alert('권한이 없습니다.');
+        })
+    }
+
     return (
         <section className={styles.section}>
             <h2>전체 댓글 <span>{comments.length}</span>개</h2>
@@ -113,6 +154,7 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
                             value.member.email === user?.email
                             ?
                             <div className={styles.buttonContainer}>
+                                <input className={styles.editButton} type="button" value="댓글 달기" onClick={() => setReplyingId(value.id)} />
                                 <input className={styles.editButton} type="button" value="수정" onClick={() => {
                                     if (value.id === editCommentId) {
                                         handleUpdate(value);
@@ -125,6 +167,29 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
                             </div>
                             :
                             ""
+                        }
+
+                        {value.children_comment.map((chidren_comment) => (
+                            <div className={styles.replyComment}>
+                                <div className={styles.commentContent}>
+                                    <div>ㄴ {new Date(chidren_comment.createdAt).toLocaleString()}</div>
+                                    <div>{chidren_comment.member.nickname}</div>
+                                    <p>{chidren_comment.content}</p>
+                                </div>
+                            </div>
+                            )
+                        )}
+
+                        { replyingId === value.id && 
+                            (
+                            <div className={styles.reply}>
+                                <textarea name="replyComment" id="replyComment" value={replyComment ?? ""} onChange={(e) => setReplyComment(e.target.value)}></textarea>
+                                <div className={styles.buttonContainer}>
+                                    <input className={styles.editButton} type="button" value="등록" onClick={() => handleReply(value)}/>
+                                    <input className={styles.cancleButton} type="button" value="취소" onClick={() => setReplyingId(null)}/>
+                                </div>
+                            </div>
+                            )
                         }
                     </div>
                 ))
