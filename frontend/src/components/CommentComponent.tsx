@@ -1,4 +1,4 @@
-import { useState, type FormEventHandler } from "react";
+import { useState, type FormEventHandler, type MouseEventHandler } from "react";
 import type { PostComment } from "../BoardPostDetail";
 import styles from '../styles/Comment.module.css'
 import { useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ type PostCommentProps = {
 
 const Comment = ({comments, setComments} : PostCommentProps) => {
     const {categoryCode, postId} = useParams();
-    const {accessToken} = useAuth();
+    const {user, accessToken} = useAuth();
 
     const [comment, setComment] = useState("");
 
@@ -44,16 +44,33 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
         })
     }
 
+    const handleDelete:MouseEventHandler<HTMLInputElement> = (e) => {
+        console.log(e);
+    }
+
     return (
         <section className={styles.section}>
             <h2>전체 댓글 <span>{comments.length}</span>개</h2>
 
             {
                 comments.sort((a, b) => a.id - b.id).map((value) => (
-                    <div className={styles.comments} key={value.id}>
-                        <div>{value.member.nickname}</div>
-                        <p>{value.content}</p>
-                        <div>{new Date(value.createdAt).toLocaleString()}</div>
+                    <div key={value.id} className={styles.comments}>
+                        <div className={styles.commentContent}>
+                            <div>{new Date(value.createdAt).toLocaleString()}</div>
+                            <div>{value.member.nickname}</div>
+                            <p>{value.content}</p>
+                        </div>
+                        
+                        {
+                            value.member.email === user?.email
+                            ?
+                            <div className={styles.buttonContainer}>
+                                    <input className={styles.editButton} type="button" value="수정" />
+                                    <input className={styles.deleteButton} type="button" value="삭제" onClick={handleDelete} />
+                                </div>
+                            :
+                            ""
+                        }
                     </div>
                 ))
             }
@@ -61,7 +78,7 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
             <form className={styles.form} onSubmit={handleSubmit}>
                 <textarea name="comment" id="comment" onChange={(e) => setComment(e.target.value)}></textarea>
                 <div className={styles.buttonContainer}>
-                    <input type="submit" value="등록" />
+                    <input className={styles.editButton} type="submit" value="등록" />
                 </div>
             </form>
         </section>

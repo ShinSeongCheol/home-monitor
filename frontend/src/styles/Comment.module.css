@@ -18,28 +18,24 @@
 }
 
 .comments {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-size: 16px;
+    color: #666;
     margin-bottom: 8px;
     border-bottom: 1px solid lightgrey;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+
 }
 
-.comments > div {
-    padding:4px;
-    min-width: 128px;
-    text-align: start;
-}
+.commentContent {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-template-rows: minmax(40px, auto);
 
-.comments > div:last-child {
-    text-align: end;
-    font-size: 12px;
-    color: #666;
-}
-
-.comments > p {
-    flex: 1;
-    padding:4px;
+    gap: 16px;
+    align-items: center;
 }
 
 .form {
@@ -50,27 +46,42 @@
 .form > textarea {
     resize: none;
     height: 60px;
+
+    margin-bottom: 8px;
 }
 
 .buttonContainer {
     display: flex;
+    align-items: center;
     justify-content: end;
 
-    margin-top: 8px;
     gap: 8px;
 }
 
 .buttonContainer > input {
-    background: #1976d2;
-    color: white;
-
     border: none;
     width: 80px;
     height: 30px;
 }
 
-.buttonContainer > input:hover {
+.editButton {
+    background: #1976d2;
+    color: white;
+}
+
+.editButton:hover {
     background: #1560ab;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.deleteButton {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+.deleteButton:hover {
+    background: #c82333;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -80,7 +91,10 @@
         width: 100%;
     }
 
-    .comments > div{
-        min-width: 64px;
+    .commentContent {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 8px;
     }
 }
