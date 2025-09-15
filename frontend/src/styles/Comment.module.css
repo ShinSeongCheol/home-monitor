@@ -25,15 +25,15 @@
 
     display: grid;
     grid-template-columns: 1fr auto;
+    grid-template-rows: minmax(60px, auto);
     gap: 16px;
 }
 
 .commentContent {
     display: grid;
     grid-template-columns: auto auto 1fr;
-
-    gap: 16px;
     align-items: center;
+    gap: 16px;
 }
 
 .commentContent > textarea {
