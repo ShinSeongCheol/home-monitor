@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type FormEventHandler, type MouseEventHandler } from "react";
+import { useState, type FormEventHandler } from "react";
 import type { PostComment } from "../BoardPostDetail";
 import styles from '../styles/Comment.module.css'
 import { useParams } from "react-router-dom";
@@ -108,7 +108,7 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
             )
         })
         .then(res => {
-            if(!res.ok) throw res;
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json();
         })
             .then(res => {
@@ -150,24 +150,23 @@ const Comment = ({comments, setComments} : PostCommentProps) => {
                             }
                         </div>
 
-                        {
-                            value.member.email === user?.email
-                            ?
                             <div className={styles.buttonContainer}>
-                                <input className={styles.editButton} type="button" value="댓글 달기" onClick={() => setReplyingId(value.id)} />
-                                <input className={styles.editButton} type="button" value="수정" onClick={() => {
-                                    if (value.id === editCommentId) {
-                                        handleUpdate(value);
-                                    }else {
-                                        setEditCommentId(value.id);
-                                        setEditComment(value.content);
-                                    }
-                                }}/>
-                                <input className={styles.deleteButton} type="button" value="삭제" onClick={() => handleDelete(value)} />
+                                {user && <input className={styles.editButton} type="button" value="댓글 달기" onClick={() => setReplyingId(value.id)} />}
+                                { user?.email === value.member.email 
+                                ? 
+                                    <>
+                                    <input className={styles.editButton} type="button" value="수정" onClick={() => {
+                                        if (value.id === editCommentId) {
+                                            handleUpdate(value);
+                                        }else {
+                                            setEditCommentId(value.id);
+                                            setEditComment(value.content);
+                                        }
+                                    }}/>
+                                    <input className={styles.deleteButton} type="button" value="삭제" onClick={() => handleDelete(value)} />
+                                    </>
+                                : "" }
                             </div>
-                            :
-                            ""
-                        }
 
                         {value.children_comment.map((chidren_comment) => (
                             <div className={styles.replyComment}>
