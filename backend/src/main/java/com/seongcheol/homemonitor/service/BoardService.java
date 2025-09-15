@@ -170,7 +170,7 @@ public class BoardService {
     public PostResponseDto getPost(String categoryCode, Long postId) {
         log.info("게시글 {} 글 {} 조회 서비스", categoryCode, postId);
 
-        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        PostEntity postEntity = postRepository.findPostsWitoutParentComments(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         postEntity.setView(postEntity.getView() + 1);
 
         PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
@@ -335,4 +335,43 @@ public class BoardService {
         throw new AccessDeniedException("인증되지 않은 사용자입니다.");
     }
 
+    @Transactional
+    public CommentResponseDto replyComment(String categoryCode, Long postId, Long commentId, CommentRequestDto commentRequestDto) throws AccessDeniedException, NoSuchElementException, IllegalArgumentException {
+        log.info("게시판 {} 게시글 {} 댓글 {} 댓글 달기 서비스", categoryCode, postId, commentId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // member entity 연관 관계 설정
+        if (authentication != null && authentication.isAuthenticated()) {
+            
+            if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+                String userEmail = userDetailsImpl.getEmail();
+                
+                MemberEntity memberEntity = memberRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
+                PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당하는 게시글이 없습니다."));
+
+                LocalDateTime localDateTime = LocalDateTime.now();
+
+                CommentEntity parentCommentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 없습니다."));
+
+                CommentEntity commentEntity = CommentEntity.builder()
+                    .content(commentRequestDto.getComment())
+                    .createdAt(localDateTime)
+                    .updatedAt(localDateTime)
+                    .post(postEntity)
+                    .member(memberEntity)
+                    .parent_comment(parentCommentEntity)
+                    .build()
+                ;
+
+                CommentEntity savedCommentResponseEntity = commentRepository.save(commentEntity);
+
+                return CommentResponseDto.fromEntity(savedCommentResponseEntity);
+            }
+            
+        }
+
+        throw new AccessDeniedException("인증되지 않은 사용자입니다.");
+    }
 }

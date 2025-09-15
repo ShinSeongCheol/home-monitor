@@ -142,4 +142,18 @@ public class BoardController {
         }
         
     }
+
+    @PostMapping("/{categoryCode}/{postId}/comment/{commentId}/reply")
+    public ResponseEntity<CommentResponseDto> replyComment(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @PathVariable(value = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
+        log.info("게시판 {} 글 {} 댓글 {} 댓글 달기 컨트롤러", categoryCode, postId, commentId);
+
+        try {
+            CommentResponseDto commentResponseDto = boardService.replyComment(categoryCode, postId, commentId, commentRequestDto);
+            return ResponseEntity.ok(commentResponseDto);
+        } catch (AccessDeniedException | NoSuchElementException | IllegalArgumentException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+        
+    }
 }
