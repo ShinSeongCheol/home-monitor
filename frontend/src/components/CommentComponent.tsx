@@ -122,10 +122,14 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                     <p>{comment.content}</p>
                 }
 
-                {
+                
+                <div className={styles.actions}>
+                    {user?.email && 
+                        <input className={styles.reply_btn} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
+                    }
+                    {
                     comment.member.email === user?.email && 
-                        <div className={styles.actions}>
-                            <input className={styles.reply_btn} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
+                        <>
                             <input className={styles.edit_btn} type="button" value="수정" onClick={() => {
                                 if (comment.id === editCommentId) {
                                     handleUpdate(comment.id);
@@ -135,8 +139,10 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                                 }
                             }} />
                             <input className={styles.delete_btn} type="button" value="삭제" onClick={() => handleDelete(comment.id)} />
-                        </div>
-                }
+                        </>
+                    }
+                </div>
+                
 
                 {replyingId === comment.id &&
                     (
@@ -169,7 +175,7 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
 
 const Comment = () => {
     const {categoryCode, postId} = useParams();
-    const {accessToken} = useAuth();
+    const {user, accessToken} = useAuth();
 
     const [comments, setComments] = useState<CommentProps[]>();
     const [comment, setComment] = useState("");
@@ -238,14 +244,16 @@ const Comment = () => {
                 ))
             }
 
-            <form className={styles.comment} onSubmit={handleSubmit}>
-                <div className={styles.content}>
-                    <textarea name="comment" id="comment" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
-                    <div className={styles.actions}>
-                        <input className={styles.reply_btn} type="submit" value="등록" />
+            {user?.email && 
+                <form className={styles.comment} onSubmit={handleSubmit}>
+                    <div className={styles.content}>
+                        <textarea name="comment" id="comment" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+                        <div className={styles.actions}>
+                            <input className={styles.reply_btn} type="submit" value="등록" />
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            }
         </section>
     )
 }
