@@ -107,27 +107,26 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
     }
 
     return (
-        <div className={styles.comments}>
-            <div className={styles.container}>
-                <div className={styles.commentContent}>
-                    <div className={styles.date}>{`${new Date(comment.createdAt).toLocaleString()}`}</div>
-                    <div className={styles.author}>{comment.member.nickname} : </div>
-                    <div className={styles.content}>
-                    {
-                        comment.id === editCommentId
-                        ?
-                        <textarea name="comment" id="comment" value={editComment ?? ""} onChange={(e) => setEditComment(e.target.value)}></textarea>
-                        :
-                        <p>{comment.content}</p>
-                    }
-                    </div>
-                </div>
+        <div className={styles.comment}>
+            <div className={styles.meta}>
+                <span className={styles.author}>{comment.member.nickname}</span>
+                <span className={styles.date}>{`${new Date(comment.createdAt).toLocaleString()}`}</span>
+            </div>
+
+            <div className={styles.content}>
+                {
+                    comment.id === editCommentId
+                    ?
+                    <textarea name="comment" id="comment" value={editComment ?? ""} onChange={(e) => setEditComment(e.target.value)}></textarea>
+                    :
+                    <p>{comment.content}</p>
+                }
 
                 {
                     comment.member.email === user?.email && 
-                        <div className={styles.buttonContainer}>
-                            <input className={styles.editButton} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
-                            <input className={styles.editButton} type="button" value="수정" onClick={() => {
+                        <div className={styles.actions}>
+                            <input className={styles.reply_btn} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
+                            <input className={styles.edit_btn} type="button" value="수정" onClick={() => {
                                 if (comment.id === editCommentId) {
                                     handleUpdate(comment.id);
                                 } else {
@@ -135,7 +134,7 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                                     setEditComment(comment.content);
                                 }
                             }} />
-                            <input className={styles.deleteButton} type="button" value="삭제" onClick={() => handleDelete(comment.id)} />
+                            <input className={styles.delete_btn} type="button" value="삭제" onClick={() => handleDelete(comment.id)} />
                         </div>
                 }
 
@@ -143,24 +142,26 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                     (
                         <div className={styles.reply}>
                             <textarea name="replyComment" id="replyComment" value={replyComment ?? ""} onChange={(e) => setReplyComment(e.target.value)}></textarea>
-                            <div className={styles.buttonContainer}>
-                                <input className={styles.editButton} type="button" value="등록" onClick={() => handleReply(comment.id)} />
-                                <input className={styles.cancleButton} type="button" value="취소" onClick={() => setReplyingId(null)} />
+                            <div className={styles.actions}>
+                                <input className={styles.reply_btn} type="button" value="등록" onClick={() => handleReply(comment.id)} />
+                                <input className={styles.cancle_btn} type="button" value="취소" onClick={() => setReplyingId(null)} />
                             </div>
                         </div>
                     )
                 }
-            </div>
-            
-            {comment.children_comment && comment.children_comment.length > 0 && (
-                comment.children_comment.map((children_comment) => {
-                    return (
-                        <div className={styles.replyComment}>
-                            <CommentItem key={children_comment.id} comment={children_comment} fetchComment={fetchComment}></CommentItem>
-                        </div>
+
+                {
+                comment.children_comment && comment.children_comment.length > 0 && (
+                    comment.children_comment.map((children_comment) => {
+                        return (
+                            <div className={styles.replies}>
+                                <CommentItem key={children_comment.id} comment={children_comment} fetchComment={fetchComment}></CommentItem>
+                            </div>
+                        )
+                    })
                     )
-                })
-            )}
+                }
+            </div>
 
         </div>
     )
@@ -237,10 +238,12 @@ const Comment = () => {
                 ))
             }
 
-            <form className={styles.form} onSubmit={handleSubmit}>
-                <textarea name="comment" id="comment" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
-                <div className={styles.buttonContainer}>
-                    <input className={styles.editButton} type="submit" value="등록" />
+            <form className={styles.comment} onSubmit={handleSubmit}>
+                <div className={styles.content}>
+                    <textarea name="comment" id="comment" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+                    <div className={styles.actions}>
+                        <input className={styles.reply_btn} type="submit" value="등록" />
+                    </div>
                 </div>
             </form>
         </section>
