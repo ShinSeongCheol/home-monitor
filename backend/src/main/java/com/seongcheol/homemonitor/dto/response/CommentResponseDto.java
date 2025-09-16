@@ -35,7 +35,7 @@ public class CommentResponseDto {
             .createdAt(commentEntity.getCreatedAt())
             .updatedAt(commentEntity.getUpdatedAt())
             .member(MemberDto.fromEntity(commentEntity.getMember()))
-            .children_comment(Optional.ofNullable(commentEntity.getChildren_comment()).orElse(Collections.emptyList()).stream().map((children_comment) -> CommentResponseDto.fromEntity(children_comment)).collect(Collectors.toList()))
+            .children_comment(Optional.ofNullable(commentEntity.getChildrenComment()).orElse(Collections.emptyList()).stream().map((children_comment) -> CommentResponseDto.fromEntity(children_comment)).collect(Collectors.toList()))
             .build()
         ;
     }

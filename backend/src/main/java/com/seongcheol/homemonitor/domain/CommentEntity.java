@@ -1,7 +1,6 @@
 package com.seongcheol.homemonitor.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -48,8 +47,8 @@ public class CommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
-    private CommentEntity parent_comment;
+    private CommentEntity parentComment;
 
-    @OneToMany(mappedBy = "parent_comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentEntity> children_comment;
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> childrenComment;
 }

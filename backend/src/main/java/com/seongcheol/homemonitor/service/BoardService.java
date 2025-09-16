@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -170,7 +171,7 @@ public class BoardService {
     public PostResponseDto getPost(String categoryCode, Long postId) {
         log.info("게시글 {} 글 {} 조회 서비스", categoryCode, postId);
 
-        PostEntity postEntity = postRepository.findPostsWitoutParentComments(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         postEntity.setView(postEntity.getView() + 1);
 
         PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
@@ -239,6 +240,17 @@ public class BoardService {
 
         ImageResponseDto imageResponseDto = ImageResponseDto.builder().url(url).build();
         return imageResponseDto;
+    }
+
+    @Transactional
+    public List<CommentResponseDto> getComments(String categoryCode, Long postId) {
+        log.info("게시글 {} 글 {} 댓글 조회 서비스", categoryCode, postId);
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다."));
+
+        List<CommentEntity> commentEntity = commentRepository.findCommentsWithoutParent(postEntity);
+
+        return commentEntity.stream().map((comment) -> CommentResponseDto.fromEntity(comment)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -361,7 +373,7 @@ public class BoardService {
                     .updatedAt(localDateTime)
                     .post(postEntity)
                     .member(memberEntity)
-                    .parent_comment(parentCommentEntity)
+                    .parentComment(parentCommentEntity)
                     .build()
                 ;
 

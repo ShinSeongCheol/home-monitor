@@ -101,6 +101,20 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/{categoryCode}/{postId}/comment")
+    public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId) {
+        log.info("게시판 {} 글 {} 댓글 등록 컨트롤러", categoryCode, postId);
+
+        try {
+            List<CommentResponseDto> commentResponseDto = boardService.getComments(categoryCode, postId);
+            return ResponseEntity.ok(commentResponseDto);
+        } catch (NoSuchElementException e) {
+            log.error("Error", e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
+        }
+        
+    }
+
     @PostMapping("/{categoryCode}/{postId}/comment")
     public ResponseEntity<CommentResponseDto> postComment(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody CommentRequestDto commentRequestDto) {
         log.info("게시판 {} 글 {} 댓글 등록 컨트롤러", categoryCode, postId);
