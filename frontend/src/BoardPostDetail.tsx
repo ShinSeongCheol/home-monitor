@@ -28,7 +28,6 @@ const BoardPostDetail = () => {
 
     const [memberEmail, setMemberEmail] = useState("");
     const [board, setBoard] = useState<Board>();
-    const [comments, setComments] = useState<PostComment[]>([]);
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
@@ -67,7 +66,6 @@ const BoardPostDetail = () => {
 
             setMemberEmail(data.member.email);
             setBoard(data.board);
-            setComments(data.comments);
         })
         .catch(err => console.error(err));
     }, [])
