@@ -138,7 +138,7 @@ const BoardPostDetail = () => {
                     } 
                 </div>
             </section>
-            <Comment comments={comments} setComments={setComments}></Comment>
+            <Comment></Comment>
         </main>
     )
 }
