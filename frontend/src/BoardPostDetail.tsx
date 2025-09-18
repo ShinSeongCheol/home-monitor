@@ -20,7 +20,7 @@ export type PostComment = {
     children_comment: PostComment[]
 }
 
-type Reaction = {
+export type Reaction = {
     member: {
         email: string;
         nickname: string;

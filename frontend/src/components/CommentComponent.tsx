@@ -2,6 +2,8 @@ import { useEffect, useState, type FormEventHandler } from "react";
 import styles from '../styles/Comment.module.css'
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import FavoriteSVG from '../assets/icon/favorite.svg?react';
+import type { Reaction } from "../BoardPostDetail";
 
 type CommentProps = {
     id: number;
@@ -13,6 +15,7 @@ type CommentProps = {
     createdAt: Date;
     updatedAt: Date;
     children_comment: CommentProps[];
+    reactions: Reaction[];
 }
 
 type CommentItemProps = {
@@ -29,6 +32,8 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
 
     const [replyingId, setReplyingId] = useState<number | null>(null);
     const [replyComment, setReplyComment] = useState<string | null>(null);
+
+    const [reactions, setReactions] = useState<Reaction[]>(comment.reactions);
 
     const handleUpdate = (id: number) => {
         if(! confirm('댓글을 수정하시겠습니까?')) return;
@@ -106,6 +111,55 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
         })
     }
 
+    const handleReact = (commentId: number) => {
+        if(!user?.email) {
+            alert('로그인 후 이용 가능합니다.')
+            return;
+        }
+
+        let isReactionExist = reactions.some((value) => value.member.email === user.email);
+
+        // 반응 삭제
+        if (isReactionExist) {
+            fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/comment/${commentId}/reactions`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    code: "HEART"
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error(`Http Error ${res.status}`);
+                setReactions(reactions.filter((value) => value.member.email !== user.email));
+            })
+            .catch(err => console.error(err));
+
+        //반응 추가
+        }else {
+            fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/comment/${commentId}/reactions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    code: "HEART"
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error(`Http Error ${res.status}`);
+                return res.json();
+            })
+            .then(res => {
+                setReactions((prev) => [...prev, res]);
+            })
+            .catch(err => console.error(err));
+        }
+    }
+
     return (
         <div className={styles.comment}>
             <div className={styles.meta}>
@@ -123,24 +177,30 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                 }
 
                 
-                <div className={styles.actions}>
-                    {user?.email && 
-                        <input className={styles.reply_btn} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
-                    }
-                    {
-                    comment.member.email === user?.email && 
-                        <>
-                            <input className={styles.edit_btn} type="button" value="수정" onClick={() => {
-                                if (comment.id === editCommentId) {
-                                    handleUpdate(comment.id);
-                                } else {
-                                    setEditCommentId(comment.id);
-                                    setEditComment(comment.content);
-                                }
-                            }} />
-                            <input className={styles.delete_btn} type="button" value="삭제" onClick={() => handleDelete(comment.id)} />
-                        </>
-                    }
+                <div className={styles.buttonContainer}>
+                    <div className={styles.react}>
+                        <FavoriteSVG width={"24px"} height={"24px"} fill={reactions.some((value) => value.member.email === user?.email) ? '#f38383ff' : 'black'} onClick={() => handleReact(comment.id)} /> {reactions.length}
+                    </div>
+
+                    <div className={styles.actions}>
+                        {user?.email && 
+                            <input className={styles.reply_btn} type="button" value="답글" onClick={() => setReplyingId(comment.id)} />
+                        }
+                        {
+                        comment.member.email === user?.email && 
+                            <>
+                                <input className={styles.edit_btn} type="button" value="수정" onClick={() => {
+                                    if (comment.id === editCommentId) {
+                                        handleUpdate(comment.id);
+                                    } else {
+                                        setEditCommentId(comment.id);
+                                        setEditComment(comment.content);
+                                    }
+                                }} />
+                                <input className={styles.delete_btn} type="button" value="삭제" onClick={() => handleDelete(comment.id)} />
+                            </>
+                        }
+                    </div>
                 </div>
                 
 
