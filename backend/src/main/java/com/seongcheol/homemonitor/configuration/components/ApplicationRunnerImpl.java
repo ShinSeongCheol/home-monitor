@@ -32,6 +32,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         memberService.initMemberRoleCode();
         log.info("Board Role Code 초기화");
         boardService.initBoardRoleCode();
+        log.info("Reaction Code 초기화");
+        boardService.initReactionCode();
 
         try {
             memberService.initAdmin();    

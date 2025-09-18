@@ -9,18 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.dto.request.CommentRequestDto;
 import com.seongcheol.homemonitor.dto.request.PostRequestDto;
+import com.seongcheol.homemonitor.dto.request.ReactionRequestDto;
 import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
 import com.seongcheol.homemonitor.dto.response.CommentResponseDto;
 import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
+import com.seongcheol.homemonitor.dto.response.ReactionResponseDto;
 import com.seongcheol.homemonitor.service.BoardService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +83,15 @@ public class BoardController {
             log.error("Error", e.getMessage());
             return ResponseEntity.internalServerError().body(null);
         }
+    }
 
+    @PostMapping("/{categoryCode}/{postId}/reactions")
+    public ReactionResponseDto reactPost(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        log.info("게시글 반응 추가 컨트롤러");
+
+        ReactionResponseDto reactionResponseDto = boardService.reactPost(categoryCode, postId, reactionRequestDto, userDetailsImpl.getEmail());
+
+        return reactionResponseDto;
     }
 
     @DeleteMapping("/{categoryCode}/{postId}")

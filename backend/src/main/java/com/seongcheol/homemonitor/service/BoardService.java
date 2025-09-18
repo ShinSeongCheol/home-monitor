@@ -24,18 +24,24 @@ import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.CommentEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
+import com.seongcheol.homemonitor.domain.ReactionCodeEntity;
+import com.seongcheol.homemonitor.domain.ReactionEntity;
 import com.seongcheol.homemonitor.dto.UserDetailsImpl;
 import com.seongcheol.homemonitor.dto.request.CommentRequestDto;
 import com.seongcheol.homemonitor.dto.request.PostRequestDto;
+import com.seongcheol.homemonitor.dto.request.ReactionRequestDto;
 import com.seongcheol.homemonitor.dto.response.BoardResponseDto;
 import com.seongcheol.homemonitor.dto.response.CommentResponseDto;
 import com.seongcheol.homemonitor.dto.response.ImageResponseDto;
 import com.seongcheol.homemonitor.dto.response.PostResponseDto;
+import com.seongcheol.homemonitor.dto.response.ReactionResponseDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.CommentRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
+import com.seongcheol.homemonitor.repository.ReactionCodeRepository;
+import com.seongcheol.homemonitor.repository.ReactionRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +64,12 @@ public class BoardService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ReactionRepository reactionRepository;
+
+    @Autowired
+    private ReactionCodeRepository reactionCodeRepository;
 
     @Value("${host}")
     private String HOST;
@@ -110,6 +122,16 @@ public class BoardService {
                 .build()
             ;
             return boardRoleCodeRepository.save(boardRoleCodeEntity);
+        });
+    }
+
+    public void initReactionCode() {
+        log.info("Reaction Code 초기화 서비스");
+
+        log.info("Reaction Code Heart 초기화");
+        reactionCodeRepository.findByCode("HEART").orElseGet(() -> {
+            ReactionCodeEntity reactionCodeEntity = ReactionCodeEntity.builder().code("HEART").name("하트").build();
+            return reactionCodeRepository.save(reactionCodeEntity);
         });
     }
 
@@ -240,6 +262,24 @@ public class BoardService {
 
         ImageResponseDto imageResponseDto = ImageResponseDto.builder().url(url).build();
         return imageResponseDto;
+    }
+
+    @Transactional
+    public ReactionResponseDto reactPost(String categoryCode, Long postId, ReactionRequestDto reactionRequestDto, String email) throws NoSuchElementException {
+        log.info("게시글 {} 글 {} 반응 추가 서비스", categoryCode, postId);
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findByCode(reactionRequestDto.getCode()).orElseThrow(() -> new NoSuchElementException("해당 Reaction Code가 없습니다."));
+
+        ReactionEntity reactionEntity = ReactionEntity.builder()
+            .memmber(memberEntity)
+            .post(postEntity)
+            .reactionCode(reactionCodeEntity)
+            .build()
+        ;
+
+        return ReactionResponseDto.fromEntity(reactionRepository.save(reactionEntity));
     }
 
     @Transactional
