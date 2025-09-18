@@ -23,6 +23,7 @@ import com.seongcheol.homemonitor.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -85,13 +86,46 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/{categoryCode}/{postId}/reactions")
+    public ResponseEntity<List<ReactionResponseDto>> getPostReactions(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId) {
+        log.info("게시판 {} 글 {} 반응 추가 컨트롤러", categoryCode, postId);
+        try {
+            List<ReactionResponseDto> reactionResponseDto = boardService.getPostReactions(categoryCode, postId);
+            return ResponseEntity.ok().body(reactionResponseDto);
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     @PostMapping("/{categoryCode}/{postId}/reactions")
-    public ReactionResponseDto reactPost(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        log.info("게시글 반응 추가 컨트롤러");
+    public ResponseEntity<ReactionResponseDto> postPostReactions(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        log.info("게시판 {} 글 {} 반응 추가 컨트롤러", categoryCode, postId);
+        try {
+            ReactionResponseDto reactionResponseDto = boardService.postPostReactions(categoryCode, postId, reactionRequestDto, userDetailsImpl.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body(reactionResponseDto);
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch(IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
 
-        ReactionResponseDto reactionResponseDto = boardService.reactPost(categoryCode, postId, reactionRequestDto, userDetailsImpl.getEmail());
-
-        return reactionResponseDto;
+    @DeleteMapping("/{categoryCode}/{postId}/reactions")
+    public ResponseEntity<String> deleteReactions(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        log.info("게시판 {} 글 {} 삭제 컨트롤러", categoryCode, postId);
+        try {
+            boardService.deleteReactions(categoryCode, postId, reactionRequestDto, userDetailsImpl.getEmail());
+            return ResponseEntity.ok().build();
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch(IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @DeleteMapping("/{categoryCode}/{postId}")
