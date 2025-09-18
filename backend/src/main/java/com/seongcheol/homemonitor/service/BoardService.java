@@ -282,18 +282,18 @@ public class BoardService {
         MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
         ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findByCode(reactionRequestDto.getCode()).orElseThrow(() -> new NoSuchElementException("해당 Reaction Code가 없습니다."));
 
-        if (!reactionRepository.existsByPostAndMemberAndCommentIsNull(postEntity, memberEntity)) {
-            ReactionEntity reactionEntity = ReactionEntity.builder()
+        if (reactionRepository.existsByPostAndMemberAndReactionCodeAndCommentIsNull(postEntity, memberEntity, reactionCodeEntity)) {
+            throw new IllegalStateException("이미 반응한 사용자입니다.");
+        }
+
+        ReactionEntity reactionEntity = ReactionEntity.builder()
                 .member(memberEntity)
                 .post(postEntity)
                 .reactionCode(reactionCodeEntity)
                 .build()
             ;
     
-            return ReactionResponseDto.fromEntity(reactionRepository.save(reactionEntity));
-        }else {
-            throw new IllegalStateException("이미 반응한 사용자입니다.");
-        }
+        return ReactionResponseDto.fromEntity(reactionRepository.save(reactionEntity));
     }
 
     @Transactional
@@ -450,5 +450,41 @@ public class BoardService {
         }
 
         throw new AccessDeniedException("인증되지 않은 사용자입니다.");
+    }
+
+    @Transactional
+    public ReactionResponseDto postCommentReactions(String categoryCode, Long postId, Long commentId, ReactionRequestDto reactionRequestDto, String email) {
+        log.info("게시판 {} 글 {} 댓글 {} 반응 추가 서비스", categoryCode, postId, commentId);
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다."));
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findByCode(reactionRequestDto.getCode()).orElseThrow(() -> new NoSuchElementException("해당 Reaction Code가 없습니다."));
+
+        if (reactionRepository.existsByPostAndMemberAndReactionCodeAndComment(postEntity, memberEntity, reactionCodeEntity, commentEntity)) {
+            throw new IllegalStateException("이미 반응한 사용자입니다.");
+        };
+
+        ReactionEntity reactionEntity = ReactionEntity.builder()
+            .member(memberEntity)
+            .post(postEntity)
+            .comment(commentEntity)
+            .reactionCode(reactionCodeEntity)
+            .build()
+        ;
+
+        return ReactionResponseDto.fromEntity(reactionRepository.save(reactionEntity));
+    }
+
+    @Transactional
+    public void deleteCommentReactions(String categoryCode, Long postId, Long commentId, ReactionRequestDto reactionRequestDto, String email) {
+        log.info("게시판 {} 글 {} 댓글 {} 반응 삭제 서비스", categoryCode, postId, commentId);
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다."));
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findByCode(reactionRequestDto.getCode()).orElseThrow(() -> new NoSuchElementException("해당 Reaction Code가 없습니다."));
+
+        reactionRepository.deleteByPostAndMemberAndReactionCodeAndComment(postEntity, memberEntity, reactionCodeEntity, commentEntity);
     }
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.seongcheol.homemonitor.domain.CommentEntity;
@@ -27,6 +28,7 @@ public class CommentResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<CommentResponseDto> children_comment;
+    private Set<ReactionResponseDto> reactions;
 
     public static CommentResponseDto fromEntity(CommentEntity commentEntity) {
         return CommentResponseDto.builder()
@@ -36,6 +38,7 @@ public class CommentResponseDto {
             .updatedAt(commentEntity.getUpdatedAt())
             .member(MemberDto.fromEntity(commentEntity.getMember()))
             .children_comment(Optional.ofNullable(commentEntity.getChildrenComment()).orElse(Collections.emptyList()).stream().map((children_comment) -> CommentResponseDto.fromEntity(children_comment)).collect(Collectors.toList()))
+            .reactions(Optional.ofNullable(commentEntity.getReactions()).orElse(Collections.emptySet()).stream().map((children_comment) -> ReactionResponseDto.fromEntity(children_comment)).collect(Collectors.toSet()))
             .build()
         ;
     }

@@ -214,6 +214,35 @@ public class BoardController {
             log.error("Error", e.getMessage());
             return ResponseEntity.internalServerError().body(null);
         }
-        
+   }
+
+    @PostMapping("/{categoryCode}/{postId}/comment/{commentId}/reactions")
+    public ResponseEntity<ReactionResponseDto> postCommentReactions(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @PathVariable(value = "commentId") Long commentId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        log.info("게시판 {} 글 {} 댓글 {} 반응 추가 컨트롤러", categoryCode, postId, commentId);
+        try {
+            ReactionResponseDto reactionResponseDto = boardService.postCommentReactions(categoryCode, postId, commentId, reactionRequestDto, userDetailsImpl.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body(reactionResponseDto);
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch(IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/{categoryCode}/{postId}/comment/{commentId}/reactions")
+    public ResponseEntity<String> deleteCommentReactions(@PathVariable(value = "categoryCode") String categoryCode, @PathVariable(value = "postId") Long postId, @PathVariable(value = "commentId") Long commentId, @RequestBody ReactionRequestDto reactionRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        log.info("게시판 {} 글 {} 댓글 {} 반응 삭제 컨트롤러", categoryCode, postId, commentId);
+        try {
+            boardService.deleteCommentReactions(categoryCode, postId, commentId, reactionRequestDto, userDetailsImpl.getEmail());
+            return ResponseEntity.ok().build();
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch(IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }
