@@ -67,6 +67,19 @@
     transition: background-color 0.2s ease;
 }
 
+.react {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+
+    user-select: none;
+}
+
+.react svg {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1024px) {
     .main {
         width: 100%;
