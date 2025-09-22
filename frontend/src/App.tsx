@@ -15,6 +15,7 @@ import PostCreatePage from './pages/PostCreatePage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostUpdatePage from './pages/PostUpdatePage';
 import BoardPage from './pages/BoardPage';
+import BackOfficeLayout from './layouts/BackOfficeLayout';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -37,6 +38,10 @@ function App() {
           <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
 
           {/* Admin */}
+          <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout /></ProtectedRoute> }>
+            <Route path="board" element={<ForecastAdministrativeDistrict/>}></Route>
+          </Route>
+          
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
 

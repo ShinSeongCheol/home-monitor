@@ -1,0 +1,93 @@
+.backoffice {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+}
+
+.sidebar {
+    height: 100%;
+    width: 240px;
+
+    border: 1px solid lightgrey;
+    border-top: none;
+
+    background-color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px;
+
+    border-bottom: 1px solid lightgrey;
+}
+
+.nav {
+    flex: 1;
+}
+
+.nav ul {
+    padding: 16px;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    gap: 4px;
+
+    border-bottom: 1px solid lightgrey;
+
+    user-select: none;
+}
+
+.menu:hover {
+    background-color: #edeef1;
+    cursor: pointer;
+
+    border-radius: 4px;
+}
+
+.menu.open {
+    background-color: #edeef1;
+}
+
+.submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.submenu li {
+    padding: 6px;
+    user-select: none;
+    display: flex;
+    gap: 16px;
+}
+
+.submenu li:hover {
+    background-color: #edeef1;
+    cursor: pointer;
+
+    border-radius: 4px;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+.main {
+    flex: 1;
+}
