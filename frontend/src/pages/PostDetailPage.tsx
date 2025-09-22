@@ -189,7 +189,7 @@ const PostDetailPage = () => {
                 <div className={styles.container}>
                     <div className="ck-content" dangerouslySetInnerHTML={{__html: content}}></div>
                     <div className={styles.react}>
-                        <Heart size={"24px"} fill={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} color={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} strokeWidth={1} onClick={handleReact}/> {reactions.length}
+                        <Heart size={"24px"} fill={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} color={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'black'} strokeWidth={1} onClick={handleReact}/> {reactions.length}
                     </div>
                 </div>
 
