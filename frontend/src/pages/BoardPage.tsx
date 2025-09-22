@@ -68,8 +68,6 @@ const BoardPage = () => {
 
                 <div className={styles.gridContainer}>
                     {
-                        // [...boardList.filter(board => board.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ')), ...boardList.filter(board => board.boardRoles.some(boardRole => user?.authorities.includes(boardRole.memberRoleCode?.code ?? "")))]
-                        // .filter((board, index, self) => index === self.findIndex(b => b.categoryCode === board.categoryCode))
                         boardList
                         .filter(board => board.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode?.code ?? ""))))
                         .map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)
