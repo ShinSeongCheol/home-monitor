@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import DOMPurify from "dompurify";
-import type Board from "./Board";
+import type { Board } from "./BoardPage";
 
-const BoardPostEditComponent = () => {
+const PostUpdatePage = () => {
 
     const {user, accessToken} = useAuth();
 
@@ -111,4 +111,4 @@ const BoardPostEditComponent = () => {
     )
 }
 
-export default BoardPostEditComponent;
+export default PostUpdatePage;

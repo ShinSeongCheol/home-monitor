@@ -3,7 +3,7 @@ import styles from './styles/Profile.module.css';
 import { useAuth } from './contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-const Profile = () => {
+const ProfilePage = () => {
 
     const { user, accessToken } = useAuth();
     const navigate = useNavigate();
@@ -92,4 +92,4 @@ const Profile = () => {
     )
 }
 
-export default Profile;
+export default ProfilePage;

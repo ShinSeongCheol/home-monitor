@@ -3,7 +3,7 @@ import BoardCardComponent from './components/BoardCardComponent';
 import styles from './styles/Board.module.css';
 import { useAuth } from './contexts/AuthContext';
 
-type Board = {
+export type Board = {
     categoryCode: string;
     categoryName: string | null;
     comment: string | null;
@@ -41,7 +41,7 @@ type MemberRoleCode = {
     name: string;
 }
 
-const Board = () => {
+const BoardPage = () => {
 
     const {user} = useAuth();
     const [boardList, setBoardList] = useState<Board[]>([]);
@@ -80,4 +80,4 @@ const Board = () => {
     )
 }
 
-export default Board;
+export default BoardPage;

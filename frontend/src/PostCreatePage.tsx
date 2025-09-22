@@ -3,9 +3,9 @@ import styles from './styles/BoardPostCreateComponent.module.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
-import type Board from "./Board";
+import type { Board } from "./BoardPage";
 
-const BoardPostCreateComponent = () => {
+const PostCreatePage = () => {
 
     const {user,accessToken} = useAuth();
 
@@ -75,7 +75,7 @@ const BoardPostCreateComponent = () => {
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <input className={styles.inputTitle} type="text" name="title" id="title" placeholder="제목을 입력하세요." maxLength={32} required value={title} onChange={handleTitleChange}/>
                     <hr />
-                    <CkEditorComponent data="내용을 입력해주세요!" handleChange={(content) => setContent(content)}/>
+                    <CkEditorComponent data="" handleChange={(content) => setContent(content)}/>
                     <div className={styles.buttonContainer}>
                         <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
                         <input className={styles.submitButton} type="submit" value="등록"/>
@@ -86,4 +86,4 @@ const BoardPostCreateComponent = () => {
     )
 }
 
-export default BoardPostCreateComponent;
+export default PostCreatePage;

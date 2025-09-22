@@ -19,6 +19,7 @@ const CkEditorComponent = ({ data, handleChange }: CkEditorProps) => {
         <div className={styles.editor}>
             <CKEditor
                 data={data}
+                
                 editor={ClassicEditor}
                 config={{
                     licenseKey: 'GPL',

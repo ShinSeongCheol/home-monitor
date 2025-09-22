@@ -1,10 +1,10 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './styles/BoardList.module.css';
 import { useEffect, useState } from 'react';
-import Board from './Board';
 import { useAuth } from './contexts/AuthContext';
+import type { Board } from './BoardPage';
 
-const BoardList = () => {
+const PostPage = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -86,4 +86,4 @@ const BoardList = () => {
     )
 }
 
-export default BoardList;
+export default PostPage;

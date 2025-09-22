@@ -1,6 +1,6 @@
 import styles from './styles/App.module.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from './Dashboard';
+import DashboardPage from './DashboardPage';
 import ForecastAdministrativeDistrict from './ForecastAdministrativeDistrict';
 import MiddleForecastAreaDistrict from './MiddleForecastAreaDistrict';
 
@@ -8,13 +8,13 @@ import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
-import Profile from './Profile';
+import ProfilePage from './ProfilePage';
 import AuthPage from './AuthPage';
-import BoardPostCreateComponent from './BoardPostCreate';
-import Board from './Board';
-import BoardList from './BoardList';
-import BoardPostDetail from './BoardPostDetail';
-import BoardPostEditComponent from './BoardPostEdit';
+import PostPage from './PostPage';
+import PostCreatePage from './PostCreatePage';
+import PostDetailPage from './PostDetailPage';
+import PostUpdatePage from './PostUpdatePage';
+import BoardPage from './BoardPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -26,21 +26,21 @@ function App() {
         <Header></Header>
         <Navigation></Navigation>
         <Routes>
-          <Route path="/" element={<Dashboard></Dashboard>}></Route>
-          {/* 게시판 종류 목록 */}
-          <Route path="/boards/" element={<Board/>}></Route>
-          {/* 게시판 글 목록 */}
-          <Route path="/boards/:categoryCode" element={<BoardList />}></Route>
-          {/* 게시판 글 추가 */}
-          <Route path="/boards/:categoryCode/post" element={<ProtectedRoute><BoardPostCreateComponent/></ProtectedRoute>}></Route>
-          {/* 게시판 글 조회 */}
-          <Route path="/boards/:categoryCode/:postId" element={<BoardPostDetail/>}></Route>
-          {/* 게시판 글 수정 */}
-          <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><BoardPostEditComponent/></ProtectedRoute>}></Route>
+          {/* DashBoard */}
+          <Route path="/" element={<DashboardPage/>}></Route>
+
+          {/* Board */}
+          <Route path="/boards/" element={<BoardPage/>}></Route>
+          <Route path="/boards/:categoryCode" element={<PostPage />}></Route>
+          <Route path="/boards/:categoryCode/post" element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}></Route>
+          <Route path="/boards/:categoryCode/:postId" element={<PostDetailPage/>}></Route>
+          <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
+
+          {/* Admin */}
           <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
           <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
-          <Route path="/profile" element={<ProtectedRoute><Profile></Profile></ProtectedRoute>}></Route>
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}></Route>
           <Route path="*" element={<div>Page Not Found</div>}></Route>
         </Routes>
       </BrowserRouter>

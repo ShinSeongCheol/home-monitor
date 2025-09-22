@@ -4,9 +4,9 @@ import DOMPurify from "dompurify";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from './contexts/AuthContext';
-import Board from './Board';
 import Comment from './components/CommentComponent'
 import FavoriteSVG from './assets/icon/favorite.svg?react';
+import type { Board } from './BoardPage';
 
 export type PostComment = {
     id: number;
@@ -31,7 +31,7 @@ export type Reaction = {
     }
 }
 
-const BoardPostDetail = () => {
+const PostDetailPage = () => {
 
     const {user, accessToken} = useAuth();
 
@@ -220,4 +220,4 @@ const BoardPostDetail = () => {
     )
 }
 
-export default BoardPostDetail;
+export default PostDetailPage;

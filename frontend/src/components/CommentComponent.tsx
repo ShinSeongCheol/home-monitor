@@ -3,7 +3,7 @@ import styles from '../styles/Comment.module.css'
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import FavoriteSVG from '../assets/icon/favorite.svg?react';
-import type { Reaction } from "../BoardPostDetail";
+import type { Reaction } from "../PostDetailPage";
 
 type CommentProps = {
     id: number;

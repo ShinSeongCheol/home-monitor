@@ -36,7 +36,7 @@ type UltraShortNowcast = {
     wsd: number;
 }
 
-const Dashboard = () => {
+const DashboardPage = () => {
 
     const [temperatureDatasets, setTemperatureDatasets] = useState<Datasets[]>([]);
     const [humidityDatasets, setHumidityDatasets] = useState<Datasets[]>([]);
@@ -140,4 +140,4 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard;
+export default DashboardPage;
