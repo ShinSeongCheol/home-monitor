@@ -1,8 +1,8 @@
-import styles from './styles/Dashboard.module.css'
-import WeatherComponent from "./components/WeatherComponent";
-import LineChartComponent from './components/LineChartComponent';
-import HumiditySVG from './assets/icon/humidity.svg?react';
-import TemeratureSVG from './assets/icon/device_thermostat.svg?react'
+import styles from '../styles/pages/DashboardPage.module.css'
+import WeatherComponent from "../components/WeatherComponent";
+import LineChartComponent from '../components/LineChartComponent';
+import HumiditySVG from '../assets/icon/humidity.svg?react';
+import TemeratureSVG from '../assets/icon/device_thermostat.svg?react'
 import { useEffect, useState } from 'react';
 
 export type Data = {

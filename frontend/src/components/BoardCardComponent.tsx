@@ -1,5 +1,5 @@
 import type { MouseEventHandler } from 'react';
-import styles from '../styles/BoardCardComponent.module.css';
+import styles from '../styles/components/BoardCardComponent.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type BoardCardComponentProps = {

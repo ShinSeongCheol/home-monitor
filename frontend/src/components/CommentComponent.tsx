@@ -1,9 +1,9 @@
 import { useEffect, useState, type FormEventHandler } from "react";
-import styles from '../styles/Comment.module.css'
+import styles from '../styles/components/Comment.module.css';
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import FavoriteSVG from '../assets/icon/favorite.svg?react';
-import type { Reaction } from "../PostDetailPage";
+import type { Reaction } from "../pages/PostDetailPage";
 
 type CommentProps = {
     id: number;

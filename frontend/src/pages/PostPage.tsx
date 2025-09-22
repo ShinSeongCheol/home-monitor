@@ -1,8 +1,8 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import styles from './styles/BoardList.module.css';
+import styles from '../styles/pages/PostPage.module.css';
 import { useEffect, useState } from 'react';
-import { useAuth } from './contexts/AuthContext';
-import type { Board } from './BoardPage';
+import { useAuth } from '../contexts/AuthContext';
+import type { Board } from '../pages/BoardPage';
 
 const PostPage = () => {
 

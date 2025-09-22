@@ -1,5 +1,5 @@
-import styles from '../styles/LoginFormComponent.module.css'
-import kakaoLoginButton from '../assets/kakao/ko/kakao_login_medium_narrow.png'
+import styles from '../styles/components/LoginFormComponent.module.css';
+import kakaoLoginButton from '../assets/kakao/ko/kakao_login_medium_narrow.png';
 import { useEffect, useState, type FormEventHandler, type MouseEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';

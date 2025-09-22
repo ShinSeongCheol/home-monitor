@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import styles from '../styles/LineChartComponent.module.css';
+import styles from '../styles/components/LineChartComponent.module.css';
 import * as d3 from 'd3';
-import type { Data, Datasets } from '../DashboardPage';
+import type { Data, Datasets } from '../pages/DashboardPage';
 
 
 type LineChartComponentProps = {

@@ -1,4 +1,4 @@
-import styles from '../styles/Navigation.module.css'
+import styles from '../styles/components/Navigation.module.css';
 import { Link, useLocation } from 'react-router-dom';
 import DashboardSVG from '../assets/icon/dashboard.svg?react';
 import EditNoteSVG from '../assets/icon/edit_note.svg?react'

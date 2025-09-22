@@ -1,10 +1,11 @@
-import CkEditorComponent from "./components/CkEditorComponent";
-import styles from './styles/BoardPostCreateComponent.module.css';
+import styles from '../styles/pages/PostCreatePage.module.css';
+
+import CkEditorComponent from "../components/CkEditorComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
-import type { Board } from "./BoardPage";
+import type { Board } from "../pages/BoardPage";
 
 const PostUpdatePage = () => {
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import BoardCardComponent from './components/BoardCardComponent';
-import styles from './styles/Board.module.css';
-import { useAuth } from './contexts/AuthContext';
+import BoardCardComponent from '../components/BoardCardComponent';
+import styles from '../styles/pages/BoardPage.module.css';
+import { useAuth } from '../contexts/AuthContext';
 
 export type Board = {
     categoryCode: string;

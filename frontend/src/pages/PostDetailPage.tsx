@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import styles from './styles/BoardPostDetail.module.css';
+import styles from '../styles/pages/PostDetailPage.module.css';
 import DOMPurify from "dompurify";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
-import { useAuth } from './contexts/AuthContext';
-import Comment from './components/CommentComponent'
-import FavoriteSVG from './assets/icon/favorite.svg?react';
-import type { Board } from './BoardPage';
+import { useAuth } from '../contexts/AuthContext';
+import Comment from '../components/CommentComponent'
+import FavoriteSVG from '../assets/icon/favorite.svg?react';
+import type { Board } from '../pages/BoardPage';
 
 export type PostComment = {
     id: number;

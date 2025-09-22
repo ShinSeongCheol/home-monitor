@@ -1,5 +1,5 @@
 import { useState, type FormEventHandler } from 'react';
-import styles from '../styles/SingupFormComponent.module.css'
+import styles from '../styles/components/SingupFormComponent.module.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 

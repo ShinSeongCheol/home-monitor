@@ -1,6 +1,6 @@
 import { useState, type FormEventHandler } from 'react';
-import styles from './styles/Profile.module.css';
-import { useAuth } from './contexts/AuthContext';
+import styles from '../styles/pages/ProfilePage.module.css';
+import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {

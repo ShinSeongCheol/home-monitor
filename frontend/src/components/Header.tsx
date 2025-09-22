@@ -1,4 +1,4 @@
-import styles from '../styles/Header.module.css';
+import styles from '../styles/components/Header.module.css';
 import DeviceThermometerSVG from '../assets/icon/device_thermostat.svg?react';
 import LoginSVG from '../assets/icon/login.svg?react';
 import AccountCircleSVG from '../assets/icon/account_circle.svg?react';

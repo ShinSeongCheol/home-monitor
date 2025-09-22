@@ -3,7 +3,7 @@ import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock
 import 'ckeditor5/ckeditor5.css';
 import coreTransitions from "ckeditor5/translations/ko.js";
 import { type Dispatch, type SetStateAction } from "react";
-import styles from '../styles/CkEditorComponent.module.css'
+import styles from '../styles/components/CkEditorComponent.module.css';
 import { useAuth } from "../contexts/AuthContext";
 
 type CkEditorProps = {

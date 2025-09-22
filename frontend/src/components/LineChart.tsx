@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import styles from '../styles/LineChart.module.css'
+import styles from '../styles/components/LineChart.module.css';
 
 interface DataItem {
     temperature: number,

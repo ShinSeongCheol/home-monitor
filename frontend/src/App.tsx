@@ -1,20 +1,20 @@
 import styles from './styles/App.module.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DashboardPage from './DashboardPage';
-import ForecastAdministrativeDistrict from './ForecastAdministrativeDistrict';
-import MiddleForecastAreaDistrict from './MiddleForecastAreaDistrict';
+import ForecastAdministrativeDistrict from './pages/ForecastAdministrativeDistrict';
+import MiddleForecastAreaDistrict from './pages/MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
-import ProfilePage from './ProfilePage';
-import AuthPage from './AuthPage';
-import PostPage from './PostPage';
-import PostCreatePage from './PostCreatePage';
-import PostDetailPage from './PostDetailPage';
-import PostUpdatePage from './PostUpdatePage';
-import BoardPage from './BoardPage';
+import DashboardPage from './pages/DashboardPage';
+import AuthPage from './pages/AuthPage';
+import PostPage from './pages/PostPage';
+import ProfilePage from './pages/ProfilePage';
+import PostCreatePage from './pages/PostCreatePage';
+import PostDetailPage from './pages/PostDetailPage';
+import PostUpdatePage from './pages/PostUpdatePage';
+import BoardPage from './pages/BoardPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

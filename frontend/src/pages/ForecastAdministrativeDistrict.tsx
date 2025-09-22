@@ -3,8 +3,8 @@ import { useEffect, useMemo, useRef, useState, type ChangeEventHandler, type For
 import { themeBalham, type ColDef, type SizeColumnsToContentStrategy } from 'ag-grid-community';
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
-import { useAuth } from "./contexts/AuthContext";
-import styles from './styles/ForecastAdministrativeDistrict.module.css';
+import { useAuth } from "../contexts/AuthContext";
+import styles from '../styles/ForecastAdministrativeDistrict.module.css';
 
 interface AdministartiveDistrict {
     type: string;
