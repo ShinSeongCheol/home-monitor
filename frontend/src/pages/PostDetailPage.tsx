@@ -5,8 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from '../contexts/AuthContext';
 import Comment from '../components/CommentComponent'
-import FavoriteSVG from '../assets/icon/favorite.svg?react';
 import type { Board } from '../pages/BoardPage';
+import { Heart } from 'lucide-react';
 
 export type PostComment = {
     id: number;
@@ -189,7 +189,7 @@ const PostDetailPage = () => {
                 <div className={styles.container}>
                     <div className="ck-content" dangerouslySetInnerHTML={{__html: content}}></div>
                     <div className={styles.react}>
-                        <FavoriteSVG width={"24px"} height={"24px"} fill={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'black'} onClick={handleReact}/> {reactions.length}
+                        <Heart size={"24px"} fill={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} color={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} strokeWidth={1} onClick={handleReact}/> {reactions.length}
                     </div>
                 </div>
 

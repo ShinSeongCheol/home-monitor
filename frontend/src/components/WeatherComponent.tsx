@@ -1,7 +1,6 @@
 import styles from '../styles/components/WeatherComponent.module.css';
-import HumiditySVG from '../assets/icon/humidity.svg?react';
-import TemeratureSVG from '../assets/icon/device_thermostat.svg?react'
 import { useEffect, useState } from 'react';
+import { Droplet, Thermometer } from 'lucide-react';
 
 const weatherComponent = () => {
 
@@ -70,7 +69,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>실내 온도</p>
-                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#FFB266'></TemeratureSVG></span>
+                    <span><Thermometer size={'24px'} fill='#FFB266' color='#FFB266' strokeWidth={1} /></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${insideTemperature ?? ""}°C`}</span>
@@ -80,7 +79,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>외부 온도</p>
-                    <span><TemeratureSVG width={"24px"} height={"24px"} fill='#E74C3C'></TemeratureSVG></span>
+                    <span><Thermometer size={'24px'} fill='#E74C3C' color='#E74C3C' strokeWidth={1}/></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${outsideTemperature ?? ""}°C`}</span>
@@ -90,7 +89,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>실내 습도</p>
-                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#85C1E9'></HumiditySVG></span>
+                    <span><Droplet size={'24px'} fill='#85C1E9' color='#85C1E9' strokeWidth={1} /></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${insideHumidity ?? ""}%`}</span>
@@ -100,7 +99,7 @@ const weatherComponent = () => {
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <p>외부 습도</p>
-                    <span><HumiditySVG width={"24px"} height={"24px"} fill='#3498DB'></HumiditySVG></span>
+                    <span><Droplet size={'24px'} fill='#3498DB' color='#3498DB' strokeWidth={1} /></span>
                 </div>
                 <div className={styles.cardContent}>
                     <span>{`${outsideHumidity ?? ""}%`}</span>

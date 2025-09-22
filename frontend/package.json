@@ -18,10 +18,10 @@
     "ckeditor5": "^46.0.2",
     "d3": "^7.9.0",
     "dompurify": "^3.2.6",
+    "lucide-react": "^0.544.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.8.0",
-    "svgr": "^1.10.0",
     "vite-plugin-svgr": "^4.3.0",
     "xlsx": "^0.18.5"
   },

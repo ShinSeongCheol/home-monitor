@@ -1,13 +1,8 @@
 import styles from '../styles/components/Header.module.css';
-import DeviceThermometerSVG from '../assets/icon/device_thermostat.svg?react';
-import LoginSVG from '../assets/icon/login.svg?react';
-import AccountCircleSVG from '../assets/icon/account_circle.svg?react';
-import KeyboardArrowDownSVG from '../assets/icon/keyboard_arrow_down.svg?react';
-import LogoutSVG from '../assets/icon/logout.svg?react';
-import SettingSVG from '../assets/icon/settings.svg?react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useRef, useState } from 'react';
+import { ChevronDown, CircleUser, LogIn, LogOut, Settings, Thermometer } from 'lucide-react';
 
 const Header = () => {
 
@@ -43,7 +38,7 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.container}>
                 <div className={styles.logo}>
-                    <DeviceThermometerSVG width={"32px"} height={"32px"} fill={"#d47878ff"}></DeviceThermometerSVG>
+                    <Thermometer size={'32px'} fill={"#d47878ff"}/>
                     <h1>ClimaHome</h1>
                 </div>
 
@@ -51,9 +46,9 @@ const Header = () => {
                     (   
                         <div className={styles.accountContainer} ref={accountContainerRef}>
                             <div className={styles.account} onClick={() => setIsProfileOpen(!isProfileOpen)}>
-                                <AccountCircleSVG width={"24px"} height={"24px"} fill={"#789DE5"}></AccountCircleSVG>
+                                <CircleUser size={'24px'} color={'#789DE5'} strokeWidth={1}  />
                                 <span>{user?.name}</span>
-                                <KeyboardArrowDownSVG width={"16px"} height={"16px"} ></KeyboardArrowDownSVG>
+                                <ChevronDown size={'16px'} strokeWidth={1} />
                             </div>
                             { isProfileOpen && 
                                 (
@@ -61,8 +56,8 @@ const Header = () => {
                                         <p>{user?.name} 님 안녕하세요</p>
                                         <hr />
                                         <div className={styles.buttonContainer}>
-                                            <button className={`${styles.button} ${styles.editProfile}`} onClick={() => navigate('/profile')}><SettingSVG width={'16px'} height={'16px'} fill='gray'></SettingSVG> 내 정보 수정</button>
-                                            <button className={`${styles.button} ${styles.logout}`} onClick={handleLogout}><LogoutSVG width={'16px'} height={'16px'} fill='red'></LogoutSVG>로그아웃</button>
+                                            <button className={`${styles.button} ${styles.editProfile}`} onClick={() => navigate('/profile')}><Settings size={'16px'} color='gray' strokeWidth={1} />내 정보 수정</button>
+                                            <button className={`${styles.button} ${styles.logout}`} onClick={handleLogout}><LogOut size={'16px'} color='red' strokeWidth={1} /> 로그아웃</button>
                                         </div>
                                     </div>
                                 )
@@ -72,7 +67,7 @@ const Header = () => {
                     : 
                     (
                         <div className={styles.login} onClick={onClickLogin}>
-                            <LoginSVG width={"16px"} height={"16px"} fill="#23789DE5"></LoginSVG>
+                            <LogIn width={"16px"} height={"16px"} color="#23789DE5" strokeWidth={1}/>
                             <p>로그인</p>
                         </div>
                     )

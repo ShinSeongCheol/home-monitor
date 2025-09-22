@@ -1,9 +1,8 @@
 import styles from '../styles/pages/DashboardPage.module.css'
 import WeatherComponent from "../components/WeatherComponent";
 import LineChartComponent from '../components/LineChartComponent';
-import HumiditySVG from '../assets/icon/humidity.svg?react';
-import TemeratureSVG from '../assets/icon/device_thermostat.svg?react'
 import { useEffect, useState } from 'react';
+import { Droplet, Thermometer } from 'lucide-react';
 
 export type Data = {
     x: Date;
@@ -133,8 +132,8 @@ const DashboardPage = () => {
         <main className={styles.main}>
             <section className={styles.section}>
                 <WeatherComponent></WeatherComponent>
-                <LineChartComponent title='온도 추이 (24 시간)' icon={<TemeratureSVG width={"24px"} height={"24px"} fill='#ffa2a2ff' />} datasets={temperatureDatasets}></LineChartComponent>
-                <LineChartComponent title='습도 추이 (24 시간)' icon={<HumiditySVG width={"24px"} height={"24px"} fill='#99ddfdff' />} datasets={humidityDatasets}></LineChartComponent>
+                <LineChartComponent title='온도 추이 (24 시간)' icon={<Thermometer width={"24px"} height={"24px"} fill='#ffa2a2ff' color='#ffa2a2ff' strokeWidth={1}/>} datasets={temperatureDatasets}></LineChartComponent>
+                <LineChartComponent title='습도 추이 (24 시간)' icon={<Droplet width={"24px"} height={"24px"} fill='#99ddfdff' color='#99ddfdff' strokeWidth={1}/>} datasets={humidityDatasets}></LineChartComponent>
             </section>
         </main>
     );

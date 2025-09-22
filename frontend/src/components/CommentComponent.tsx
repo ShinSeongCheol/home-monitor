@@ -2,8 +2,8 @@ import { useEffect, useState, type FormEventHandler } from "react";
 import styles from '../styles/components/Comment.module.css';
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import FavoriteSVG from '../assets/icon/favorite.svg?react';
 import type { Reaction } from "../pages/PostDetailPage";
+import { Heart } from "lucide-react";
 
 type CommentProps = {
     id: number;
@@ -179,7 +179,7 @@ const CommentItem = ({comment, fetchComment}: CommentItemProps) => {
                 
                 <div className={styles.buttonContainer}>
                     <div className={styles.react}>
-                        <FavoriteSVG width={"24px"} height={"24px"} fill={reactions.some((value) => value.member.email === user?.email) ? '#f38383ff' : 'black'} onClick={() => handleReact(comment.id)} /> {reactions.length}
+                        <Heart size={'24px'} fill={reactions.some((value) => value.member.email === user?.email) ? '#f38383ff' : 'none'} color={reactions.some((value) => value.member.email === user?.email) ? '#f38383ff' : 'black'}  strokeWidth={1} onClick={() => handleReact(comment.id)} /> {reactions.length}
                     </div>
 
                     <div className={styles.actions}>
