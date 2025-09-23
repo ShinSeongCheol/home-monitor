@@ -40,10 +40,10 @@ function App() {
           {/* Admin */}
           <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout /></ProtectedRoute> }>
             <Route path="board" element={<ForecastAdministrativeDistrict/>}></Route>
+            <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrict/>}></Route>
+            <Route path="areaDistrict" element={<MiddleForecastAreaDistrict/>}></Route>
           </Route>
           
-          <Route path="/configuration/forecast/administrativeDistrict" element={<ProtectedRoute><ForecastAdministrativeDistrict></ForecastAdministrativeDistrict></ProtectedRoute>}></Route>
-          <Route path="/configuration/forecast/AreaDistrict" element={<ProtectedRoute><MiddleForecastAreaDistrict></MiddleForecastAreaDistrict></ProtectedRoute>}></Route>
 
           {/* Auth */}
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>

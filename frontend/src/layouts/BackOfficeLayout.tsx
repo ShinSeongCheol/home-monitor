@@ -1,4 +1,4 @@
-import { ChevronRight, KeyRound, List, Shield, SquarePen, TextAlignJustify, User } from 'lucide-react';
+import { ChevronRight, KeyRound, List, Shield, SquarePen, SunMedium, TextAlignJustify, User } from 'lucide-react';
 import styles from '../styles/layouts/BackOfficeLayout.module.css';
 
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -26,19 +26,17 @@ const BackOfficeLayout = () => {
                                 <ChevronRight className={`${styles.chevron} ${openMenu === "board" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
                             </div>
 
-                            {openMenu === 'board' && (
-                                <ul className={styles.submenu}>
-                                    <li><List size={'16px'} strokeWidth={1} /> 게시판 목록</li>
-                                    <li><List size={'16px'} strokeWidth={1} /> 게시물 목록</li>
-                                    <li><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
-                                    <li><KeyRound size={'16px'} strokeWidth={1} /> 게시판 권한 코드</li>
+                            <ul className={`${styles.submenu} ${openMenu === "board" ? styles.open : ""}`}>
+                                <li><List size={'16px'} strokeWidth={1} /> 게시판 목록</li>
+                                <li><List size={'16px'} strokeWidth={1} /> 게시물 목록</li>
+                                <li><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
+                                <li><KeyRound size={'16px'} strokeWidth={1} /> 게시판 권한 코드</li>
 
-                                    <li><List size={'16px'} strokeWidth={1} /> 댓글 목록</li>
+                                <li><List size={'16px'} strokeWidth={1} /> 댓글 목록</li>
 
-                                    <li><List size={'16px'} strokeWidth={1} /> 반응 목록</li>
-                                    <li><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
-                                </ul>
-                            )}
+                                <li><List size={'16px'} strokeWidth={1} /> 반응 목록</li>
+                                <li><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
+                            </ul>
 
                         </li>
 
@@ -49,13 +47,24 @@ const BackOfficeLayout = () => {
                                 <ChevronRight className={`${styles.chevron} ${openMenu === "user" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
                             </div>
 
-                            {openMenu === 'user' && (
-                                <ul className={styles.submenu}>
-                                    <li><List size={'16px'} strokeWidth={1} /> 사용자 목록</li>
-                                    <li><Shield size={'16px'} strokeWidth={1} /> 사용자 권한</li>
-                                    <li><KeyRound size={'16px'} strokeWidth={1} /> 사용자 권한 코드</li>
-                                </ul>
-                            )}
+                            <ul className={`${styles.submenu} ${openMenu === "user" ? styles.open : ""}`}>
+                                <li><List size={'16px'} strokeWidth={1} /> 사용자 목록</li>
+                                <li><Shield size={'16px'} strokeWidth={1} /> 사용자 권한</li>
+                                <li><KeyRound size={'16px'} strokeWidth={1} /> 사용자 권한 코드</li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <div className={`${styles.menu} ${openMenu === "weather" ? styles.open : ""}`} onClick={() => toggleMenu("weather")}>
+                                <SunMedium size={'16px'} strokeWidth={1} />
+                                <span>기상 데이터 관리</span>
+                                <ChevronRight className={`${styles.chevron} ${openMenu === "user" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
+                            </div>
+
+                            <ul className={`${styles.submenu} ${openMenu === "weather" ? styles.open : ""}`}>
+                                <li onClick={() => navigate('administrativeDistrict')}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
+                                <li onClick={() => navigate('areaDistrict')}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
+                            </ul>
                         </li>
                     </ul>
                 </nav>
