@@ -22,7 +22,7 @@ const navigation = () => {
                     </li>
                     {user?.authorities.includes("ROLE_ADMIN")
                         ?
-                        <li className={location.pathname === '/backoffice' ? `${styles.active}` : ""}>
+                        <li className={location.pathname.includes('/backoffice') ? `${styles.active}` : ""}>
                             <Settings size={"16px"} color={"gray"} strokeWidth={1} />
                             <Link to={"/backoffice"}>설정</Link>
                         </li>
