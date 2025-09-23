@@ -4,13 +4,42 @@ import styles from '../styles/layouts/BackOfficeLayout.module.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+const MenuType = {
+    Board : 'board',
+    User : 'user',
+    Weather : 'weather',
+} as const;
+
+const SideMenuType = {
+    Board: 'board',
+    Post: 'post',
+    BoardRole: 'boardRole',
+    BoardRoleCode: 'boardRoleCode',
+    Comment: 'comment',
+    Reaction: 'reaction',
+    ReactionCode: 'reactionCode',
+
+    User: 'user',
+    UserRole: 'userRole',
+    UserRoleCode: 'userRoleCode',
+
+    AdministrativeDistrict: 'administrativeDistrict',
+    AreaDistrict: 'areaDistrict',
+}
+
 const BackOfficeLayout = () => {
 
     const navigate = useNavigate();
     const [openMenu, setOpenMenu] = useState<string | null>(null);
+    const [openSideMenu, setOpenSideMenu] = useState<string | null>(null);
 
     const toggleMenu = (menu: string) => {
         setOpenMenu(openMenu === menu ? null : menu);
+    }
+
+    const toggleSideMenu = (sideMenu: string) => {
+        setOpenSideMenu(openSideMenu === sideMenu ? null : sideMenu);
+        navigate(sideMenu);
     }
 
     return (
@@ -20,50 +49,50 @@ const BackOfficeLayout = () => {
                 <nav className={styles.nav}>
                     <ul>
                         <li>
-                            <div className={`${styles.menu} ${openMenu === "board" ? styles.open : ""}`} onClick={() => toggleMenu("board")}>
+                            <div className={`${styles.menu} ${openMenu === MenuType.Board ? styles.open : ""}`} onClick={() => toggleMenu(MenuType.Board)}>
                                 <SquarePen size={'16px'} strokeWidth={1} />
                                 <span>게시판 관리</span>
-                                <ChevronRight className={`${styles.chevron} ${openMenu === "board" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
+                                <ChevronRight className={`${styles.chevron} ${openMenu === MenuType.Board ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
                             </div>
 
-                            <ul className={`${styles.submenu} ${openMenu === "board" ? styles.open : ""}`}>
-                                <li><List size={'16px'} strokeWidth={1} /> 게시판 목록</li>
-                                <li><List size={'16px'} strokeWidth={1} /> 게시물 목록</li>
-                                <li><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
-                                <li><KeyRound size={'16px'} strokeWidth={1} /> 게시판 권한 코드</li>
+                            <ul className={`${styles.submenu} ${openMenu === MenuType.Board ? styles.open : ""}`}>
+                                <li className={`${openSideMenu === SideMenuType.Board ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Board)}><List size={'16px'} strokeWidth={1} /> 게시판 목록</li>
+                                <li className={`${openSideMenu === SideMenuType.BoardRoleCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.BoardRoleCode)}><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
+                                <li className={`${openSideMenu === SideMenuType.BoardRoleCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.BoardRoleCode)}><KeyRound size={'16px'} strokeWidth={1} /> 게시판 권한 코드</li>
+                                <li className={`${openSideMenu === SideMenuType.Post ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Post)}><List size={'16px'} strokeWidth={1} /> 게시물 목록</li>
 
-                                <li><List size={'16px'} strokeWidth={1} /> 댓글 목록</li>
+                                <li className={`${openSideMenu === SideMenuType.Comment ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Comment)}><List size={'16px'} strokeWidth={1} /> 댓글 목록</li>
 
-                                <li><List size={'16px'} strokeWidth={1} /> 반응 목록</li>
-                                <li><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
+                                <li className={`${openSideMenu === SideMenuType.Reaction ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Reaction)}><List size={'16px'} strokeWidth={1} /> 반응 목록</li>
+                                <li className={`${openSideMenu === SideMenuType.ReactionCode ? styles.open : ""}`} onClick={() => toggleSideMenu('')}><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
                             </ul>
 
                         </li>
 
                         <li>
-                            <div className={`${styles.menu} ${openMenu === "user" ? styles.open : ""}`} onClick={() => toggleMenu("user")}>
+                            <div className={`${styles.menu} ${openMenu === MenuType.User ? styles.open : ""}`} onClick={() => toggleMenu(MenuType.User)}>
                                 <User size={'16px'} strokeWidth={1} />
                                 <span>사용자 관리</span>
-                                <ChevronRight className={`${styles.chevron} ${openMenu === "user" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
+                                <ChevronRight className={`${styles.chevron} ${openMenu === MenuType.User ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
                             </div>
 
-                            <ul className={`${styles.submenu} ${openMenu === "user" ? styles.open : ""}`}>
-                                <li><List size={'16px'} strokeWidth={1} /> 사용자 목록</li>
-                                <li><Shield size={'16px'} strokeWidth={1} /> 사용자 권한</li>
-                                <li><KeyRound size={'16px'} strokeWidth={1} /> 사용자 권한 코드</li>
+                            <ul className={`${styles.submenu} ${openMenu === MenuType.User ? styles.open : ""}`}>
+                                <li className={`${openSideMenu === SideMenuType.User ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.User)}><List size={'16px'} strokeWidth={1} /> 사용자 목록</li>
+                                <li className={`${openSideMenu === SideMenuType.UserRole ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.UserRole)}><Shield size={'16px'} strokeWidth={1} /> 사용자 권한</li>
+                                <li className={`${openSideMenu === SideMenuType.UserRoleCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.UserRoleCode)}><KeyRound size={'16px'} strokeWidth={1} /> 사용자 권한 코드</li>
                             </ul>
                         </li>
 
                         <li>
-                            <div className={`${styles.menu} ${openMenu === "weather" ? styles.open : ""}`} onClick={() => toggleMenu("weather")}>
+                            <div className={`${styles.menu} ${openMenu === MenuType.Weather ? styles.open : ""}`} onClick={() => toggleMenu(MenuType.Weather)}>
                                 <SunMedium size={'16px'} strokeWidth={1} />
                                 <span>기상 데이터 관리</span>
-                                <ChevronRight className={`${styles.chevron} ${openMenu === "user" ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
+                                <ChevronRight className={`${styles.chevron} ${openMenu === MenuType.Weather ? styles.open : ""}`} size={'16px'} strokeWidth={1} />
                             </div>
 
-                            <ul className={`${styles.submenu} ${openMenu === "weather" ? styles.open : ""}`}>
-                                <li onClick={() => navigate('administrativeDistrict')}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
-                                <li onClick={() => navigate('areaDistrict')}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
+                            <ul className={`${styles.submenu} ${openMenu === MenuType.Weather ? styles.open : ""}`}>
+                                <li className={`${openSideMenu === SideMenuType.AdministrativeDistrict ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.AdministrativeDistrict)}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
+                                <li className={`${openSideMenu === SideMenuType.AreaDistrict ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.AreaDistrict)}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
                             </ul>
                         </li>
                     </ul>

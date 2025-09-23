@@ -1,10 +1,12 @@
 import { AgGridReact } from "ag-grid-react";
-import { useEffect, useMemo, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
-import { themeBalham, type ColDef, type SizeColumnsToContentStrategy } from 'ag-grid-community';
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
+import { themeBalham, type ColDef, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
 import { useAuth } from "../contexts/AuthContext";
 import styles from '../styles/ForecastAdministrativeDistrict.module.css';
+import { ChevronRight, Download, File, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface AdministartiveDistrict {
     type: string;
@@ -26,13 +28,14 @@ interface AdministartiveDistrict {
 }
 
 const ForecastAdministrativeDistrict = () => {
+    const divRef = useRef<HTMLDivElement>(null);
     const agGridRef = useRef<AgGridReact | null>(null);
 
     const { accessToken } = useAuth();
 
-    const autoSizeStrategy = useMemo<SizeColumnsToContentStrategy>(() => {
+    const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy >(() => {
         return {
-            type: 'fitCellContents',
+            type: 'fitGridWidth',
             defaultMinWidth: 100,
             columnLimits: [
             ]
@@ -121,31 +124,78 @@ const ForecastAdministrativeDistrict = () => {
                 "Authorization": `Bearer ${accessToken}`,
             }
         })
-            .then(res => res.json())
-            .then(data => setRowData(data))
-            ;
+        .then(res => res.json())
+        .then(data => setRowData(data));
     }, [])
 
     useEffect(() => {
-        const gridApi = agGridRef.current?.api;
-        if (gridApi) {
-            gridApi.sizeColumnsToFit();
-        }
+        if(!divRef.current) return;
+
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if(!agGridRef.current?.api) return;
+
+                if (entry.contentRect.width < 1024) 
+                    agGridRef.current.api.autoSizeAllColumns();
+                else 
+                    agGridRef.current.api.sizeColumnsToFit();
+            }
+        });
+
+        observer.observe(divRef.current);
+        return () => observer.disconnect();
+    }, [])
+
+    useEffect(() => {
+        if(!agGridRef.current?.api) return;
+        agGridRef.current.api.sizeColumnsToFit();
     }, [rowData]);
 
+    const handleCsvDownload = useCallback(() => {
+        if(!agGridRef.current) return;
+
+        const pad = (n: number) => n.toString().padStart(2, "0");
+
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const dayOfMonth = pad(date.getDate());
+        const hours = pad(date.getHours())
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+
+        agGridRef.current.api.exportDataAsCsv({fileName: `행정구역코드 ${year}${month}${dayOfMonth}_${hours}${minutes}${seconds}.csv`});
+    }, [])
+
     return (
-        <main className={styles.main}>
-            <section className={styles.section}>
-                <form id="form" className={styles.form} onSubmit={onSubmitExcel}>
+        <section className={styles.section}>
+            
+            
+            <form id="form" className={styles.form} onSubmit={onSubmitExcel}>
+
+                <nav className={styles.breadcrumb} aria-label="breadcrumb">
+                    <ol>
+                        <li><Link to={'/backoffice'}>관리자</Link></li>
+                        <ChevronRight size={16} color="black" strokeWidth={1} />
+                        <li>기상 데이터 관리</li>
+                        <ChevronRight size={16} color="black" strokeWidth={1} />
+                        <li aria-current="page">행정 구역 코드</li>
+                    </ol>
+                </nav>
+
+                <div className={styles.buttonContainer}>
+                    <label className={styles.fileUploadLabel} htmlFor="fileInput"> <File size={16} color="white" fill="white" strokeWidth={1} /> 엑셀 불러오기</label>
+                    <input className={styles.fileInputButton} type="file" name="fileInput" id="fileInput" onChange={onChangeExcel} />
+                    <button className={styles.fileUploadButton} type="submit"><Upload size={16} color="white" fill="white" strokeWidth={1} />업로드</button>
+                    <label className={styles.fileUploadLabel} onClick={handleCsvDownload}> <Download size={16} color="white" fill="white" strokeWidth={1} /> CSV 다운로드</label>
+                </div>
+
+                <div className={styles.agGrid} ref={divRef}>
                     <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
-                    <div className={styles.buttonContainer}>
-                        <label className={styles.fileUploadLabel} htmlFor="fileInput">엑셀 파일 읽기</label>
-                        <input className={styles.fileInputButton} type="file" name="fileInput" id="fileInput" onChange={onChangeExcel} />
-                        <input className={styles.fileUploadButton} type="submit" value="등록" />
-                    </div>
-                </form>
-            </section>
-        </main>
+                </div>
+            </form>
+
+        </section>
     )
 }
 

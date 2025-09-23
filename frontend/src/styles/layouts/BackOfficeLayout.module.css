@@ -85,6 +85,10 @@
     border-radius: 4px;
 }
 
+.submenu li.open {
+    background-color: #edeef1;
+}
+
 .chevron {
   transition: transform 0.2s ease;
 }

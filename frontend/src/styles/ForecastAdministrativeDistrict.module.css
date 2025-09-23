@@ -1,45 +1,75 @@
-.main {
-    width: 1024px;
-    height: 100%;
-    padding: 16px;
-}
 
 .section {
+    width: 100%;
     height: 100%;
+
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .form {
+    height: 100%;
+    
+    padding: 16px;
+    box-sizing: inherit;
+
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+
     display: flex;
     flex-direction: column;
-    height: 100%;
+    gap: 8px;
+}
+
+.breadcrumb ol {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.breadcrumb ol li a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+
+    padding: 4px;
+}
+
+.breadcrumb ol li a:hover, a:visited, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.breadcrumb ol li a:hover{
+    background-color: #edeef1;
+    border-radius: 4px;
 }
 
 .buttonContainer {
     display: flex;
     justify-content: right;
     gap: 8px;
-
-    margin-top: 16px;
 }
 
 .fileUploadLabel {
-    width: 160px;
-
     display: flex;
-    justify-content: center;
-    align-items: center;
-
+    gap: 4px;
+    
     border: 1px solid lightgray;
     border-radius: 4px;
 
-    background-color: lightgreen;
+    background-color: #31bf7d;
 
     font-size: 16px;
+    padding: 8px;
+
+    color: white;
 }
 
 .fileUploadLabel:hover {
     cursor: pointer;
-    background-color: rgb(102, 215, 102);
+    background-color: #2ea16b;
 }
 
 .fileInputButton {
@@ -47,18 +77,22 @@
 }
 
 .fileUploadButton {
-    width: 80px;
-
+    display: flex;
+    align-items: center;
+    gap: 4px;
     border: 1px solid lightgray;
     border-radius: 4px;
-
-    background-color: lightblue;
-
+    background-color: #1976d2;
     font-size: 16px;
+    color: white;
 }
 
 .fileUploadButton:hover {
     cursor: pointer;
+    background-color: #1560ab;
+}
 
-    background-color: rgb(139, 203, 224);
+.agGrid {
+    width: 100%;
+    height: 100%;
 }
