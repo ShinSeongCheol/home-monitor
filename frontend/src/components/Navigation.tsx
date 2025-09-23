@@ -22,9 +22,9 @@ const navigation = () => {
                     </li>
                     {user?.authorities.includes("ROLE_ADMIN")
                         ?
-                        <li className={location.pathname === '/configuration/forecast/administrativeDistrict' ? `${styles.active}` : ""}>
+                        <li className={location.pathname === '/backoffice' ? `${styles.active}` : ""}>
                             <Settings size={"16px"} color={"gray"} strokeWidth={1} />
-                            <Link to={"/configuration/forecast/administrativeDistrict"}>설정</Link>
+                            <Link to={"/backoffice"}>설정</Link>
                         </li>
                         :
                         ""

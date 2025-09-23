@@ -10,7 +10,7 @@ const MenuType = {
     Weather : 'weather',
 } as const;
 
-const SideMenuType = {
+export const SideMenuType = {
     Board: 'board',
     Post: 'post',
     BoardRole: 'boardRole',
@@ -57,14 +57,14 @@ const BackOfficeLayout = () => {
 
                             <ul className={`${styles.submenu} ${openMenu === MenuType.Board ? styles.open : ""}`}>
                                 <li className={`${openSideMenu === SideMenuType.Board ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Board)}><List size={'16px'} strokeWidth={1} /> 게시판 목록</li>
-                                <li className={`${openSideMenu === SideMenuType.BoardRoleCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.BoardRoleCode)}><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
+                                <li className={`${openSideMenu === SideMenuType.BoardRole ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.BoardRole)}><Shield size={'16px'} strokeWidth={1} /> 게시판 권한 </li>
                                 <li className={`${openSideMenu === SideMenuType.BoardRoleCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.BoardRoleCode)}><KeyRound size={'16px'} strokeWidth={1} /> 게시판 권한 코드</li>
                                 <li className={`${openSideMenu === SideMenuType.Post ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Post)}><List size={'16px'} strokeWidth={1} /> 게시물 목록</li>
 
                                 <li className={`${openSideMenu === SideMenuType.Comment ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Comment)}><List size={'16px'} strokeWidth={1} /> 댓글 목록</li>
 
                                 <li className={`${openSideMenu === SideMenuType.Reaction ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.Reaction)}><List size={'16px'} strokeWidth={1} /> 반응 목록</li>
-                                <li className={`${openSideMenu === SideMenuType.ReactionCode ? styles.open : ""}`} onClick={() => toggleSideMenu('')}><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
+                                <li className={`${openSideMenu === SideMenuType.ReactionCode ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.ReactionCode)}><KeyRound size={'16px'} strokeWidth={1} /> 반응 코드</li>
                             </ul>
 
                         </li>
@@ -92,7 +92,7 @@ const BackOfficeLayout = () => {
 
                             <ul className={`${styles.submenu} ${openMenu === MenuType.Weather ? styles.open : ""}`}>
                                 <li className={`${openSideMenu === SideMenuType.AdministrativeDistrict ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.AdministrativeDistrict)}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
-                                <li className={`${openSideMenu === SideMenuType.AreaDistrict ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.AreaDistrict)}><KeyRound size={'16px'} strokeWidth={1} /> 행정 구역 코드</li>
+                                <li className={`${openSideMenu === SideMenuType.AreaDistrict ? styles.open : ""}`} onClick={() => toggleSideMenu(SideMenuType.AreaDistrict)}><KeyRound size={'16px'} strokeWidth={1} /> 구역 코드</li>
                             </ul>
                         </li>
                     </ul>

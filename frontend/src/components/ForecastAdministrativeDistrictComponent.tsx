@@ -4,7 +4,7 @@ import { themeBalham, type ColDef, type SizeColumnsToFitGridStrategy } from 'ag-
 import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
 import * as XLSX from "xlsx";
 import { useAuth } from "../contexts/AuthContext";
-import styles from '../styles/ForecastAdministrativeDistrict.module.css';
+import styles from '../styles/components/ForecastAdministrativeDistrictComponent.module.css';
 import { ChevronRight, Download, File, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 

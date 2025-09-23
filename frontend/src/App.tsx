@@ -1,6 +1,6 @@
 import styles from './styles/App.module.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ForecastAdministrativeDistrict from './pages/ForecastAdministrativeDistrict';
+import ForecastAdministrativeDistrictComponent from './components/ForecastAdministrativeDistrictComponent';
 import MiddleForecastAreaDistrict from './pages/MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
@@ -15,7 +15,7 @@ import PostCreatePage from './pages/PostCreatePage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostUpdatePage from './pages/PostUpdatePage';
 import BoardPage from './pages/BoardPage';
-import BackOfficeLayout from './layouts/BackOfficeLayout';
+import BackOfficeLayout, { SideMenuType } from './layouts/BackOfficeLayout';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,11 +39,21 @@ function App() {
 
           {/* Admin */}
           <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout /></ProtectedRoute> }>
-            <Route path="board" element={<ForecastAdministrativeDistrict/>}></Route>
-            <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrict/>}></Route>
+            <Route path="board" element={SideMenuType.Board}></Route>
+            <Route path="post" element={SideMenuType.Post}></Route>
+            <Route path="BoardRole" element={SideMenuType.BoardRole}></Route>
+            <Route path="BoardRoleCode" element={SideMenuType.BoardRoleCode}></Route>
+            <Route path="Comment" element={SideMenuType.Comment}></Route>
+            <Route path="Reaction" element={SideMenuType.Reaction}></Route>
+            <Route path="userRoleCode" element={SideMenuType.ReactionCode}></Route>
+
+            <Route path="user" element={SideMenuType.User}></Route>
+            <Route path="userRole" element={SideMenuType.UserRole}></Route>
+            <Route path="ReactionCode" element={SideMenuType.UserRoleCode}></Route>
+
+            <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrictComponent/>}></Route>
             <Route path="areaDistrict" element={<MiddleForecastAreaDistrict/>}></Route>
           </Route>
-          
 
           {/* Auth */}
           <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
