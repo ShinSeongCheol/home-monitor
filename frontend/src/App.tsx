@@ -16,6 +16,7 @@ import PostDetailPage from './pages/PostDetailPage';
 import PostUpdatePage from './pages/PostUpdatePage';
 import BoardPage from './pages/BoardPage';
 import BackOfficeLayout, { SideMenuType } from './layouts/BackOfficeLayout';
+import BackOfficeBoard from './pages/BackOfficeBoard';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,7 +40,7 @@ function App() {
 
           {/* Admin */}
           <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout /></ProtectedRoute> }>
-            <Route path="board" element={SideMenuType.Board}></Route>
+            <Route path="board" element={<BackOfficeBoard/>}></Route>
             <Route path="post" element={SideMenuType.Post}></Route>
             <Route path="BoardRole" element={SideMenuType.BoardRole}></Route>
             <Route path="BoardRoleCode" element={SideMenuType.BoardRoleCode}></Route>
