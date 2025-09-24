@@ -1,12 +1,12 @@
-import { AgGridReact } from "ag-grid-react";
-import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
-import { themeBalham, type ColDef, type SizeColumnsToFitGridStrategy } from 'ag-grid-community';
-import { AG_GRID_LOCALE_KR } from '@ag-grid-community/locale'
+import { useCallback, useEffect, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
+import { type ColDef } from 'ag-grid-community';
 import * as XLSX from "xlsx";
 import { useAuth } from "../contexts/AuthContext";
-import styles from '../styles/components/ForecastAdministrativeDistrictComponent.module.css';
+import styles from '../styles/pages/ForecastAdministrativeDistrictPage.module.css';
 import { ChevronRight, Download, File, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import AgGridReactComponent from "../components/AgGridReactComponent";
+import type { AgGridReact } from "ag-grid-react";
 
 interface AdministartiveDistrict {
     type: string;
@@ -28,19 +28,9 @@ interface AdministartiveDistrict {
 }
 
 const ForecastAdministrativeDistrict = () => {
-    const divRef = useRef<HTMLDivElement>(null);
     const agGridRef = useRef<AgGridReact | null>(null);
 
     const { accessToken } = useAuth();
-
-    const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy >(() => {
-        return {
-            type: 'fitGridWidth',
-            defaultMinWidth: 100,
-            columnLimits: [
-            ]
-        };
-    }, []);
 
     const [rowData, setRowData] = useState<AdministartiveDistrict[]>([
     ]);
@@ -80,41 +70,42 @@ const ForecastAdministrativeDistrict = () => {
     const onChangeExcel: ChangeEventHandler<HTMLInputElement> = (event) => {
         const files = event.target.files;
 
-        if (files)
-            files[0].arrayBuffer()
-                .then(data => {
-                    return new Uint8Array(data);
-                })
-                .then(data => {
-                    const workbook = XLSX.read(data);
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: "A", range: 1 }) as { [key: string]: any }[]
-                    const mappedData: AdministartiveDistrict[] = jsonData.map((data) => {
-                        return {
-                            type: data['A'] ? String(data['A']) : '',
-                            code: data['B'] ? Number(data['B']) : '',
-                            level1: data['C'] ? String(data['C']) : '',
-                            level2: data['D'] ? String(data['D']) : '',
-                            level3: data['E'] ? String(data['E']) : '',
-                            x: data['F'] ? Number(data['F']) : '',
-                            y: data['G'] ? Number(data['G']) : '',
-                            longitude_degrees: data['H'] ? Number(data['H']) : '',
-                            longitude_minutes: data['I'] ? Number(data['I']) : '',
-                            longitude_seconds: data['J'] ? Number(data['J']) : '',
-                            latitude_degrees: data['K'] ? Number(data['K']) : '',
-                            latitude_minutes: data['L'] ? Number(data['L']) : '',
-                            latitude_seconds: data['M'] ? Number(data['M']) : '',
-                            longitude: data['N'] ? Number(data['N']) : '',
-                            latitude: data['O'] ? Number(data['O']) : '',
-                            updatedAt: data['P'] ? String(data['P']) : '',
-                        }
-                    });
+        if (!files) return;
+        
+        files[0].arrayBuffer()
+        .then(data => {
+            return new Uint8Array(data);
+        })
+        .then(data => {
+            const workbook = XLSX.read(data);
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: "A", range: 1 }) as { [key: string]: any }[]
+            const mappedData: AdministartiveDistrict[] = jsonData.map((data) => {
+                return {
+                    type: data['A'] ? String(data['A']) : '',
+                    code: data['B'] ? Number(data['B']) : '',
+                    level1: data['C'] ? String(data['C']) : '',
+                    level2: data['D'] ? String(data['D']) : '',
+                    level3: data['E'] ? String(data['E']) : '',
+                    x: data['F'] ? Number(data['F']) : '',
+                    y: data['G'] ? Number(data['G']) : '',
+                    longitude_degrees: data['H'] ? Number(data['H']) : '',
+                    longitude_minutes: data['I'] ? Number(data['I']) : '',
+                    longitude_seconds: data['J'] ? Number(data['J']) : '',
+                    latitude_degrees: data['K'] ? Number(data['K']) : '',
+                    latitude_minutes: data['L'] ? Number(data['L']) : '',
+                    latitude_seconds: data['M'] ? Number(data['M']) : '',
+                    longitude: data['N'] ? Number(data['N']) : '',
+                    latitude: data['O'] ? Number(data['O']) : '',
+                    updatedAt: data['P'] ? String(data['P']) : '',
+                }
+            });
 
-                    setRowData(mappedData);
-                })
-                .catch(error => {
-                    throw new Error(error);
-                });
+            setRowData(mappedData);
+        })
+        .catch(error => {
+            throw new Error(error);
+        });
     }
 
     useEffect(() => {
@@ -128,30 +119,8 @@ const ForecastAdministrativeDistrict = () => {
         .then(data => setRowData(data));
     }, [])
 
-    useEffect(() => {
-        if(!divRef.current) return;
-
-        const observer = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                if(!agGridRef.current?.api) return;
-
-                if (entry.contentRect.width < 1024) 
-                    agGridRef.current.api.autoSizeAllColumns();
-                else 
-                    agGridRef.current.api.sizeColumnsToFit();
-            }
-        });
-
-        observer.observe(divRef.current);
-        return () => observer.disconnect();
-    }, [])
-
-    useEffect(() => {
-        if(!agGridRef.current?.api) return;
-        agGridRef.current.api.sizeColumnsToFit();
-    }, [rowData]);
-
     const handleCsvDownload = useCallback(() => {
+        console.log(agGridRef)
         if(!agGridRef.current) return;
 
         const pad = (n: number) => n.toString().padStart(2, "0");
@@ -169,7 +138,6 @@ const ForecastAdministrativeDistrict = () => {
 
     return (
         <section className={styles.section}>
-            
             
             <form id="form" className={styles.form} onSubmit={onSubmitExcel}>
 
@@ -190,9 +158,7 @@ const ForecastAdministrativeDistrict = () => {
                     <label className={styles.fileUploadLabel} onClick={handleCsvDownload}> <Download size={16} color="white" fill="white" strokeWidth={1} /> CSV 다운로드</label>
                 </div>
 
-                <div className={styles.agGrid} ref={divRef}>
-                    <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
-                </div>
+                <AgGridReactComponent ref={agGridRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
             </form>
 
         </section>

@@ -1,4 +1,4 @@
-import styles from '../styles/pages/BackOfficeBoard.module.css';
+import styles from '../styles/pages/BackOfficeBoardPage.module.css';
 import AgGridReactComponent from '../components/AgGridReactComponent';
 import { useState } from 'react';
 import type { ColDef } from 'ag-grid-community';

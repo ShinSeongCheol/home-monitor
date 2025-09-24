@@ -1,15 +1,17 @@
+import styles from '../styles/components/AgGridReactComponent.module.css';
+
 import { AG_GRID_LOCALE_KR } from "@ag-grid-community/locale";
 import { type SizeColumnsToFitGridStrategy, themeBalham } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useMemo, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 
 type AgGridReactComponentProps = {
     colDefs: any[]
     rowData: any[];
 }
 
-const AgGridReactComponent = ({colDefs, rowData}: AgGridReactComponentProps) => {
-
+const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(({colDefs, rowData}, ref) => {
+    const divRef = useRef<HTMLDivElement>(null);
     const agGridRef = useRef<AgGridReact | null>(null);
         
     const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy >(() => {
@@ -20,10 +22,39 @@ const AgGridReactComponent = ({colDefs, rowData}: AgGridReactComponentProps) => 
                 ]
             };
     }, []);
+
+    useImperativeHandle(ref, () => {
+        return agGridRef.current as AgGridReact
+    }, []);
+
+    useEffect(() => {
+        if(!divRef.current) return;
+
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if(!agGridRef.current?.api) return;
+
+                if (entry.contentRect.width < 1024) 
+                    agGridRef.current.api.autoSizeAllColumns();
+                else 
+                    agGridRef.current.api.sizeColumnsToFit();
+            }
+        });
+
+        observer.observe(divRef.current);
+        return () => observer.disconnect();
+    }, [])
+
+    useEffect(() => {
+        if(!agGridRef.current?.api) return;
+        agGridRef.current.api.sizeColumnsToFit();
+    }, [rowData]);
     
     return(
-        <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
+        <div ref={divRef} className={styles.container}>
+            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
+        </div>
     )
-}
+});
 
 export default AgGridReactComponent;
