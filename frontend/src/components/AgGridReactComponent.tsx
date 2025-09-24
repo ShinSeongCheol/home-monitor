@@ -1,7 +1,7 @@
 import styles from '../styles/components/AgGridReactComponent.module.css';
 
 import { AG_GRID_LOCALE_KR } from "@ag-grid-community/locale";
-import { type SizeColumnsToFitGridStrategy, themeBalham } from "ag-grid-community";
+import { type DateTimeDataTypeDefinition, type SizeColumnsToFitGridStrategy, themeBalham, type ValueFormatterParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 
@@ -21,6 +21,18 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
                 columnLimits: [
                 ]
             };
+    }, []);
+
+    const dataTypeDefinitions = useMemo(() => {
+        return {
+            dateTime: {
+            baseDataType: "dateTime",
+            extendsDataType: "dateTime",
+            valueFormatter: (params: ValueFormatterParams<Date>) => {
+                return params.value ? new Date(params.value).toLocaleString() : "";
+            },
+            } as DateTimeDataTypeDefinition<Date, any>,
+        };
     }, []);
 
     useImperativeHandle(ref, () => {
@@ -52,7 +64,7 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
     
     return(
         <div ref={divRef} className={styles.container}>
-            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} />
+            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} dataTypeDefinitions={dataTypeDefinitions} />
         </div>
     )
 });

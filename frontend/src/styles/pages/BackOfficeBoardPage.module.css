@@ -4,3 +4,48 @@
     padding: 16px;
     box-sizing: border-box;
 }
+
+.container {
+    height: 100%;
+    
+    padding: 16px;
+    box-sizing: inherit;
+
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.breadcrumb ol {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.breadcrumb ol li a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+
+    padding: 4px;
+}
+
+.breadcrumb ol li a:hover, a:visited, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.breadcrumb ol li a:hover{
+    background-color: #edeef1;
+    border-radius: 4px;
+}
