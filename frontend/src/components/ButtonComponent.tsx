@@ -1,6 +1,8 @@
 import type { ICellRendererParams } from 'ag-grid-community';
 import styles from '../styles/components/ButtonComponent.module.css';
-import { Download, Plus, SquarePen, Trash } from 'lucide-react';
+import { Plus, SquarePen, Trash } from 'lucide-react';
+import type { ReactNode } from 'react';
+import type { Board } from '../pages/BackOfficeBoardPage';
 
 export const AgGridBoardButtonGroup = (props: ICellRendererParams) => {
 
@@ -21,41 +23,47 @@ export const AgGridBoardButtonGroup = (props: ICellRendererParams) => {
 } 
 
 type ButtonProps = {
+    svg: ReactNode;
     value: string;
+    type: "button" | "submit" | "reset";
     onClick: () => void;
 }
 
-export const InsertButton = ({value, onClick}: ButtonProps) => {
+export const InsertButton = ({svg, value, type, onClick}: ButtonProps) => {
+    <Plus color='white' size={16} strokeWidth={2}/>
     return (
-        <button className={`${styles.button} ${styles.insert}`} type="button" onClick={onClick}><Plus color='white' size={16} strokeWidth={2}/>{value}</button>
+        <button className={`${styles.button} ${styles.insert}`} type={type} onClick={onClick}>{svg}{value}</button>
     )
 }
 
-export const CsvButton = ({value, onClick}: ButtonProps) => {
+export const CsvButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (
-        <button className={`${styles.button} ${styles.csv}`} type="button" onClick={onClick}><Download color='white' size={16} strokeWidth={2}/>{value}</button>
+        <button className={`${styles.button} ${styles.csv}`} type={type} onClick={onClick}>{svg}{value}</button>
     )
 }
 
-export const AgGridDeleteButton = (props: ICellRendererParams) => {
-
-    const onClickDelete = () => {
-        console.log(props.data);
-    }
-
+export const CancleButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (
-        <button className={`${styles.aggrid} ${styles.button} ${styles.delete}`} type="button" onClick={onClickDelete}><Trash color='white' size={20} strokeWidth={2} />{'삭제'}</button>
+        <button className={`${styles.button} ${styles.cancle}`} type={type} onClick={onClick}>{svg}{value}</button>
+    )
+}
+
+interface agGridButtonProps extends ICellRendererParams {
+    svg: ReactNode;
+    value: string;
+    type: "button" | "submit" | "reset";
+    onClick : (data: any) => void;
+}
+
+export const AgGridDeleteButton = (props: agGridButtonProps) => {
+    return (
+        <button className={`${styles.aggrid} ${styles.button} ${styles.delete}`} type={props.type} onClick={() => props.onClick(props.data)}>{props.svg}{props.value}</button>
     )
 } 
 
 
-export const AgGridEditButton = (props: ICellRendererParams) => {
-
-    const onClickEdit = () => {
-        console.log(props.data);
-    }
-
+export const AgGridEditButton = (props: agGridButtonProps) => {
     return (
-        <button className={`${styles.aggrid} ${styles.button} ${styles.edit}`} type="button" onClick={onClickEdit}><SquarePen color='white' size={20} strokeWidth={2} />{'수정'}</button>
+        <button className={`${styles.aggrid} ${styles.button} ${styles.edit}`} type={props.type} onClick={() => props.onClick(props.data)}>{props.svg}{props.value}</button>
     )
 } 

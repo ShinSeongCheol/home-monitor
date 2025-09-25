@@ -1,13 +1,18 @@
 import styles from '../styles/pages/BackOfficeBoardPage.module.css';
 import AgGridReactComponent from '../components/AgGridReactComponent';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
 import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import { EditBoardModal, InsertBoardModal } from '../components/BackOfficeModal';
+import type { AgGridReact } from 'ag-grid-react';
+import useFormattedDate from '../hooks/useFormattedDate';
+import type { ICellRendererParams } from 'ag-grid-community';
+import { useAuth } from '../contexts/AuthContext';
 
-type Board = {
+export type Board = {
     id: number;
     categoryCode: string | null;
     categoryName: string | null;
@@ -18,6 +23,7 @@ type Board = {
 
 const BackOfficeBoard = () => {
 
+    const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
     
     // 초기화
@@ -27,6 +33,15 @@ const BackOfficeBoard = () => {
             sideMenu: SideMenuType.Board
         });
     }, []);
+
+    const [isInsertModalOpen, setIsInsertModalOpenOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpenOpen] = useState(false);
+    const [editModalData, SetEditModalData] = useState();
+
+
+    const agGridComponentRef = useRef<AgGridReact>(null);
+
+    const {formattedDate} = useFormattedDate();
 
     const [rowData, setRowData] = useState<Board[]>([
     ]);
@@ -42,22 +57,26 @@ const BackOfficeBoard = () => {
             headerName: "관리",
             children: [
                 {
-                colId: "edit",
-                headerName: "수정",   // 하위 컬럼 이름
-                width: 60,
-                cellRenderer: AgGridEditButton,
+                    colId: "edit",
+                    headerName: "수정",
+                    width: 60,
+                    cellRenderer: (params: ICellRendererParams) => {
+                        return <AgGridEditButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
+                    },
                 },
                 {
-                colId: "delete",
-                headerName: "삭제",
-                width: 60,
-                cellRenderer: AgGridDeleteButton,
+                    colId: "delete",
+                    headerName: "삭제",
+                    width: 60,
+                    cellRenderer: (params: ICellRendererParams) => {
+                        return <AgGridDeleteButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
+                    },
                 },
             ]
         },
     ]);
 
-    useEffect(() => {
+    const fetchBoards = () => {
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boards`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
@@ -73,7 +92,34 @@ const BackOfficeBoard = () => {
             setRowData(boards);
         })
         .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchBoards();
     }, [])
+
+    const onClickEdit = (data: any) => {
+        setIsEditModalOpenOpen(true);
+        SetEditModalData(data);
+    }
+
+    const onClickDelete = (data: any) => {
+        if(!confirm(`${data.categoryName} 게시판을 삭제하시겠습니까?`)) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/board/${data.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            alert('게시판이 삭제되었습니다.');
+            fetchBoards();
+        })
+        .catch(err => console.error(err));
+    }
     
     return (
         <section className={`${styles.section}`}>
@@ -88,10 +134,12 @@ const BackOfficeBoard = () => {
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
-                    <InsertButton value='추가' onClick={() => console.log('click')}/>
-                    <CsvButton value='CSV' onClick={() => console.log('click')}/>
+                    <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 목록 ${formattedDate}.csv`})}/>
                 </div>
-                <AgGridReactComponent colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+                <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+                <InsertBoardModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchBoards={fetchBoards}></InsertBoardModal>
+                <EditBoardModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchBoards={fetchBoards} data={editModalData}></EditBoardModal>
             </div>
         </section>
     )

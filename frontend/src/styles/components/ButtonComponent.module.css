@@ -52,6 +52,16 @@
     transition: background-color 0.2s ease;
 }
 
+.button.cancle {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.button.cancle:hover {
+    background: #bdbdbd;
+    transition: background-color 0.2s ease;
+}
+
 .button.delete {
     background: #dc3545;
     color: white;
@@ -62,6 +72,12 @@
     transition: background-color 0.2s ease;
 }
 
+.aggrid {
+    display: flex;
+    align-items: center;
+}
+
 .aggrid.button {
     width: 100%;
+    height: 100%;
 }

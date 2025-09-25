@@ -142,15 +142,15 @@ public class BoardService {
         return boardResponseDtos;
     }
 
-    public BoardResponseDto getBoard(String categoryCode) {
+    public BoardResponseDto getBoard(String categoryCode) throws NoSuchElementException {
         log.debug("게시판 데이터 조회 서비스");
-        BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode);
+        BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
         BoardResponseDto boardResponseDto = BoardResponseDto.fromEntity(boardEntity);
         return boardResponseDto;
     }
 
     @Transactional
-    public PostResponseDto postBoard(String categoryCode, PostRequestDto postRequestDto) throws IllegalArgumentException{
+    public PostResponseDto postBoard(String categoryCode, PostRequestDto postRequestDto) throws IllegalArgumentException, NoSuchElementException{
         log.debug("게시판 {} 글쓰기 {}", categoryCode, postRequestDto.toString());
 
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -166,7 +166,7 @@ public class BoardService {
         ;
 
         // board Entity 연관 관계 설정
-        BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode);
+        BoardEntity boardEntity = boardRepository.findByCategoryCode(categoryCode).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
         postEntityBuilder.board(boardEntity);
 
         // member entity 연관 관계 설정

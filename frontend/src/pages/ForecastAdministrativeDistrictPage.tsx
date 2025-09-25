@@ -9,6 +9,7 @@ import AgGridReactComponent from "../components/AgGridReactComponent";
 import type { AgGridReact } from "ag-grid-react";
 import { MenuType, SideMenuType } from "../layouts/BackOfficeLayout";
 import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
+import useFormattedDate from "../hooks/useFormattedDate";
 
 interface AdministartiveDistrict {
     type: string;
@@ -43,6 +44,7 @@ const ForecastAdministrativeDistrict = () => {
     const agGridRef = useRef<AgGridReact | null>(null);
 
     const { accessToken } = useAuth();
+    const {formattedDate} = useFormattedDate();
 
     const [rowData, setRowData] = useState<AdministartiveDistrict[]>([
     ]);
@@ -131,22 +133,11 @@ const ForecastAdministrativeDistrict = () => {
         .then(data => setRowData(data));
     }, [])
 
-    const handleCsvDownload = useCallback(() => {
-        console.log(agGridRef)
+    const handleCsvDownload = () => {
         if(!agGridRef.current) return;
 
-        const pad = (n: number) => n.toString().padStart(2, "0");
-
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = pad(date.getMonth() + 1);
-        const dayOfMonth = pad(date.getDate());
-        const hours = pad(date.getHours())
-        const minutes = pad(date.getMinutes());
-        const seconds = pad(date.getSeconds());
-
-        agGridRef.current.api.exportDataAsCsv({fileName: `행정구역코드 ${year}${month}${dayOfMonth}_${hours}${minutes}${seconds}.csv`});
-    }, [])
+        agGridRef.current.api.exportDataAsCsv({fileName: `행정구역코드 ${formattedDate}.csv`});
+    }
 
     return (
         <section className={styles.section}>
