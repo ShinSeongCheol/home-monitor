@@ -1,7 +1,7 @@
 import styles from '../styles/pages/BackOfficeBoardPage.module.css';
 import AgGridReactComponent from '../components/AgGridReactComponent';
 import { useEffect, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
 import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
