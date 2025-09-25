@@ -28,8 +28,8 @@ const BackOfficeBoard = () => {
     // 초기화
     useEffect(() => {
         setMenu({
-            menu: MenuType.Weather,
-            sideMenu: SideMenuType.AdministrativeDistrict
+            menu: MenuType.Board,
+            sideMenu: SideMenuType.Board
         });
     }, []);
 
