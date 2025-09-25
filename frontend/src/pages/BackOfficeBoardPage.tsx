@@ -1,9 +1,11 @@
 import styles from '../styles/pages/BackOfficeBoardPage.module.css';
 import AgGridReactComponent from '../components/AgGridReactComponent';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { AgGridBoardButtonGroup, AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
+import { AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
+import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
+import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 
 type Board = {
     id: number;
@@ -14,7 +16,22 @@ type Board = {
     updatedAt: Date | null;
 }
 
+type ContextType = {
+    setOpenMenu : React.Dispatch<React.SetStateAction<string>>;
+    setOpenSideMenu :React.Dispatch<React.SetStateAction<string>>;
+}
+
 const BackOfficeBoard = () => {
+
+    const { setMenu }= useBackOfficeMenu();
+    
+    // 초기화
+    useEffect(() => {
+        setMenu({
+            menu: MenuType.Weather,
+            sideMenu: SideMenuType.AdministrativeDistrict
+        });
+    }, []);
 
     const [rowData, setRowData] = useState<Board[]>([
     ]);
@@ -32,11 +49,13 @@ const BackOfficeBoard = () => {
                 {
                 colId: "edit",
                 headerName: "수정",   // 하위 컬럼 이름
+                width: 60,
                 cellRenderer: AgGridEditButton,
                 },
                 {
                 colId: "delete",
                 headerName: "삭제",
+                width: 60,
                 cellRenderer: AgGridDeleteButton,
                 },
             ]

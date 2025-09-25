@@ -4,9 +4,11 @@ import * as XLSX from "xlsx";
 import { useAuth } from "../contexts/AuthContext";
 import styles from '../styles/pages/ForecastAdministrativeDistrictPage.module.css';
 import { ChevronRight, Download, File, Upload } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import AgGridReactComponent from "../components/AgGridReactComponent";
 import type { AgGridReact } from "ag-grid-react";
+import { MenuType, SideMenuType } from "../layouts/BackOfficeLayout";
+import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
 
 interface AdministartiveDistrict {
     type: string;
@@ -28,6 +30,16 @@ interface AdministartiveDistrict {
 }
 
 const ForecastAdministrativeDistrict = () => {
+    const { setMenu }= useBackOfficeMenu();
+    
+    // 초기화
+    useEffect(() => {
+        setMenu({
+            menu: MenuType.Weather,
+            sideMenu: SideMenuType.AdministrativeDistrict
+        });
+    }, []);
+    
     const agGridRef = useRef<AgGridReact | null>(null);
 
     const { accessToken } = useAuth();

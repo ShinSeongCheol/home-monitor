@@ -4,7 +4,7 @@ import styles from '../styles/layouts/BackOfficeLayout.module.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const MenuType = {
+export const MenuType = {
     Board : 'board',
     User : 'user',
     Weather : 'weather',
@@ -100,7 +100,7 @@ const BackOfficeLayout = () => {
             </aside>
 
             <main className={styles.main}>
-                <Outlet />
+                <Outlet context={{setOpenMenu, setOpenSideMenu}} />
             </main>
         </div>
     )
