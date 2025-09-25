@@ -16,11 +16,6 @@ type Board = {
     updatedAt: Date | null;
 }
 
-type ContextType = {
-    setOpenMenu : React.Dispatch<React.SetStateAction<string>>;
-    setOpenSideMenu :React.Dispatch<React.SetStateAction<string>>;
-}
-
 const BackOfficeBoard = () => {
 
     const { setMenu }= useBackOfficeMenu();
