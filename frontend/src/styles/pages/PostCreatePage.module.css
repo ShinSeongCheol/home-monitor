@@ -40,35 +40,6 @@
     padding: 20px 0px;
 }
 
-.buttonContainer input {
-    border: none;
-
-    width: 80px;
-    height: 30px;
-}
-
-.cancleButton {
-    background: #e0e0e0;
-    color: #333;
-}
-
-.cancleButton:hover {
-    background: #bdbdbd;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.submitButton {
-    background: #1976d2;
-    color: white;
-}
-
-.submitButton:hover {
-    background: #1560ab;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
 @media screen and (max-width: 1024px) {
     .section {
         width: 100%;

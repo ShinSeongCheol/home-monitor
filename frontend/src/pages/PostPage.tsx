@@ -3,6 +3,7 @@ import styles from '../styles/pages/PostPage.module.css';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { Board } from '../pages/BoardPage';
+import { CancleButton, InsertButton } from '../components/ButtonComponent';
 
 const PostPage = () => {
 
@@ -72,11 +73,11 @@ const PostPage = () => {
                 </div>
                 
                 <div className={styles.buttonContainer}>
-                    <input className={styles.cancleButton} type="button" value="뒤로가기" onClick={() => navigate(-1)} />
+                    <CancleButton svg={null} type='button' value='뒤로가기' onClick={() => navigate(-1)}/>
                     {
                     board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'WRITE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
                         ?
-                        <input className={styles.submitButton} type="button" value="글쓰기" onClick={() => navigate(`${location.pathname}/post`)} />
+                        <InsertButton svg={null} type='button' value='글쓰기' onClick={() => navigate(`${location.pathname}/post`)}/>
                         :
                         ""
                     }

@@ -6,6 +6,7 @@ import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } 
 import { useAuth } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import type { Board } from "../pages/BoardPage";
+import { CancleButton, InsertButton } from '../components/ButtonComponent';
 
 const PostUpdatePage = () => {
 
@@ -103,8 +104,8 @@ const PostUpdatePage = () => {
                     <hr />
                     <CkEditorComponent data={content} handleChange={(content) => setContent(content)}/>
                     <div className={styles.buttonContainer}>
-                        <input className={styles.cancleButton} type="button" value="취소" onClick={() => navigate(-1)} />
-                        <input className={styles.submitButton} type="submit" value="수정"/>
+                        <CancleButton svg={null} type='button' value='취소' onClick={() => navigate(-1)}/>
+                        <InsertButton svg={null} type='submit' value='수정' onClick={() => {}}/>
                     </div>
                 </form>
             </section>

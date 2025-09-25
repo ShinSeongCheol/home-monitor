@@ -2,7 +2,6 @@ import type { ICellRendererParams } from 'ag-grid-community';
 import styles from '../styles/components/ButtonComponent.module.css';
 import { Plus, SquarePen, Trash } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { Board } from '../pages/BackOfficeBoardPage';
 
 export const AgGridBoardButtonGroup = (props: ICellRendererParams) => {
 
@@ -45,6 +44,12 @@ export const CsvButton = ({svg, value, type, onClick}: ButtonProps) => {
 export const CancleButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (
         <button className={`${styles.button} ${styles.cancle}`} type={type} onClick={onClick}>{svg}{value}</button>
+    )
+}
+
+export const DeleteButton = ({svg, value, type, onClick}: ButtonProps) => {
+    return (
+        <button className={`${styles.button} ${styles.delete}`} type={type} onClick={onClick}>{svg}{value}</button>
     )
 }
 

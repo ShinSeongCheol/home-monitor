@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Comment from '../components/CommentComponent'
 import type { Board } from '../pages/BoardPage';
 import { Heart } from 'lucide-react';
+import { CancleButton, DeleteButton, InsertButton } from '../components/ButtonComponent';
 
 export type PostComment = {
     id: number;
@@ -194,12 +195,12 @@ const PostDetailPage = () => {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                    <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
+                    <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
                     {
                     memberEmail === user?.email && board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'MODIFY' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
                         ? 
                         <>
-                            <input className={styles.editButton} type="button" value="수정" onClick={handleEdit} />
+                            <InsertButton svg={null} type='button' value='수정' onClick={handleEdit}/>
                         </>
                         :
                         ""
@@ -208,7 +209,7 @@ const PostDetailPage = () => {
                     memberEmail === user?.email && board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'DELETE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
                         ? 
                         <>
-                            <input className={styles.deleteButton} type="button" value="삭제" onClick={handleDelete} />
+                            <DeleteButton svg={null} type='button' value='삭제' onClick={handleDelete}/>
                         </>
                         :
                         ""

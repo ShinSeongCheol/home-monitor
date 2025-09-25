@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import type { Board } from "../pages/BoardPage";
+import { CancleButton, InsertButton } from '../components/ButtonComponent';
 
 const PostCreatePage = () => {
 
@@ -78,8 +79,8 @@ const PostCreatePage = () => {
                     <hr />
                     <CkEditorComponent data="" handleChange={(content) => setContent(content)}/>
                     <div className={styles.buttonContainer}>
-                        <input className={styles.cancleButton} type="button" value="목록" onClick={() => navigate(-1)} />
-                        <input className={styles.submitButton} type="submit" value="등록"/>
+                        <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
+                        <InsertButton svg={null} type='submit' value='등록' onClick={() => {}}/>
                     </div>
                 </form>
             </section>

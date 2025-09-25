@@ -28,45 +28,6 @@
     gap: 8px;
 }
 
-.buttonContainer input {
-    border: none;
-    width: 80px;
-    height: 30px;
-}
-
-.cancleButton {
-    background: #e0e0e0;
-    color: #333;
-}
-
-.cancleButton:hover {
-    background: #bdbdbd;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.editButton {
-    background: #1976d2;
-    color: white;
-}
-
-.editButton:hover {
-    background: #1560ab;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.deleteButton {
-    background: #dc3545;
-    color: #ffffff;
-}
-
-.deleteButton:hover {
-    background: #c82333;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
 .react {
     display: flex;
     align-items: center;
