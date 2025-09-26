@@ -64,7 +64,7 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
     
     return(
         <div ref={divRef} className={styles.container}>
-            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} dataTypeDefinitions={dataTypeDefinitions} />
+            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} dataTypeDefinitions={dataTypeDefinitions} rowSelection={ {mode:'singleRow'}} />
         </div>
     )
 });
