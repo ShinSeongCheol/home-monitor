@@ -1,6 +1,6 @@
 import styles from '../styles/components/BackOfficeBoardModal.module.css';
 
-import { useEffect, useState, type FormEventHandler, type ReactNode } from "react";
+import { useState, type FormEventHandler, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
@@ -20,10 +20,17 @@ const ModalPortal = ({children} : ModalPortalProps) => {
 type insertModalProps = {
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    fetchBoards: () => void;
+    fetchData: () => void;
 }
 
-export const InsertBoardModal = ({isOpen, setIsOpen, fetchBoards} : insertModalProps) => {
+type editModalProps = {
+    isOpen: boolean;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchData: () => void;
+    data: any;
+}
+
+export const InsertBoardModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
     if (!isOpen) return;
 
     const {accessToken} = useAuth();
@@ -54,7 +61,7 @@ export const InsertBoardModal = ({isOpen, setIsOpen, fetchBoards} : insertModalP
         .then(res => {
             alert('게시판이 생성되었습니다.');
             setIsOpen(false);
-            fetchBoards();
+            fetchData();
         })
         .catch((res :Response)=> {
             if (res.status === 409) {
@@ -108,15 +115,7 @@ export const InsertBoardModal = ({isOpen, setIsOpen, fetchBoards} : insertModalP
     )
 }
 
-
-type editModalProps = {
-    isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    fetchBoards: () => void;
-    data: any;
-}
-
-export const EditBoardModal = ({isOpen, setIsOpen, fetchBoards, data} : editModalProps) => {
+export const EditBoardModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
     if (!isOpen) return;
 
     const {accessToken} = useAuth();
@@ -144,7 +143,7 @@ export const EditBoardModal = ({isOpen, setIsOpen, fetchBoards, data} : editModa
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             alert('게시판이 수정되었습니다.');
             setIsOpen(false);
-            fetchBoards();
+            fetchData();
         })
         .catch(err => console.error(err));
     }

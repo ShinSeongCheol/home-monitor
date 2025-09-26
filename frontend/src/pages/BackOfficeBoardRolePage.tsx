@@ -11,29 +11,9 @@ import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
 import type { ICellRendererParams } from 'ag-grid-community';
 import { useAuth } from '../contexts/AuthContext';
+import type { BoardRole } from './BackOfficeBoardPage';
 
-export type Board = {
-    id: number;
-    categoryCode: string | null;
-    categoryName: string | null;
-    comment: string | null;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-}
-
-export type BoardRole = {
-    id: number;
-    board: Board;
-    boardRoleCode: BoardRoleCode;
-}
-
-export type BoardRoleCode = {
-    id: number;
-    code: string;
-    name: string;
-}
-
-const BackOfficeBoard = () => {
+const BackOfficeBoardRole = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -42,7 +22,7 @@ const BackOfficeBoard = () => {
     useEffect(() => {
         setMenu({
             menu: MenuType.Board,
-            sideMenu: SideMenuType.Board
+            sideMenu: SideMenuType.BoardRole
         });
     }, []);
 
@@ -55,23 +35,75 @@ const BackOfficeBoard = () => {
 
     const {formattedDate} = useFormattedDate();
 
-    const [rowData, setRowData] = useState<Board[]>([
+    const [rowData, setRowData] = useState<BoardRole[]>([
     ]);
     
     const [colDefs] = useState([
-        { field: "id", headerName: "ID", filter: true },
-        { field: "categoryCode", headerName: "코드", filter: true },
-        { field: "categoryName", headerName: "이름", filter: true },
-        { field: "comment", headerName: "설명", filter: true },
-        { field: "createdAt", headerName: "생성일", cellDataType: "dateTime", filter: true },
-        { field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true },
+        { field: "id", headerName: "ID", filter: true, flex:2, },
+        {
+            headerName: "게시판",
+            children: [
+                {
+                    colId: "board_category_code",
+                    headerName: "코드",
+                    field: "board.categoryCode",
+                    flex:2,
+                },
+                {
+                    colId: "board_category_name",
+                    headerName: "이름",
+                    field: "board.categoryCode",
+                    flex:2,
+                },
+                {
+                    colId: "board_comment",
+                    headerName: "설명",
+                    field: "board.comment",
+                    flex:2,
+                },
+            ]
+        },
+        {
+            headerName: "게시판 권한 코드",
+            children: [
+                {
+                    colId: "board_role_code_code",
+                    headerName: "코드",
+                    field: "boardRoleCode.code",
+                    flex:2,
+                },
+                {
+                    colId: "board_role_code_name",
+                    headerName: "이름",
+                    field: "boardRoleCode.name",
+                    flex:2,
+                },
+            ]
+        },
+                {
+            headerName: "사용자 권한 코드",
+            children: [
+                {
+                    colId: "member_role_code_code",
+                    headerName: "코드",
+                    field: "memberRoleCode.code",
+                    flex:2,
+                },
+                {
+                    colId: "member_role_code_name",
+                    headerName: "이름",
+                    field: "memberRoleCode.name",
+                    flex:2,
+                },
+            ]
+        },
         {
             headerName: "관리",
             children: [
                 {
                     colId: "edit",
                     headerName: "수정",
-                    width: 60,
+                    width:160,
                     cellRenderer: (params: ICellRendererParams) => {
                         return <AgGridEditButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
                     },
@@ -79,7 +111,7 @@ const BackOfficeBoard = () => {
                 {
                     colId: "delete",
                     headerName: "삭제",
-                    width: 60,
+                    width:160,
                     cellRenderer: (params: ICellRendererParams) => {
                         return <AgGridDeleteButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
                     },
@@ -89,19 +121,13 @@ const BackOfficeBoard = () => {
     ]);
 
     const fetchBoards = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boards`)
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRole`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json() as Promise<Board[]>;
+            return res.json() as Promise<BoardRole[]>;
         })
         .then(res => {
-            let boards: Board[] = res.map(board => ({
-                ...board,
-                createdAt: board.createdAt ? new Date(board.createdAt) : null,
-                updatedAt: board.updatedAt ? new Date(board.updatedAt) : null,
-            }));
-
-            setRowData(boards);
+            setRowData(res);
         })
         .catch(err => console.error(err));
     }
@@ -142,7 +168,7 @@ const BackOfficeBoard = () => {
                         <ChevronRight size={16} color="black" strokeWidth={1} />
                         <li>게시판 관리</li>
                         <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">게시판 목록</li>
+                        <li aria-current="page">게시판 권한</li>
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
@@ -157,4 +183,4 @@ const BackOfficeBoard = () => {
     )
 }
 
-export default BackOfficeBoard;
+export default BackOfficeBoardRole;
