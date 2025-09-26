@@ -1,6 +1,7 @@
 package com.seongcheol.homemonitor.dto.backOffice.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
@@ -23,6 +24,7 @@ public class BackOfficePostResponseDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<BackOfficeCommentResponseDto> comments;
 
     public static BackOfficePostResponseDto fromEntity(PostEntity postEntity) {
         return BackOfficePostResponseDto.builder()
@@ -32,6 +34,7 @@ public class BackOfficePostResponseDto {
         .content(postEntity.getContent())
         .createdAt(postEntity.getCreatedAt())
         .updatedAt(postEntity.getUpdatedAt())
+        .comments(postEntity.getComments().stream().map(BackOfficeCommentResponseDto::fromEntity).toList())
         .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.dto.backOffice.response;
 
-import com.seongcheol.homemonitor.domain.BoardRoleEntity;
+import com.seongcheol.homemonitor.domain.ReactionEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +13,12 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BackOfficeBoardRoleResponseDto {
+public class BackOfficeReactionResponseDto {
     private Long id;
 
-    public static BackOfficeBoardRoleResponseDto fromEntity(BoardRoleEntity boardRoleEntity) {
-        return BackOfficeBoardRoleResponseDto.builder()
-        .id(boardRoleEntity.getId())
+    public static BackOfficeReactionResponseDto fromEntity(ReactionEntity reactionEntity) {
+        return BackOfficeReactionResponseDto.builder()
+        .id(reactionEntity.getId())
         .build();
     }
 }
