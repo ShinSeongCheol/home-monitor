@@ -32,12 +32,12 @@
 }
 
 .button.edit {
-    background: #1976d2;
+    background: #ff9800;
     color: white;
 }
 
 .button.edit:hover {
-    background: #1560ab;
+    background: #e68900;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
