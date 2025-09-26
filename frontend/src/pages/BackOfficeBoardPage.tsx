@@ -61,7 +61,7 @@ const BackOfficeBoard = () => {
                     headerName: "수정",
                     width: 60,
                     cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridEditButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
+                        return <AgGridEditButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
                     },
                 },
                 {
@@ -69,7 +69,7 @@ const BackOfficeBoard = () => {
                     headerName: "삭제",
                     width: 60,
                     cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridDeleteButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
+                        return <AgGridDeleteButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
                     },
                 },
             ]

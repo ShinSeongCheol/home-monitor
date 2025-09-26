@@ -167,7 +167,7 @@ export const EditBoardModal = ({isOpen, setIsOpen, fetchBoards, data} : editModa
                                 <div className={`${styles.formFields}`}>
                                     <div className={styles.formGroup}>
                                         <label htmlFor='code'>코드</label>
-                                        <input type="text" id="code" name="code" value={code} disabled maxLength={16} required onChange={(e) => setCode(e.target.value)}/>
+                                        <input type="text" id="code" name="code" value={code} maxLength={16} required onChange={(e) => setCode(e.target.value)}/>
                                     </div>
 
                                     <div className={styles.formGroup}>
