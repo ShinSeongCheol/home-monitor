@@ -3,13 +3,12 @@ import AgGridReactComponent from '../components/AgGridReactComponent';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton } from '../components/ButtonComponent';
 import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditBoardModal, InsertBoardModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
-import type { ICellRendererParams } from 'ag-grid-community';
 import { useAuth } from '../contexts/AuthContext';
 
 export type Board = {
@@ -59,33 +58,12 @@ const BackOfficeBoard = () => {
     ]);
     
     const [colDefs] = useState([
-        { field: "id", headerName: "ID", filter: true },
-        { field: "categoryCode", headerName: "코드", filter: true },
-        { field: "categoryName", headerName: "이름", filter: true },
-        { field: "comment", headerName: "설명", filter: true },
-        { field: "createdAt", headerName: "생성일", cellDataType: "dateTime", filter: true },
-        { field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true },
-        {
-            headerName: "관리",
-            children: [
-                {
-                    colId: "edit",
-                    headerName: "수정",
-                    width: 60,
-                    cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridEditButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
-                    },
-                },
-                {
-                    colId: "delete",
-                    headerName: "삭제",
-                    width: 60,
-                    cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridDeleteButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
-                    },
-                },
-            ]
-        },
+        { field: "id", headerName: "ID", filter: true, flex:1 },
+        { field: "categoryCode", headerName: "코드", filter: true, flex:1 },
+        { field: "categoryName", headerName: "이름", filter: true, flex:1 },
+        { field: "comment", headerName: "설명", filter: true, flex:1 },
+        { field: "createdAt", headerName: "생성일", cellDataType: "dateTime", filter: true, flex:1 },
+        { field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true, flex:1 },
     ]);
 
     const fetchBoards = () => {
@@ -110,12 +88,26 @@ const BackOfficeBoard = () => {
         fetchBoards();
     }, [])
 
-    const onClickEdit = (data: any) => {
+    const onClickEdit = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
         setIsEditModalOpenOpen(true);
         SetEditModalData(data);
     }
 
-    const onClickDelete = (data: any) => {
+    const onClickDelete = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
         if(!confirm(`${data.categoryName} 게시판을 삭제하시겠습니까?`)) return;
 
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/board/${data.id}`, {
@@ -147,6 +139,8 @@ const BackOfficeBoard = () => {
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
                     <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
+                    <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
+                    <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
                     <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>

@@ -34,6 +34,12 @@ export const InsertButton = ({svg, value, type, onClick}: ButtonProps) => {
     )
 }
 
+export const UpdateButton = ({svg, value, type, onClick}: ButtonProps) => {
+    return (
+        <button className={`${styles.button} ${styles.edit}`} type={type} onClick={onClick}>{svg}{value}</button>
+    )
+}
+
 type FileButtonProps = {
     svg: ReactNode;
     value: string;
@@ -67,23 +73,3 @@ export const DeleteButton = ({svg, value, type, onClick}: ButtonProps) => {
         <button className={`${styles.button} ${styles.delete}`} type={type} onClick={onClick}>{svg}{value}</button>
     )
 }
-
-interface agGridButtonProps extends ICellRendererParams {
-    svg: ReactNode;
-    value: string;
-    type: "button" | "submit" | "reset";
-    onClick : (data: any) => void;
-}
-
-export const AgGridDeleteButton = (props: agGridButtonProps) => {
-    return (
-        <button className={`${styles.aggrid} ${styles.button} ${styles.delete}`} type={props.type} onClick={() => props.onClick(props.data)}>{props.svg}{props.value}</button>
-    )
-} 
-
-
-export const AgGridEditButton = (props: agGridButtonProps) => {
-    return (
-        <button className={`${styles.aggrid} ${styles.button} ${styles.edit}`} type={props.type} onClick={() => props.onClick(props.data)}>{props.svg}{props.value}</button>
-    )
-} 
