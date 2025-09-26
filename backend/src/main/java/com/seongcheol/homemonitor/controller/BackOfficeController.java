@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.dto.BoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
 
@@ -78,12 +79,39 @@ public class BackOfficeController {
         }
     }
 
-    @GetMapping("/boardRole")
+    @GetMapping("/boardRoles")
     public ResponseEntity<List<BackOfficeBoardRoleDto>> getBoardRoles() {
         log.info("백오피스 게시판 권한 조회 컨트롤러");
 
         List<BackOfficeBoardRoleDto> boardRoleDtos = backOfficeService.getBoardRoles();
         return ResponseEntity.ok(boardRoleDtos);
     }
-    
+
+    @PostMapping("/boardRole")
+    public ResponseEntity<BackOfficeBoardRoleDto> postBoardRole(@RequestBody BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) {
+        log.info("백오피스 게시판 권한 추가 컨트롤러");
+
+        try {
+            BackOfficeBoardRoleDto backOfficeBoardRoleDto = backOfficeService.postBoardRole(backOfficeBoardRoleRequestDto);
+            return ResponseEntity.ok(backOfficeBoardRoleDto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("/boardRoleCodes")
+    public ResponseEntity<List<BackOfficeBoardRoleCodeDto>> getBoardRoleCodes() {
+        log.info("백오피스 게시판 권한 조회 컨트롤러");
+
+        List<BackOfficeBoardRoleCodeDto> boardRoleDtos = backOfficeService.getBoardRoleCodes();
+        return ResponseEntity.ok(boardRoleDtos);
+    }
+
+    @GetMapping("/memberRoleCodes")
+    public ResponseEntity<List<BackOfficeMemberRoleCodeDto>> getMemberRoleCodes() {
+        log.info("백오피스 게시판 권한 조회 컨트롤러");
+
+        List<BackOfficeMemberRoleCodeDto> boardRoleDtos = backOfficeService.getMemberRoleCodes();
+        return ResponseEntity.ok(boardRoleDtos);
+    }
 }

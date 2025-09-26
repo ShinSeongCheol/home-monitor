@@ -4,33 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton } from '../components/ButtonComponent';
-import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
+import { MenuType, SideMenuType, type Board } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditBoardModal, InsertBoardModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
 import { useAuth } from '../contexts/AuthContext';
-
-export type Board = {
-    id: number;
-    categoryCode: string | null;
-    categoryName: string | null;
-    comment: string | null;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-}
-
-export type BoardRole = {
-    id: number;
-    board: Board;
-    boardRoleCode: BoardRoleCode;
-}
-
-export type BoardRoleCode = {
-    id: number;
-    code: string;
-    name: string;
-}
 
 const BackOfficeBoard = () => {
 
@@ -73,13 +52,7 @@ const BackOfficeBoard = () => {
             return res.json() as Promise<Board[]>;
         })
         .then(res => {
-            let boards: Board[] = res.map(board => ({
-                ...board,
-                createdAt: board.createdAt ? new Date(board.createdAt) : null,
-                updatedAt: board.updatedAt ? new Date(board.updatedAt) : null,
-            }));
-
-            setRowData(boards);
+            setRowData(res);
         })
         .catch(err => console.error(err));
     }

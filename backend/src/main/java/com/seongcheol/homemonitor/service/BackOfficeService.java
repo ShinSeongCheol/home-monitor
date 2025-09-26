@@ -10,14 +10,18 @@ import org.springframework.stereotype.Service;
 import com.seongcheol.homemonitor.domain.BoardEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleEntity;
+import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
 import com.seongcheol.homemonitor.dto.BoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleRepository;
+import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +36,8 @@ public class BackOfficeService {
     private  BoardRoleRepository boardRoleRepository;
     @Autowired
     private  BoardRoleCodeRepository boardRoleCodeRepository;
+    @Autowired
+    private MemberRoleCodeRepository memberRoleCodeRepository;
 
     public List<BackOfficeBoardDto> getBoards() {
         log.info("백오피스 게시판 조회 서비스");
@@ -79,7 +85,40 @@ public class BackOfficeService {
     }
 
     public List<BackOfficeBoardRoleDto> getBoardRoles() {
-        List<BoardRoleEntity> boardEntities = boardRoleRepository.findAll();
-        return boardEntities.stream().map(BackOfficeBoardRoleDto::fromEntity).toList();
+        List<BoardRoleEntity> boardRoleEntities = boardRoleRepository.findAll();
+        return boardRoleEntities.stream().map(BackOfficeBoardRoleDto::fromEntity).toList();
     }
+
+    public BackOfficeBoardRoleDto postBoardRole(BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) throws NoSuchElementException{
+
+        BoardEntity boardEntity = boardRepository.findById(backOfficeBoardRoleRequestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
+        BoardRoleCodeEntity boardRoleCodeEntity = boardRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getBoardRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 게시판 권한 코드가 없습니다."));
+        MemberRoleCodeEntity memberRoleCodeEntity = memberRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드가 없습니다."));
+
+        if(boardRoleRepository.existsByBoardAndBoardRoleCodeAndMemberRoleCode(boardEntity, boardRoleCodeEntity, memberRoleCodeEntity)) {
+            log.info("존재");
+            return null;
+        }
+
+        return null;
+
+        // BoardRoleEntity boardRoleEntity = BoardRoleEntity.builder()
+        // .board(null)
+        // .boardRoleCode(null)
+        // .memberRoleCode(null)
+        // .build();
+        
+        // return BackOfficeBoardRoleDto.fromEntity(boardRoleRepository.save(boardRoleEntity));
+    }
+
+    public List<BackOfficeBoardRoleCodeDto> getBoardRoleCodes() {
+        List<BoardRoleCodeEntity> boardRoleCodeEntities = boardRoleCodeRepository.findAll();
+        return boardRoleCodeEntities.stream().map(BackOfficeBoardRoleCodeDto::fromEntity).toList();
+    }
+
+    public List<BackOfficeMemberRoleCodeDto> getMemberRoleCodes() {
+        List<MemberRoleCodeEntity> memberRoleCodeEntities = memberRoleCodeRepository.findAll();
+        return memberRoleCodeEntities.stream().map(BackOfficeMemberRoleCodeDto::fromEntity).toList();
+    }
+
 }

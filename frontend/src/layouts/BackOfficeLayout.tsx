@@ -27,6 +27,33 @@ export const SideMenuType = {
     AreaDistrict: 'areaDistrict',
 }
 
+export type Board = {
+    id: number;
+    categoryCode: string | null;
+    categoryName: string | null;
+    comment: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+}
+
+export type BoardRole = {
+    id: number;
+    board: Board;
+    boardRoleCode: BoardRoleCode;
+}
+
+export type BoardRoleCode = {
+    id: number;
+    code: string;
+    name: string;
+}
+
+export type MemberRoleCode = {
+    id: number;
+    code: string;
+    name: string;
+}
+
 const BackOfficeLayout = () => {
 
     const navigate = useNavigate();

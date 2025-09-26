@@ -3,15 +3,14 @@ import AgGridReactComponent from '../components/AgGridReactComponent';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { AgGridDeleteButton, AgGridEditButton, CsvButton, InsertButton } from '../components/ButtonComponent';
-import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
+import { MenuType, SideMenuType, type BoardRole } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
-import { EditBoardModal, InsertBoardModal } from '../components/BackOfficeModal';
+import { EditBoardRoleModal, InsertBoardRoleModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
-import type { ICellRendererParams } from 'ag-grid-community';
+import type { ValueFormatterParams } from 'ag-grid-community';
 import { useAuth } from '../contexts/AuthContext';
-import type { BoardRole } from './BackOfficeBoardPage';
 
 const BackOfficeBoardRole = () => {
 
@@ -39,27 +38,29 @@ const BackOfficeBoardRole = () => {
     ]);
     
     const [colDefs] = useState([
-        { field: "id", headerName: "ID", filter: true, flex:2, },
+        { field: "id", headerName: "ID", filter: true, flex:1, },
         {
             headerName: "게시판",
             children: [
                 {
                     colId: "board_category_code",
                     headerName: "코드",
+                    filter: true,
                     field: "board.categoryCode",
-                    flex:2,
+                    flex:1,
                 },
                 {
                     colId: "board_category_name",
                     headerName: "이름",
+                    filter: true,
                     field: "board.categoryCode",
-                    flex:2,
+                    flex:1,
                 },
                 {
                     colId: "board_comment",
                     headerName: "설명",
                     field: "board.comment",
-                    flex:2,
+                    flex:1,
                 },
             ]
         },
@@ -69,14 +70,16 @@ const BackOfficeBoardRole = () => {
                 {
                     colId: "board_role_code_code",
                     headerName: "코드",
+                    filter: true,
                     field: "boardRoleCode.code",
-                    flex:2,
+                    flex:1,
                 },
                 {
                     colId: "board_role_code_name",
                     headerName: "이름",
+                    filter: true,
                     field: "boardRoleCode.name",
-                    flex:2,
+                    flex:1,
                 },
             ]
         },
@@ -86,42 +89,29 @@ const BackOfficeBoardRole = () => {
                 {
                     colId: "member_role_code_code",
                     headerName: "코드",
+                    filter: true,
                     field: "memberRoleCode.code",
-                    flex:2,
+                    flex:1,
+                    valueFormatter: (params : ValueFormatterParams) => {
+                        return params.value ? params.value : "전체";
+                    }
                 },
                 {
                     colId: "member_role_code_name",
                     headerName: "이름",
+                    filter: true,
                     field: "memberRoleCode.name",
-                    flex:2,
-                },
-            ]
-        },
-        {
-            headerName: "관리",
-            children: [
-                {
-                    colId: "edit",
-                    headerName: "수정",
-                    width:160,
-                    cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridEditButton {...params} svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={(row) => onClickEdit(row)}></AgGridEditButton>
-                    },
-                },
-                {
-                    colId: "delete",
-                    headerName: "삭제",
-                    width:160,
-                    cellRenderer: (params: ICellRendererParams) => {
-                        return <AgGridDeleteButton {...params} svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={(row) => onClickDelete(row)}></AgGridDeleteButton>
-                    },
+                    flex:1,
+                    valueFormatter: (params : ValueFormatterParams) => {
+                        return params.value ? params.value : "전체";
+                    }
                 },
             ]
         },
     ]);
 
     const fetchBoards = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRole`)
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoles`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json() as Promise<BoardRole[]>;
@@ -136,12 +126,26 @@ const BackOfficeBoardRole = () => {
         fetchBoards();
     }, [])
 
-    const onClickEdit = (data: any) => {
+    const onClickEdit = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
         setIsEditModalOpenOpen(true);
         SetEditModalData(data);
     }
 
-    const onClickDelete = (data: any) => {
+    const onClickDelete = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
         if(!confirm(`${data.categoryName} 게시판을 삭제하시겠습니까?`)) return;
 
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/board/${data.id}`, {
@@ -173,11 +177,13 @@ const BackOfficeBoardRole = () => {
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
                     <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 목록 ${formattedDate}.csv`})}/>
+                    <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
+                    <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 권한 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertBoardModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchBoards}></InsertBoardModal>
-                <EditBoardModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchBoards} data={editModalData}></EditBoardModal>
+                <InsertBoardRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchBoards}/>
+                <EditBoardRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchBoards} data={editModalData}/>
             </div>
         </section>
     )
