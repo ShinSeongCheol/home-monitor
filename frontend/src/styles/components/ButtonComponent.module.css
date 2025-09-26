@@ -12,7 +12,7 @@
 
     border: none;
 
-    width: 80px;
+    min-width: 80px;
     height: 30px;
 
     display: flex;
@@ -80,4 +80,29 @@
 .aggrid.button {
     width: 100%;
     height: 100%;
+}
+
+.fileInput{
+    display: none;
+}
+
+.label {
+    cursor: pointer;
+
+    border: none;
+
+    min-width: 80px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    font-size: 12px;
+}
+
+.label.csv {
+    background-color: #31bf7d;
+    color: white;
 }

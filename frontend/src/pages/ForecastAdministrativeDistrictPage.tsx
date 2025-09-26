@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
+import { useEffect, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
 import { type ColDef } from 'ag-grid-community';
 import * as XLSX from "xlsx";
 import { useAuth } from "../contexts/AuthContext";
@@ -10,6 +10,7 @@ import type { AgGridReact } from "ag-grid-react";
 import { MenuType, SideMenuType } from "../layouts/BackOfficeLayout";
 import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
 import useFormattedDate from "../hooks/useFormattedDate";
+import { CsvButton, FileButton, InsertButton } from "../components/ButtonComponent";
 
 interface AdministartiveDistrict {
     type: string;
@@ -155,10 +156,9 @@ const ForecastAdministrativeDistrict = () => {
                 </nav>
 
                 <div className={styles.buttonContainer}>
-                    <label className={styles.fileUploadLabel} htmlFor="fileInput"> <File size={16} color="white" fill="white" strokeWidth={1} /> 엑셀 불러오기</label>
-                    <input className={styles.fileInputButton} type="file" name="fileInput" id="fileInput" onChange={onChangeExcel} />
-                    <button className={styles.fileUploadButton} type="submit"><Upload size={16} color="white" fill="white" strokeWidth={1} />업로드</button>
-                    <label className={styles.fileUploadLabel} onClick={handleCsvDownload}> <Download size={16} color="white" fill="white" strokeWidth={1} /> CSV 다운로드</label>
+                    <FileButton svg={<File color='white' size={16} strokeWidth={2}/>} value='불러오기' type='file' onChange={onChangeExcel}/>
+                    <InsertButton svg={<Upload size={16} color="white" fill="white" strokeWidth={1} />}  value='업로드' type='submit' onClick={() => {}}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={handleCsvDownload}/>
                 </div>
 
                 <AgGridReactComponent ref={agGridRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>

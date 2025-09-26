@@ -1,7 +1,7 @@
 import type { ICellRendererParams } from 'ag-grid-community';
 import styles from '../styles/components/ButtonComponent.module.css';
-import { Plus, SquarePen, Trash } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { SquarePen, Trash } from 'lucide-react';
+import type { ChangeEventHandler, ReactNode } from 'react';
 
 export const AgGridBoardButtonGroup = (props: ICellRendererParams) => {
 
@@ -29,9 +29,24 @@ type ButtonProps = {
 }
 
 export const InsertButton = ({svg, value, type, onClick}: ButtonProps) => {
-    <Plus color='white' size={16} strokeWidth={2}/>
     return (
         <button className={`${styles.button} ${styles.insert}`} type={type} onClick={onClick}>{svg}{value}</button>
+    )
+}
+
+type FileButtonProps = {
+    svg: ReactNode;
+    value: string;
+    type: "button" | "file";
+    onChange: ChangeEventHandler<HTMLInputElement>;
+}
+
+export const FileButton = ({svg, value, type, onChange}: FileButtonProps) => {
+    return (
+        <div>
+            <label className={`${styles.label} ${styles.csv}`} htmlFor="fileInput">{svg}{value}</label>
+            <input className={styles.fileInput} type="file" name="fileInput" id="fileInput" onChange={onChange} />
+        </div>
     )
 }
 
