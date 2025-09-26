@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seongcheol.homemonitor.dto.BoardDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 
 @Slf4j
@@ -31,32 +35,32 @@ public class BackOfficeController {
     private BackOfficeService backOfficeService;
 
     @GetMapping("/boards")
-    public ResponseEntity<List<BoardDto>> getBoards() {
+    public ResponseEntity<List<BackOfficeBoardDto>> getBoards() {
         log.info("백오피스 게시판 조회 컨트롤러");
 
-        List<BoardDto> boardDtos = backOfficeService.getBoards();
+        List<BackOfficeBoardDto> backOfficeBoardDtos = backOfficeService.getBoards();
 
-        return ResponseEntity.ok(boardDtos);
+        return ResponseEntity.ok(backOfficeBoardDtos);
     }
 
     @PostMapping("/board")
-    public ResponseEntity<BoardDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
+    public ResponseEntity<BackOfficeBoardDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
         log.info("백오피스 게시판 추가 컨트롤러");
         try {
-            BoardDto boardDto = backOfficeService.postBoard(boardRequestDto);    
-            return ResponseEntity.ok(boardDto);
+            BackOfficeBoardDto backOfficeBoardDto = backOfficeService.postBoard(boardRequestDto);    
+            return ResponseEntity.ok(backOfficeBoardDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
     @PutMapping("/board/{boardId}")
-    public ResponseEntity<BoardDto> putBoard(@PathVariable("boardId") Long boardId, @RequestBody BoardRequestDto boardRequestDto) {
+    public ResponseEntity<BackOfficeBoardDto> putBoard(@PathVariable("boardId") Long boardId, @RequestBody BoardRequestDto boardRequestDto) {
         log.info("백오피스 게시판 수정 컨트롤러");
 
         try {
-            BoardDto boardDto = backOfficeService.putBoard(boardId, boardRequestDto);
-            return ResponseEntity.ok(boardDto);
+            BackOfficeBoardDto backOfficeBoardDto = backOfficeService.putBoard(boardId, boardRequestDto);
+            return ResponseEntity.ok(backOfficeBoardDto);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -73,4 +77,13 @@ public class BackOfficeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @GetMapping("/boardRole")
+    public ResponseEntity<List<BackOfficeBoardRoleDto>> getBoardRoles() {
+        log.info("백오피스 게시판 권한 조회 컨트롤러");
+
+        List<BackOfficeBoardRoleDto> boardRoleDtos = backOfficeService.getBoardRoles();
+        return ResponseEntity.ok(boardRoleDtos);
+    }
+    
 }
