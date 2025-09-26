@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.seongcheol.homemonitor.domain.PostEntity;
-import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class BackOfficePostResponseDto {
     private Long id;
-    private BackOfficeMemberDto member;
+    private BackOfficeMemberResponseDto member;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -29,7 +28,7 @@ public class BackOfficePostResponseDto {
     public static BackOfficePostResponseDto fromEntity(PostEntity postEntity) {
         return BackOfficePostResponseDto.builder()
         .id(postEntity.getId())
-        .member(BackOfficeMemberDto.fromEntity(postEntity.getMember()))
+        .member(BackOfficeMemberResponseDto.fromEntity(postEntity.getMember()))
         .title(postEntity.getTitle())
         .content(postEntity.getContent())
         .createdAt(postEntity.getCreatedAt())
