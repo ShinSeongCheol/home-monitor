@@ -96,7 +96,32 @@ public class BackOfficeController {
             return ResponseEntity.ok(backOfficeBoardRoleDto);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
+
+    @PutMapping("/boardRole/{boardRoleId}")
+    public ResponseEntity<BackOfficeBoardRoleDto> putBoardRole(@PathVariable("boardRoleId") Long boardRoleId, @RequestBody BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) {
+        log.info("백오피스 게시판 권한 수정 컨트롤러");
+
+        try {
+            BackOfficeBoardRoleDto backOfficeBoardRoleDto = backOfficeService.putBoardRole(boardRoleId, backOfficeBoardRoleRequestDto);
+            return ResponseEntity.ok(backOfficeBoardRoleDto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/boardRole/{boardRoleId}")
+    public ResponseEntity<String> deleteBoardRole(@PathVariable("boardRoleId") Long boardRoleId) {
+        log.info("백오피스 게시판 권한 삭제 컨트롤러");
+
+        backOfficeService.deleteBoardRole(boardRoleId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/boardRoleCodes")

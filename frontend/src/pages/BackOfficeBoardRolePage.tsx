@@ -146,9 +146,9 @@ const BackOfficeBoardRole = () => {
         if (rows.length === 0) return ;
         const data = rows[0];
 
-        if(!confirm(`${data.categoryName} 게시판을 삭제하시겠습니까?`)) return;
+        if(!confirm(`${data.id}번 게시판 권한을 삭제하시겠습니까?`)) return;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/board/${data.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRole/${data.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

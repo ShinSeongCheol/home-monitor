@@ -89,26 +89,62 @@ public class BackOfficeService {
         return boardRoleEntities.stream().map(BackOfficeBoardRoleDto::fromEntity).toList();
     }
 
-    public BackOfficeBoardRoleDto postBoardRole(BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) throws NoSuchElementException{
+    @Transactional
+    public BackOfficeBoardRoleDto postBoardRole(BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) throws NoSuchElementException, IllegalArgumentException{
+        log.info("게시판 권한 추가 서비스");
 
         BoardEntity boardEntity = boardRepository.findById(backOfficeBoardRoleRequestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
         BoardRoleCodeEntity boardRoleCodeEntity = boardRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getBoardRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 게시판 권한 코드가 없습니다."));
-        MemberRoleCodeEntity memberRoleCodeEntity = memberRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드가 없습니다."));
 
-        if(boardRoleRepository.existsByBoardAndBoardRoleCodeAndMemberRoleCode(boardEntity, boardRoleCodeEntity, memberRoleCodeEntity)) {
-            log.info("존재");
-            return null;
+        MemberRoleCodeEntity memberRoleCodeEntity = null;
+        if(backOfficeBoardRoleRequestDto.getMemberRoleCodeId() != null) {
+            memberRoleCodeEntity = memberRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드가 없습니다."));
         }
 
-        return null;
+        // 중복 확인
+        if(boardRoleRepository.existsByBoardAndBoardRoleCodeAndMemberRoleCode(boardEntity, boardRoleCodeEntity, memberRoleCodeEntity)) {
+            throw new IllegalArgumentException("해당 게시판 권한이 존재합니다.");
+        }
 
-        // BoardRoleEntity boardRoleEntity = BoardRoleEntity.builder()
-        // .board(null)
-        // .boardRoleCode(null)
-        // .memberRoleCode(null)
-        // .build();
+        BoardRoleEntity boardRoleEntity = BoardRoleEntity.builder()
+        .board(boardEntity)
+        .boardRoleCode(boardRoleCodeEntity)
+        .memberRoleCode(memberRoleCodeEntity)
+        .build();
         
-        // return BackOfficeBoardRoleDto.fromEntity(boardRoleRepository.save(boardRoleEntity));
+        return BackOfficeBoardRoleDto.fromEntity(boardRoleRepository.save(boardRoleEntity));
+    }
+
+    @Transactional
+    public BackOfficeBoardRoleDto putBoardRole(Long boardRoleId, BackOfficeBoardRoleRequestDto backOfficeBoardRoleRequestDto) {
+        log.info("게시판 권한 수정 서비스");
+
+        BoardEntity boardEntity = boardRepository.findById(backOfficeBoardRoleRequestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
+        BoardRoleCodeEntity boardRoleCodeEntity = boardRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getBoardRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 게시판 권한 코드가 없습니다."));
+
+        MemberRoleCodeEntity memberRoleCodeEntity = null;
+        if(backOfficeBoardRoleRequestDto.getMemberRoleCodeId() != null) {
+            memberRoleCodeEntity = memberRoleCodeRepository.findById(backOfficeBoardRoleRequestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드가 없습니다."));
+        }
+
+        // 중복 확인
+        if(boardRoleRepository.existsByBoardAndBoardRoleCodeAndMemberRoleCode(boardEntity, boardRoleCodeEntity, memberRoleCodeEntity)) {
+            throw new IllegalArgumentException("해당 게시판 권한이 존재합니다.");
+        }
+
+        BoardRoleEntity boardRoleEntity = boardRoleRepository.findById(boardRoleId).orElseThrow(() -> new NoSuchElementException("해당 게시판 권한이 없습니다."));
+        boardRoleEntity.setBoard(boardEntity);
+        boardRoleEntity.setBoardRoleCode(boardRoleCodeEntity);
+        boardRoleEntity.setMemberRoleCode(memberRoleCodeEntity);
+
+        return BackOfficeBoardRoleDto.fromEntity(boardRoleRepository.save(boardRoleEntity));
+    }
+
+    @Transactional
+    public void deleteBoardRole(Long boardRoleId) {
+        log.info("게시판 권한 삭제 서비스");
+
+        boardRoleRepository.deleteById(boardRoleId);
     }
 
     public List<BackOfficeBoardRoleCodeDto> getBoardRoleCodes() {
