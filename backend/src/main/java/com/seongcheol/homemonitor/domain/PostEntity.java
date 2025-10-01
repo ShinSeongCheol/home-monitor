@@ -56,4 +56,7 @@ public class PostEntity {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReactionEntity> reactions;
 }
