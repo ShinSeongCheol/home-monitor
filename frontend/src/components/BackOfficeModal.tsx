@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import type { Board, BoardRoleCode, Member, MemberRoleCode } from '../layouts/BackOfficeLayout';
+import type { Board, BoardRole, BoardRoleCode, Comment, Member, MemberRoleCode, Post } from '../layouts/BackOfficeLayout';
 import CkEditorComponent from './CkEditorComponent';
 import DOMPurify from 'dompurify';
 
@@ -907,6 +907,310 @@ export const EditPostModal = ({isOpen, setIsOpen, fetchData, data} : editModalPr
                                     </div>
 
                                     <CkEditorComponent data={content} handleChange={setContent}></CkEditorComponent>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [posts, setPosts] = useState<Post[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [parentComments, setParentComments] = useState<Comment[]>();
+    const [content, setContent] = useState<string>("");
+
+    const [selectedPostId, setSelectedPostId] = useState<number>();
+    const [selectedMemberId, setSelectedMemberId] = useState<number>();
+    const [selectedParentCommentId, setSelectedParentCommentId] = useState<number>();
+
+    // board 조회
+    const fetchBoards = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setPosts(res);
+            setSelectedPostId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+            setSelectedMemberId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchBoards();
+        fetchMembers();
+    }, []);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setSelectedParentCommentId(undefined);
+
+            setParentComments(res.filter(value => value.id === selectedPostId)[0].comments)
+        })
+        .catch(err => console.error(err));
+
+    }, [selectedPostId])
+
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                postId: selectedPostId,
+                parentCommentId: selectedParentCommentId,
+                content: content,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json();
+        })
+        .then(res => {
+            alert('댓글이 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(err => console.log(err));
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={`${styles.modal}`}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>댓글 추가</h2>
+                            <p>새로운 댓글을 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>게시물</label>
+                                        <select name='board' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
+                                            {posts?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.title})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>작성자</label>
+                                        <select name='board' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='parentCommentId'>부모 댓글 ID</label>
+                                        <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
+                                            <option>{''}</option>
+                                            {parentComments?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id}</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='content'>내용</label>
+                                        <input type="text" id="content" name="content" value={content} maxLength={128} onChange={(e) => setContent(e.target.value)}/>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [posts, setPosts] = useState<Post[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [parentComments, setParentComments] = useState<Comment[]>();
+    const [content, setContent] = useState<string>("");
+
+    const [selectedPostId, setSelectedPostId] = useState<number>(data.post.id);
+    const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
+    const [selectedParentCommentId, setSelectedParentCommentId] = useState<number>(data.parentComment.id);
+
+    // board 조회
+    const fetchBoards = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setPosts(res);
+            setSelectedPostId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+            setSelectedMemberId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchBoards();
+        fetchMembers();
+    }, []);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setParentComments(res.filter(value => value.id === selectedPostId)[0].comments)
+        })
+        .catch(err => console.error(err));
+
+    }, [selectedPostId])
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                postId: selectedPostId,
+                parentCommentId: selectedParentCommentId,
+                content: content,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Status ${res.status}`);
+            return res.json();
+        })
+        .then(res => {
+            alert('게시물이 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(err => console.error(err));
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>게시물 수정</h2>
+                            <p>게시물을 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>게시물</label>
+                                        <select name='board' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
+                                            {posts?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.title})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>작성자</label>
+                                        <select name='board' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='parentCommentId'>부모 댓글 ID</label>
+                                        <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
+                                            <option>{''}</option>
+                                            {parentComments?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id}</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='content'>내용</label>
+                                        <input type="text" id="content" name="content" value={content} maxLength={128} onChange={(e) => setContent(e.target.value)}/>
+                                    </div>
 
                                 <div className={`${styles.buttonGroup}`}>
                                     <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>

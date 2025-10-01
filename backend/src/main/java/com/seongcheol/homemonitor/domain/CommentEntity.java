@@ -1,6 +1,8 @@
 package com.seongcheol.homemonitor.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +53,10 @@ public class CommentEntity {
     private CommentEntity parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentEntity> childrenComment;
+    @Builder.Default
+    private List<CommentEntity> childrenComment = new ArrayList<>();
 
     @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ReactionEntity> reactions;
+    @Builder.Default
+    private Set<ReactionEntity> reactions = new HashSet<>();
 }

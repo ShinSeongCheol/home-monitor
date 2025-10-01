@@ -48,6 +48,31 @@ export type BoardRoleCode = {
     name: string;
 }
 
+export type Post = {
+    id: number;
+    title: string;
+    content: string;
+    createdAt: Date;
+    updatedAt: Date;
+    member: Member[];
+    comments: Comment[];
+}
+
+export type Comment = {
+    id: number;
+    parentComment: number;
+    comments: Comment[];
+    member: Member[];
+    post: Post[];
+    createdAt: Date;
+    updatedAt: Date;
+    reactions: Reaction[];
+}
+
+export type Reaction = {
+    id: number;
+}
+
 export type Member = {
     id: number;
     email: string;

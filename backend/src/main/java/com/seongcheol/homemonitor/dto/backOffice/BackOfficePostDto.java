@@ -1,9 +1,12 @@
 package com.seongcheol.homemonitor.dto.backOffice;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.backOffice.response.BackOfficeBoardResponseDto;
+import com.seongcheol.homemonitor.dto.backOffice.response.BackOfficeCommentResponseDto;
 import com.seongcheol.homemonitor.dto.backOffice.response.BackOfficeMemberResponseDto;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +30,8 @@ public class BackOfficePostDto {
     private LocalDateTime updatedAt;
     private int view;
 
+    private Set<BackOfficeCommentResponseDto> comments;
+
     public static BackOfficePostDto fromEntity(PostEntity postEntity) {
         return BackOfficePostDto.builder()
         .id(postEntity.getId())
@@ -37,6 +42,7 @@ public class BackOfficePostDto {
         .createdAt(postEntity.getCreatedAt())
         .updatedAt(postEntity.getUpdatedAt())
         .view(postEntity.getView())
+        .comments(postEntity.getComments().stream().map(BackOfficeCommentResponseDto::fromEntity).collect(Collectors.toSet()))
         .build();
     }
 }

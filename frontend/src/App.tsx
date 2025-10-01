@@ -20,6 +20,7 @@ import BackOfficeBoardPage from './pages/BackOfficeBoardPage';
 import BackOfficeBoardRolePage from './pages/BackOfficeBoardRolePage';
 import BackOfficeBoardRoleCodePage from './pages/BackOfficeBoardRoleCodePage';
 import BackOfficePostPage from './pages/BackOfficePostPage';
+import BackOfficeCommentPage from './pages/BackOfficeCommentPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -47,8 +48,8 @@ function App() {
             <Route path="BoardRole" element={<BackOfficeBoardRolePage/>}></Route>
             <Route path="BoardRoleCode" element={<BackOfficeBoardRoleCodePage/>}></Route>
             <Route path="post" element={<BackOfficePostPage/>}></Route>
-            <Route path="Comment" element={SideMenuType.Comment}></Route>
-            <Route path="Reaction" element={SideMenuType.Reaction}></Route>
+            <Route path="comment" element={<BackOfficeCommentPage/>}></Route>
+            <Route path="reaction" element={SideMenuType.Reaction}></Route>
             <Route path="userRoleCode" element={SideMenuType.ReactionCode}></Route>
 
             <Route path="user" element={SideMenuType.User}></Route>

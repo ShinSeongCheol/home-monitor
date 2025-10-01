@@ -10,22 +10,26 @@ import org.springframework.stereotype.Service;
 import com.seongcheol.homemonitor.domain.BoardEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleEntity;
+import com.seongcheol.homemonitor.domain.CommentEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleRepository;
+import com.seongcheol.homemonitor.repository.CommentRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
@@ -45,6 +49,8 @@ public class BackOfficeService {
     private  BoardRoleCodeRepository boardRoleCodeRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private CommentRepository commentRepository;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -248,6 +254,68 @@ public class BackOfficeService {
         log.info("게시물 삭제 서비스");
 
         postRepository.deleteById(postId);
+    }
+
+    public List<BackOfficeCommentDto> getComments() {
+        log.info("댓글 조회 서비스");
+
+        List<CommentEntity> commentEntities = commentRepository.findAll();
+        return commentEntities.stream().map(BackOfficeCommentDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficeCommentDto postComment(BackOfficeCommentRequestDto requestDto) {
+        log.info("댓글 등록 서비스");
+
+        PostEntity postEntity = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
+        CommentEntity parentCommentEntity = null;
+        if (requestDto.getParentCommentId() != null) {
+            commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
+        }
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        CommentEntity commentEntity = CommentEntity.builder()
+        .member(memberEntity)
+        .post(postEntity)
+        .content(requestDto.getContent())
+        .parentComment(parentCommentEntity)
+        .createdAt(currentDateTime)
+        .updatedAt(currentDateTime)
+        .build();
+
+        return BackOfficeCommentDto.fromEntity(commentRepository.save(commentEntity));
+    }
+
+    @Transactional
+    public BackOfficeCommentDto putComment(Long commentId, BackOfficeCommentRequestDto requestDto) {
+        log.info("댓글 수정 서비스");
+
+        PostEntity postEntity = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
+        CommentEntity parentCommentEntity = null;
+        if (requestDto.getParentCommentId() != null) {
+            commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
+        }
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        CommentEntity commentEntity = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다."));
+        commentEntity.setMember(memberEntity);
+        commentEntity.setPost(postEntity);
+        commentEntity.setContent(requestDto.getContent());
+        commentEntity.setParentComment(parentCommentEntity);
+        commentEntity.setUpdatedAt(currentDateTime);
+
+        return BackOfficeCommentDto.fromEntity(commentRepository.save(commentEntity));
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        log.info("댓글 삭제 서비스");
+
+        commentRepository.deleteById(commentId);
     }
 
     public List<BackOfficeMemberDto> getMembers() {

@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
@@ -217,6 +219,50 @@ public class BackOfficeController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<BackOfficeCommentDto>> getComments() {
+        log.info("댓글 조회 컨트롤러");
+
+        List<BackOfficeCommentDto> backOfficeCommentDtos = backOfficeService.getComments();
+        return ResponseEntity.ok(backOfficeCommentDtos);
+    }
+
+    @PostMapping("/comments")
+    public ResponseEntity<BackOfficeCommentDto> postComment(@RequestBody BackOfficeCommentRequestDto requestDto) {
+        log.info("댓글 추가 컨트롤러");
+        
+        try {
+            BackOfficeCommentDto backOfficeCommentDto = backOfficeService.postComment(requestDto);
+            return ResponseEntity.ok(backOfficeCommentDto);
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<BackOfficeCommentDto> putComment(@PathVariable("commentId") Long commentId, @RequestBody BackOfficeCommentRequestDto requestDto) {
+        log.info("댓글 수정 컨트롤러");
+
+        try {
+            BackOfficeCommentDto backOfficeCommentDto = backOfficeService.putComment(commentId, requestDto);
+            return ResponseEntity.ok(backOfficeCommentDto);
+        }
+        catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
+        log.info("댓글 삭제 컨트롤러");
+
+        backOfficeService.deleteComment(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    
     
     @GetMapping("/members")
     public ResponseEntity<List<BackOfficeMemberDto>> getMembers() {

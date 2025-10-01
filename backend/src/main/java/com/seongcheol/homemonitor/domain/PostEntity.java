@@ -1,6 +1,7 @@
 package com.seongcheol.homemonitor.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -55,8 +56,10 @@ public class PostEntity {
     private BoardEntity board;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CommentEntity> comments;
+    @Builder.Default
+    private Set<CommentEntity> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ReactionEntity> reactions;
+    @Builder.Default
+    private Set<ReactionEntity> reactions = new HashSet<>();
 }
