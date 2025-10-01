@@ -104,7 +104,7 @@ const BackOfficeBoardRoleCode = () => {
                         <ChevronRight size={16} color="black" strokeWidth={1} />
                         <li>게시판 관리</li>
                         <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">게시판 권한</li>
+                        <li aria-current="page">게시판 권한 코드</li>
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>

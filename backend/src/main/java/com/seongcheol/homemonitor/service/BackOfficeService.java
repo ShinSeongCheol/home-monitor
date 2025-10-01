@@ -211,13 +211,15 @@ public class BackOfficeService {
         MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
         BoardEntity boardEntity = boardRepository.findById(requestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
 
+        LocalDateTime currentTime = LocalDateTime.now();
+
         PostEntity postEntity = PostEntity.builder()
         .member(memberEntity)
         .board(boardEntity)
         .title(requestDto.getTitle())
         .content(requestDto.getContent())
-        .createdAt(requestDto.getCreatedAt())
-        .updatedAt(requestDto.getUpdatedAt())
+        .createdAt(currentTime)
+        .updatedAt(currentTime)
         .view(0)
         .build();
 
