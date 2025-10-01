@@ -1,7 +1,7 @@
 import styles from '../styles/components/AgGridReactComponent.module.css';
 
 import { AG_GRID_LOCALE_KR } from "@ag-grid-community/locale";
-import { type DateTimeDataTypeDefinition, type SizeColumnsToFitGridStrategy, themeBalham, type ValueFormatterParams } from "ag-grid-community";
+import { type DateTimeDataTypeDefinition, type RowSelectionOptions, type SizeColumnsToFitGridStrategy, themeBalham, type ValueFormatterParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 
@@ -35,6 +35,14 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
         };
     }, []);
 
+    const rowSelection :RowSelectionOptions = useMemo(() => {
+        return {
+            mode: "singleRow",
+            checkboxes: false,
+            enableClickSelection: true,
+        };
+    }, []);
+
     useImperativeHandle(ref, () => {
         return agGridRef.current as AgGridReact
     }, []);
@@ -64,7 +72,16 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
     
     return(
         <div ref={divRef} className={styles.container}>
-            <AgGridReact ref={agGridRef} theme={themeBalham} autoSizeStrategy={autoSizeStrategy} columnDefs={colDefs} rowData={rowData} pagination={true} localeText={AG_GRID_LOCALE_KR} dataTypeDefinitions={dataTypeDefinitions} rowSelection={ {mode:'singleRow'}} />
+            <AgGridReact 
+                ref={agGridRef} 
+                theme={themeBalham} 
+                autoSizeStrategy={autoSizeStrategy} 
+                columnDefs={colDefs} 
+                rowData={rowData} 
+                pagination={true} 
+                localeText={AG_GRID_LOCALE_KR} 
+                dataTypeDefinitions={dataTypeDefinitions} 
+                rowSelection={rowSelection} />
         </div>
     )
 });
