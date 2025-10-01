@@ -271,7 +271,7 @@ public class BackOfficeService {
         MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
         CommentEntity parentCommentEntity = null;
         if (requestDto.getParentCommentId() != null) {
-            commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
+            parentCommentEntity = commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
         }
 
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -296,7 +296,7 @@ public class BackOfficeService {
         MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
         CommentEntity parentCommentEntity = null;
         if (requestDto.getParentCommentId() != null) {
-            commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
+            parentCommentEntity = commentRepository.findById(requestDto.getParentCommentId()).orElseThrow(() -> new NoSuchElementException("해당 부모 ID가 없습니다."));
         }
 
         LocalDateTime currentDateTime = LocalDateTime.now();

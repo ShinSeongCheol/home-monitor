@@ -1088,18 +1088,17 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
 
     const [selectedPostId, setSelectedPostId] = useState<number>(data.post.id);
     const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
-    const [selectedParentCommentId, setSelectedParentCommentId] = useState<number>(data.parentComment.id);
+    const [selectedParentCommentId, setSelectedParentCommentId] = useState<number>(data.parentComment?.id);
 
     // board 조회
-    const fetchBoards = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments`)
+    const fetchPosts = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json() as Promise<Post[]>;
         })
         .then(res => {
             setPosts(res);
-            setSelectedPostId(res[0].id);
         })
         .catch(err => console.error(err));
     }
@@ -1113,13 +1112,12 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
         })
         .then(res => {
             setMembers(res);
-            setSelectedMemberId(res[0].id);
         })
         .catch(err => console.error(err));
     }
 
     useEffect(() => {
-        fetchBoards();
+        fetchPosts();
         fetchMembers();
     }, []);
 
@@ -1180,8 +1178,8 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
                         <div className={`${styles.modalBody}`}>
                             <form className={styles.modalForm} onSubmit={onClickSubmit}>
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='board'>게시물</label>
-                                        <select name='board' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
+                                        <label htmlFor='post'>게시물</label>
+                                        <select name='post' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
                                             {posts?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.id} ({value.title})</option>
                                             })}
@@ -1189,8 +1187,8 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='board'>작성자</label>
-                                        <select name='board' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                        <label htmlFor='member'>작성자</label>
+                                        <select name='member' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
                                             {members?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
                                             })}
