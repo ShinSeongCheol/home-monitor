@@ -126,3 +126,30 @@
     justify-content: flex-end;
     gap: 4px;
 }
+
+.postModal {
+    position:relative;
+
+    background-color: white;
+
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+
+    width: 1024px;
+    height: 768px;
+
+    overflow: scroll;
+    
+    padding:24px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media screen and (max-width: 1024px) {
+    .postModal {
+        width: 100%;
+    }
+}

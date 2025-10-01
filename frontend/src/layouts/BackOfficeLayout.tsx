@@ -48,6 +48,13 @@ export type BoardRoleCode = {
     name: string;
 }
 
+export type Member = {
+    id: number;
+    email: string;
+    username: string;
+    password: string;   
+}
+
 export type MemberRoleCode = {
     id: number;
     code: string;

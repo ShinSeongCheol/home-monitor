@@ -5,7 +5,9 @@ import { createPortal } from "react-dom";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import type { Board, BoardRoleCode, MemberRoleCode } from '../layouts/BackOfficeLayout';
+import type { Board, BoardRoleCode, Member, MemberRoleCode } from '../layouts/BackOfficeLayout';
+import CkEditorComponent from './CkEditorComponent';
+import DOMPurify from 'dompurify';
 
 type ModalPortalProps = {
     children: ReactNode;
@@ -310,7 +312,7 @@ export const InsertBoardRoleModal = ({isOpen, setIsOpen, fetchData} : insertModa
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='boardRoleCode'>이름</label>
+                                        <label htmlFor='boardRoleCode'>게시판 권한</label>
                                         <select name='boardRoleCode' value={selectedBoardRoleCodeId} onChange={(e) => setSelectedBoardRoleCodeId(Number(e.target.value))}>
                                             {boardRoleCodes?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
@@ -319,7 +321,7 @@ export const InsertBoardRoleModal = ({isOpen, setIsOpen, fetchData} : insertModa
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='memberRoleCode'>설명</label>
+                                        <label htmlFor='memberRoleCode'>사용자 권한</label>
                                         <select name='memberRoleCode' value={selectedMemberRoleCodeId} onChange={(e) => setSelectedMemberRoleCodeId(Number(e.target.value))}>
                                             <option>전체</option>
                                             {memberRoleCodes?.map((value) => {
@@ -455,7 +457,7 @@ export const EditBoardRoleModal = ({isOpen, setIsOpen, fetchData, data} : editMo
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='boardRoleCode'>이름</label>
+                                        <label htmlFor='boardRoleCode'>게시판 권한</label>
                                         <select name='boardRoleCode' value={selectedBoardRoleCodeId} onChange={(e) => setSelectedBoardRoleCodeId(Number(e.target.value))}>
                                             {boardRoleCodes?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
@@ -464,7 +466,7 @@ export const EditBoardRoleModal = ({isOpen, setIsOpen, fetchData, data} : editMo
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label htmlFor='memberRoleCode'>설명</label>
+                                        <label htmlFor='memberRoleCode'>사용자 권한</label>
                                         <select name='memberRoleCode' value={selectedMemberRoleCodeId} onChange={(e) => setSelectedMemberRoleCodeId(Number(e.target.value))}>
                                             <option>전체</option>
                                             {memberRoleCodes?.map((value) => {
@@ -630,6 +632,281 @@ export const EditBoardRoleCodeModal = ({isOpen, setIsOpen, fetchData, data} : ed
                                         <input type="text" id="name" name="name" value={name} maxLength={16} onChange={(e) => setName(e.target.value)}/>
                                     </div>
                                 </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const InsertPostModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [boards, setBoards] = useState<Board[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [title, setTitle] = useState<string>();
+    const [content, setContent] = useState<string>("");
+
+    const [selectedBoardId, setSelectedBoardId] = useState<number>();
+    const [selectedMemberId, setSelectedMemberId] = useState<number>();
+
+    // board 조회
+    const fetchBoards = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boards`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Board[]>;
+        })
+        .then(res => {
+            setBoards(res);
+            setSelectedBoardId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+            setSelectedMemberId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchBoards();
+        fetchMembers();
+    }, []);
+
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                boardId: selectedBoardId,
+                title: title,
+                content: content,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json();
+        })
+        .then(res => {
+            alert('게시물이 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(err => console.log(err));
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={`${styles.postModal}`}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>게시물 추가</h2>
+                            <p>새로운 게시물을 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>게시판</label>
+                                        <select name='board' value={selectedBoardId} onChange={(e) => setSelectedBoardId(Number(e.target.value))}>
+                                            {boards?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.categoryCode} ({value.categoryName})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>작성자</label>
+                                        <select name='board' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='title'>제목</label>
+                                        <input type="text" id="title" name="title" value={title} maxLength={16} onChange={(e) => setTitle(e.target.value)}/>
+                                    </div>
+
+                                    <CkEditorComponent data={content} handleChange={setContent}></CkEditorComponent>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditPostModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [boards, setBoards] = useState<Board[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [title, setTitle] = useState<string>(data.title);
+    
+    DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+        if(data.tagName === 'iframe') {
+            const el = node as Element;
+            const src = el.getAttribute('src') || '';
+            const allowedSrc = ['https://www.youtube.com/embed/', 'https://www.dailymotion.com/embed/']
+
+            const isAllowed = allowedSrc.some(prefix => src.startsWith(prefix));
+            if(!isAllowed)
+                el.remove()
+        }
+    });
+
+    const santiizedContent = DOMPurify.sanitize(data.content, {
+        ADD_TAGS: ["iframe"],
+        ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
+    });
+
+    const [content, setContent] = useState<string>(santiizedContent);
+
+    const [selectedBoardId, setSelectedBoardId] = useState<number>(data.board.id);
+    const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
+
+
+    // board 조회
+    const fetchBoards = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boards`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Board[]>;
+        })
+        .then(res => {
+            setBoards(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchBoards();
+        fetchMembers();
+    }, []);
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                boardId: selectedBoardId,
+                title: title,
+                content: content,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Status ${res.status}`);
+            return res.json();
+        })
+        .then(res => {
+            alert('게시물이 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(err => console.error(err));
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.postModal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>게시물 수정</h2>
+                            <p>게시물을 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={styles.formGroup}>
+                                        <label htmlFor='board'>게시판</label>
+                                        <select name='board' value={selectedBoardId} onChange={(e) => setSelectedBoardId(Number(e.target.value))}>
+                                            {boards?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.categoryCode} ({value.categoryName})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='board'>작성자</label>
+                                        <select name='board' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='title'>제목</label>
+                                        <input type="text" id="title" name="title" value={title} maxLength={16} onChange={(e) => setTitle(e.target.value)}/>
+                                    </div>
+
+                                    <CkEditorComponent data={content} handleChange={setContent}></CkEditorComponent>
 
                                 <div className={`${styles.buttonGroup}`}>
                                     <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>

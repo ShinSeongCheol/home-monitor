@@ -18,13 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 
 
@@ -169,6 +173,59 @@ public class BackOfficeController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<BackOfficePostDto>> getPosts() {
+        log.info("백오피스 게시물 조회 컨트롤러");
+
+        List<BackOfficePostDto> backOfficePostDtos = backOfficeService.getPosts();
+
+        return ResponseEntity.ok(backOfficePostDtos);
+    }
+    
+    @PostMapping("/posts")
+    public ResponseEntity<BackOfficePostDto> postPost(@RequestBody BackOfficePostRequestDto requestDto) {
+        log.info("백오피스 게시물 추가 컨트롤러");
+
+        try {
+            BackOfficePostDto backOfficePostDto = backOfficeService.postPost(requestDto);
+            return ResponseEntity.ok(backOfficePostDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<BackOfficePostDto> putPost(@PathVariable("postId") Long postId, @RequestBody BackOfficePostRequestDto requestDto) {
+        log.info("백오피스 게시물 수정 컨트롤러");
+
+        try {
+            BackOfficePostDto backOfficePostDto = backOfficeService.putPost(postId, requestDto);
+            return ResponseEntity.ok(backOfficePostDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
+        log.info("백오피스 게시물 삭제 컨트롤러");
+
+        backOfficeService.deletePost(postId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    
+    @GetMapping("/members")
+    public ResponseEntity<List<BackOfficeMemberDto>> getMembers() {
+        log.info("사용자 조회 컨트롤러");
+
+        List<BackOfficeMemberDto> backOfficeMemberResponseDtos = backOfficeService.getMembers();
+        return ResponseEntity.ok(backOfficeMemberResponseDtos);
+    }
+    
 
     @GetMapping("/memberRoleCodes")
     public ResponseEntity<List<BackOfficeMemberRoleCodeDto>> getMemberRoleCodes() {

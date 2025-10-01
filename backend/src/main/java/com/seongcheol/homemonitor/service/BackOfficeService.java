@@ -10,18 +10,25 @@ import org.springframework.stereotype.Service;
 import com.seongcheol.homemonitor.domain.BoardEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleEntity;
+import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
+import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleRepository;
+import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
+import com.seongcheol.homemonitor.repository.PostRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +43,10 @@ public class BackOfficeService {
     private  BoardRoleRepository boardRoleRepository;
     @Autowired
     private  BoardRoleCodeRepository boardRoleCodeRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private MemberRepository memberRepository;
     @Autowired
     private MemberRoleCodeRepository memberRoleCodeRepository;
 
@@ -184,6 +195,64 @@ public class BackOfficeService {
         log.info("게시판 권한 코드 삭제 서비스");
 
         boardRoleCodeRepository.deleteById(boardRoleCodeId);
+    }
+
+    public List<BackOfficePostDto> getPosts() {
+        log.info("게시물 조회 서비스");
+
+        List<PostEntity> postEntities = postRepository.findAll();
+        return postEntities.stream().map(BackOfficePostDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficePostDto postPost(BackOfficePostRequestDto requestDto) {
+        log.info("게시물 추가 서비스");
+
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
+        BoardEntity boardEntity = boardRepository.findById(requestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
+
+        PostEntity postEntity = PostEntity.builder()
+        .member(memberEntity)
+        .board(boardEntity)
+        .title(requestDto.getTitle())
+        .content(requestDto.getContent())
+        .createdAt(requestDto.getCreatedAt())
+        .updatedAt(requestDto.getUpdatedAt())
+        .view(0)
+        .build();
+
+        return BackOfficePostDto.fromEntity(postRepository.save(postEntity));
+    }
+
+    @Transactional
+    public BackOfficePostDto putPost(Long postId, BackOfficePostRequestDto requestDto) throws NoSuchElementException {
+        log.info("게시물 수정 서비스");
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 유저가 없습니다."));
+        BoardEntity boardEntity = boardRepository.findById(requestDto.getBoardId()).orElseThrow(() -> new NoSuchElementException("해당 게시판이 없습니다."));
+
+        postEntity.setBoard(boardEntity);
+        postEntity.setMember(memberEntity);
+        postEntity.setTitle(requestDto.getTitle());
+        postEntity.setContent(requestDto.getContent());
+        postEntity.setUpdatedAt(LocalDateTime.now());
+
+        return BackOfficePostDto.fromEntity(postRepository.save(postEntity));
+    }
+
+    @Transactional
+    public void deletePost(Long postId) {
+        log.info("게시물 삭제 서비스");
+
+        postRepository.deleteById(postId);
+    }
+
+    public List<BackOfficeMemberDto> getMembers() {
+        log.info("사용자 조회 서비스");
+
+        List<MemberEntity> memberEntities = memberRepository.findAll();
+        return memberEntities.stream().map(BackOfficeMemberDto::fromEntity).toList();
     }
 
     public List<BackOfficeMemberRoleCodeDto> getMemberRoleCodes() {
