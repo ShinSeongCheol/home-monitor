@@ -19,6 +19,7 @@ import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
@@ -126,15 +127,52 @@ public class BackOfficeController {
 
     @GetMapping("/boardRoleCodes")
     public ResponseEntity<List<BackOfficeBoardRoleCodeDto>> getBoardRoleCodes() {
-        log.info("백오피스 게시판 권한 조회 컨트롤러");
+        log.info("백오피스 게시판 권한 코드 조회 컨트롤러");
 
         List<BackOfficeBoardRoleCodeDto> boardRoleDtos = backOfficeService.getBoardRoleCodes();
         return ResponseEntity.ok(boardRoleDtos);
     }
 
+    @PostMapping("/boardRoleCodes")
+    public ResponseEntity<BackOfficeBoardRoleCodeDto> postBoardRoleCode(@RequestBody BackOfficeBoardRoleCodeRequestDto requestDto) {
+        log.info("게시판 권한 코드 추가 컨트롤러");
+
+        try {
+            BackOfficeBoardRoleCodeDto backBoardRoleCodeDto = backOfficeService.postBoardRoleCode(requestDto);
+            return ResponseEntity.ok(backBoardRoleCodeDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).build();
+        }
+    }
+
+    @PutMapping("/boardRoleCodes/{boardRoleCodeId}")
+    public ResponseEntity<BackOfficeBoardRoleCodeDto> putBoardRoleCode(@PathVariable("boardRoleCodeId") Long boardRoleCodeId, @RequestBody BackOfficeBoardRoleCodeRequestDto requestDto) {
+        log.info("게시판 권한 코드 추가 컨트롤러");
+
+        try {
+            BackOfficeBoardRoleCodeDto backBoardRoleCodeDto = backOfficeService.putBoardRoleCode(boardRoleCodeId, requestDto);
+            return ResponseEntity.ok(backBoardRoleCodeDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/boardRoleCodes/{boardRoleCodeId}")
+    public ResponseEntity<String> deleteBoardRoleCode(@PathVariable("boardRoleCodeId") Long boardRoleCodeId) {
+        log.info("백오피스 게시판 권한 삭제 컨트롤러");
+
+        backOfficeService.deleteBoardRoleCode(boardRoleCodeId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     @GetMapping("/memberRoleCodes")
     public ResponseEntity<List<BackOfficeMemberRoleCodeDto>> getMemberRoleCodes() {
-        log.info("백오피스 게시판 권한 조회 컨트롤러");
+        log.info("백오피스 사용자 권한 코드 조회 컨트롤러");
 
         List<BackOfficeMemberRoleCodeDto> boardRoleDtos = backOfficeService.getMemberRoleCodes();
         return ResponseEntity.ok(boardRoleDtos);

@@ -110,7 +110,7 @@ const BackOfficeBoardRole = () => {
         },
     ]);
 
-    const fetchBoards = () => {
+    const fetchData = () => {
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoles`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
@@ -123,7 +123,7 @@ const BackOfficeBoardRole = () => {
     }
 
     useEffect(() => {
-        fetchBoards();
+        fetchData();
     }, [])
 
     const onClickEdit = () => {
@@ -158,7 +158,7 @@ const BackOfficeBoardRole = () => {
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             alert('게시판이 삭제되었습니다.');
-            fetchBoards();
+            fetchData();
         })
         .catch(err => console.error(err));
     }
@@ -182,8 +182,8 @@ const BackOfficeBoardRole = () => {
                     <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 권한 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertBoardRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchBoards}/>
-                <EditBoardRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchBoards} data={editModalData}/>
+                <InsertBoardRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditBoardRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
             </div>
         </section>
     )

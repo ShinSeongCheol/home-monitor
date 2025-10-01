@@ -6,10 +6,9 @@ import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
 import { MenuType, SideMenuType, type BoardRole } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
-import { EditBoardRoleModal, InsertBoardRoleModal } from '../components/BackOfficeModal';
+import { EditBoardRoleCodeModal, InsertBoardRoleCodeModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
-import type { ValueFormatterParams } from 'ag-grid-community';
 import { useAuth } from '../contexts/AuthContext';
 
 const BackOfficeBoardRoleCode = () => {
@@ -39,79 +38,12 @@ const BackOfficeBoardRoleCode = () => {
     
     const [colDefs] = useState([
         { field: "id", headerName: "ID", filter: true, flex:1, },
-        {
-            headerName: "게시판",
-            children: [
-                {
-                    colId: "board_category_code",
-                    headerName: "코드",
-                    filter: true,
-                    field: "board.categoryCode",
-                    flex:1,
-                },
-                {
-                    colId: "board_category_name",
-                    headerName: "이름",
-                    filter: true,
-                    field: "board.categoryCode",
-                    flex:1,
-                },
-                {
-                    colId: "board_comment",
-                    headerName: "설명",
-                    field: "board.comment",
-                    flex:1,
-                },
-            ]
-        },
-        {
-            headerName: "게시판 권한 코드",
-            children: [
-                {
-                    colId: "board_role_code_code",
-                    headerName: "코드",
-                    filter: true,
-                    field: "boardRoleCode.code",
-                    flex:1,
-                },
-                {
-                    colId: "board_role_code_name",
-                    headerName: "이름",
-                    filter: true,
-                    field: "boardRoleCode.name",
-                    flex:1,
-                },
-            ]
-        },
-                {
-            headerName: "사용자 권한 코드",
-            children: [
-                {
-                    colId: "member_role_code_code",
-                    headerName: "코드",
-                    filter: true,
-                    field: "memberRoleCode.code",
-                    flex:1,
-                    valueFormatter: (params : ValueFormatterParams) => {
-                        return params.value ? params.value : "전체";
-                    }
-                },
-                {
-                    colId: "member_role_code_name",
-                    headerName: "이름",
-                    filter: true,
-                    field: "memberRoleCode.name",
-                    flex:1,
-                    valueFormatter: (params : ValueFormatterParams) => {
-                        return params.value ? params.value : "전체";
-                    }
-                },
-            ]
-        },
+        { field: "code", headerName: "코드", filter: true, flex:1, },
+        { field: "name", headerName: "이름", filter: true, flex:1, },
     ]);
 
-    const fetchBoards = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoles`)
+    const fetchData = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoleCodes`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json() as Promise<BoardRole[]>;
@@ -123,7 +55,7 @@ const BackOfficeBoardRoleCode = () => {
     }
 
     useEffect(() => {
-        fetchBoards();
+        fetchData();
     }, [])
 
     const onClickEdit = () => {
@@ -148,7 +80,7 @@ const BackOfficeBoardRoleCode = () => {
 
         if(!confirm(`${data.id}번 게시판 권한을 삭제하시겠습니까?`)) return;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRole/${data.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoleCodes/${data.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,8 +89,8 @@ const BackOfficeBoardRoleCode = () => {
         })
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            alert('게시판이 삭제되었습니다.');
-            fetchBoards();
+            alert('게시판권한 코드가 삭제되었습니다.');
+            fetchData();
         })
         .catch(err => console.error(err));
     }
@@ -182,8 +114,8 @@ const BackOfficeBoardRoleCode = () => {
                     <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 권한 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertBoardRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchBoards}/>
-                <EditBoardRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchBoards} data={editModalData}/>
+                <InsertBoardRoleCodeModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditBoardRoleCodeModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
             </div>
         </section>
     )

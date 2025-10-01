@@ -1,5 +1,6 @@
 package com.seongcheol.homemonitor.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -37,5 +38,6 @@ public class BoardRoleCodeEntity {
     private String name;
 
     @OneToMany(mappedBy = "boardRoleCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BoardRoleEntity> boardRole;
+    @Builder.Default
+    private Set<BoardRoleEntity> boardRole  = new HashSet<>();;
 }

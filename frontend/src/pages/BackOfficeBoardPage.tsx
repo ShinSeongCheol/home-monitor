@@ -45,7 +45,7 @@ const BackOfficeBoard = () => {
         { field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true, flex:1 },
     ]);
 
-    const fetchBoards = () => {
+    const fetchData = () => {
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boards`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
@@ -58,7 +58,7 @@ const BackOfficeBoard = () => {
     }
 
     useEffect(() => {
-        fetchBoards();
+        fetchData();
     }, [])
 
     const onClickEdit = () => {
@@ -93,7 +93,7 @@ const BackOfficeBoard = () => {
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             alert('게시판이 삭제되었습니다.');
-            fetchBoards();
+            fetchData();
         })
         .catch(err => console.error(err));
     }
@@ -117,8 +117,8 @@ const BackOfficeBoard = () => {
                     <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertBoardModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchBoards}></InsertBoardModal>
-                <EditBoardModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchBoards} data={editModalData}></EditBoardModal>
+                <InsertBoardModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}></InsertBoardModal>
+                <EditBoardModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}></EditBoardModal>
             </div>
         </section>
     )

@@ -11,11 +11,11 @@ import com.seongcheol.homemonitor.domain.BoardEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.BoardRoleEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
-import com.seongcheol.homemonitor.dto.BoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
@@ -150,6 +150,40 @@ public class BackOfficeService {
     public List<BackOfficeBoardRoleCodeDto> getBoardRoleCodes() {
         List<BoardRoleCodeEntity> boardRoleCodeEntities = boardRoleCodeRepository.findAll();
         return boardRoleCodeEntities.stream().map(BackOfficeBoardRoleCodeDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficeBoardRoleCodeDto postBoardRoleCode(BackOfficeBoardRoleCodeRequestDto requestDto) throws IllegalArgumentException {
+        log.info("게시판 권한 코드 추가 서비스");
+
+        if (boardRoleCodeRepository.findByCode(requestDto.getCode()).isPresent()) throw new IllegalArgumentException("해당 게시판 권한 코드가 존재합니다.");
+
+        BoardRoleCodeEntity boardRoleCodeEntity = BoardRoleCodeEntity.builder()
+        .code(requestDto.getCode())
+        .name(requestDto.getName())
+        .build();
+
+        return BackOfficeBoardRoleCodeDto.fromEntity(boardRoleCodeRepository.save(boardRoleCodeEntity));
+    }
+
+    @Transactional
+    public BackOfficeBoardRoleCodeDto putBoardRoleCode(Long boardRoleCodeId, BackOfficeBoardRoleCodeRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
+        log.info("게시판 권한 코드 수정 서비스");
+
+        BoardRoleCodeEntity boardRoleCodeEntity = boardRoleCodeRepository.findById(boardRoleCodeId).orElseThrow(() -> new NoSuchElementException("해당 게시판 코드가 없습니다."));
+        if(boardRoleCodeEntity.getCode().equals(requestDto.getCode()) != boardRoleCodeRepository.existsByCode(requestDto.getCode())) throw new IllegalArgumentException("해당 게시판 권한 코드가 존재합니다.");
+
+        boardRoleCodeEntity.setCode(requestDto.getCode());
+        boardRoleCodeEntity.setName(requestDto.getName());
+
+        return BackOfficeBoardRoleCodeDto.fromEntity(boardRoleCodeEntity);
+    }
+
+    @Transactional
+    public void deleteBoardRoleCode(Long boardRoleCodeId) {
+        log.info("게시판 권한 코드 삭제 서비스");
+
+        boardRoleCodeRepository.deleteById(boardRoleCodeId);
     }
 
     public List<BackOfficeMemberRoleCodeDto> getMemberRoleCodes() {
