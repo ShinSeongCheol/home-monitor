@@ -27,7 +27,7 @@ public class BackOfficeCommentDto {
     private BackOfficePostResponseDto post;
     private BackOfficeCommentResponseDto parentComment;
     private String content;
-    private List<BackOfficeCommentDto> comments;
+    private List<BackOfficeCommentResponseDto> comments;
     private List<BackOfficeReactionResponseDto> reactions;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -39,7 +39,7 @@ public class BackOfficeCommentDto {
         .post(BackOfficePostResponseDto.fromEntity(commentEntity.getPost()))
         .content(commentEntity.getContent())
         .parentComment(Optional.ofNullable(commentEntity.getParentComment()).map(BackOfficeCommentResponseDto::fromEntity).orElse(null))
-        .comments(commentEntity.getChildrenComment().stream().map(BackOfficeCommentDto::fromEntity).toList())
+        .comments(commentEntity.getChildrenComment().stream().map(BackOfficeCommentResponseDto::fromEntity).toList())
         .reactions(commentEntity.getReactions().stream().map(BackOfficeReactionResponseDto::fromEntity).toList())
         .createdAt(commentEntity.getCreatedAt())
         .updatedAt(commentEntity.getUpdatedAt())

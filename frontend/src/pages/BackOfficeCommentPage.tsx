@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type BoardRole } from '../layouts/BackOfficeLayout';
+import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditCommentModal, InsertCommentModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';

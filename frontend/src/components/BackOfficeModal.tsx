@@ -996,7 +996,7 @@ export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalP
             body: JSON.stringify({
                 memberId: selectedMemberId,
                 postId: selectedPostId,
-                parentCommentId: selectedParentCommentId,
+                parentCommentId: selectedParentCommentId === 0 ? null : selectedParentCommentId ,
                 content: content,
             })
         })
@@ -1049,7 +1049,7 @@ export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalP
                                     <div className={styles.formGroup}>
                                         <label htmlFor='parentCommentId'>부모 댓글 ID</label>
                                         <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
-                                            <option>{''}</option>
+                                            <option value="">{''}</option>
                                             {parentComments?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.id}</option>
                                             })}
@@ -1146,7 +1146,7 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
             body: JSON.stringify({
                 memberId: selectedMemberId,
                 postId: selectedPostId,
-                parentCommentId: selectedParentCommentId,
+                parentCommentId: selectedParentCommentId === 0 ? null : selectedParentCommentId,
                 content: content,
             })
         })
@@ -1198,7 +1198,7 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
                                     <div className={styles.formGroup}>
                                         <label htmlFor='parentCommentId'>부모 댓글 ID</label>
                                         <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
-                                            <option>{''}</option>
+                                            <option value="">{''}</option>
                                             {parentComments?.map((value) => {
                                                 return <option key={value.id} value={value.id}>{value.id}</option>
                                             })}
