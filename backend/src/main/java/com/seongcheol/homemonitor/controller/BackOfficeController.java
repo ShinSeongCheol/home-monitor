@@ -28,6 +28,7 @@ import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
@@ -381,6 +382,42 @@ public class BackOfficeController {
 
         List<BackOfficeMemberDto> backOfficeMemberResponseDtos = backOfficeService.getMembers();
         return ResponseEntity.ok(backOfficeMemberResponseDtos);
+    }
+
+    @PostMapping("/members")
+    public ResponseEntity<BackOfficeMemberDto> postMember(@RequestBody BackOfficeMemberRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 추가 컨트롤러");
+
+        try {
+            BackOfficeMemberDto memberDto = backOfficeService.postMember(requestDto);
+            return ResponseEntity.ok(memberDto);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PutMapping("/members/{memberId}")
+    public ResponseEntity<BackOfficeMemberDto> putMember(@PathVariable("memberId") Long memberId, @RequestBody BackOfficeMemberRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 수정 컨트롤러");
+        try {
+            BackOfficeMemberDto memberDto = backOfficeService.putMember(memberId, requestDto);
+            return ResponseEntity.ok(memberDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/members/{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId) {
+        log.info("백오피스 사용자 삭제 컨트롤러");
+
+        backOfficeService.deleteMember(memberId);
+        return ResponseEntity.ok(null);
     }
     
 

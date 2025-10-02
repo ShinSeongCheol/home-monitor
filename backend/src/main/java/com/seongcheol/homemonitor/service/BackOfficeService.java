@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.seongcheol.homemonitor.domain.BoardEntity;
@@ -17,6 +18,8 @@ import com.seongcheol.homemonitor.domain.MemberRoleEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.domain.ReactionCodeEntity;
 import com.seongcheol.homemonitor.domain.ReactionEntity;
+import com.seongcheol.homemonitor.domain.SocialAccountEntity;
+import com.seongcheol.homemonitor.dto.MemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
@@ -30,6 +33,7 @@ import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
@@ -46,6 +50,7 @@ import com.seongcheol.homemonitor.repository.MemberRoleRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
 import com.seongcheol.homemonitor.repository.ReactionCodeRepository;
 import com.seongcheol.homemonitor.repository.ReactionRepository;
+import com.seongcheol.homemonitor.repository.SocialAccountRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +75,10 @@ public class BackOfficeService {
     private ReactionCodeRepository reactionCodeRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SocialAccountRepository socialAccountRepository;
     @Autowired
     private MemberRoleRepository memberRoleRepository;
     @Autowired
@@ -472,6 +481,92 @@ public class BackOfficeService {
 
         List<MemberEntity> memberEntities = memberRepository.findAll();
         return memberEntities.stream().map(BackOfficeMemberDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficeMemberDto postMember(BackOfficeMemberRequestDto requestDto) throws IllegalArgumentException, NoSuchElementException {
+        log.info("사용자 추가 서비스");
+
+        // 멤버 엔티티에 이메일이 존재
+        if (memberRepository.existsByEmail(requestDto.getEmail())) {
+            // 소셜 계정 엔티티에 Provider가 local이 있는지 확인 후 없으면 생성
+            MemberEntity memberEntity = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new NoSuchElementException("해당 이메일의 사용자가 없습니다."));
+
+            // Local 계정 있으면 에러 처리
+            if (socialAccountRepository.existsByProviderAndProviderId("LOCAL", memberEntity.getId())) {
+                throw new IllegalArgumentException("해당 이메일은 로컬 계정이 있습니다.");
+            }
+
+            socialAccountRepository.findByProviderAndProviderId("LOCAL", memberEntity.getId())
+                .orElseGet(
+                    () -> {
+                        SocialAccountEntity newSocialAccountEntity = SocialAccountEntity.builder()
+                            .member(memberEntity)
+                            .provider("LOCAL")
+                            .providerId(memberEntity.getId())
+                            .build()
+                        ;
+                        
+                        return socialAccountRepository.save(newSocialAccountEntity);
+                    }
+                );
+            
+            memberEntity.setUsername(requestDto.getUsername());
+            memberEntity.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+
+            return BackOfficeMemberDto.fromEntity(memberRepository.save(memberEntity));
+
+        // 없으면 계정 생성
+        }else {
+            MemberEntity memberEntity = MemberEntity.builder()
+                .email(requestDto.getEmail())
+                .username(requestDto.getUsername())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
+                .build()
+            ;
+
+            MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+
+            MemberRoleCodeEntity memberRoleCodeUserEntity = memberRoleCodeRepository.findByCode("ROLE_USER").orElseThrow(() -> new NoSuchElementException("유저 권한이 없습니다."));
+            MemberRoleEntity memberRoleEntity = MemberRoleEntity.builder()
+                .member(savedMemberEntity)
+                .memberRoleCode(memberRoleCodeUserEntity)
+                .build()
+            ;
+
+            memberRoleRepository.save(memberRoleEntity);
+
+            SocialAccountEntity socialAccountEntity = SocialAccountEntity.builder()
+                .member(savedMemberEntity)
+                .provider("LOCAL")
+                .providerId(savedMemberEntity.getId())
+                .build()
+            ;
+
+            socialAccountRepository.save(socialAccountEntity);
+
+            return BackOfficeMemberDto.fromEntity(socialAccountEntity.getMember());
+        }
+    }
+
+    @Transactional
+    public BackOfficeMemberDto putMember(Long memberRoleId, BackOfficeMemberRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
+        log.info("사용자 수정 서비스");
+
+        // 유저와 비밀번호 확인
+        MemberEntity memberEntity = memberRepository.findByEmailAndSocialAccountsProvider(requestDto.getEmail(), "LOCAL").orElseThrow();
+
+        memberEntity.setUsername(requestDto.getUsername());
+        memberEntity.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+
+        return BackOfficeMemberDto.fromEntity(memberRepository.save(memberEntity));
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        log.info("사용자 삭제 서비스");
+
+        memberRepository.deleteById(memberId);
     }
 
     public List<BackOfficeMemberRoleDto> getMemberRoles() {

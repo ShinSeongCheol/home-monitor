@@ -1772,6 +1772,192 @@ export const EditReactionCodeModal = ({isOpen, setIsOpen, fetchData, data} : edi
     )
 }
 
+export const InsertUserModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [email, setEamil] = useState("");
+    const [username, setUserName] = useState("");
+    const [password, setPasswrod] = useState("");
+    const [passwordConfirm, setPasswrodConfirm] = useState("");
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                email: email,
+                username: username,
+                password: password
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자가 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 추가</h2>
+                            <p>새로운 사용자를 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='email'>이메일</label>
+                                        <input type="email" id="email" name="email" value={email} maxLength={16} required onChange={(e) => setEamil(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='username'>이름</label>
+                                        <input type="text" id="username" name="username" value={username} maxLength={16} onChange={(e) => setUserName(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='password'>비밀번호</label>
+                                        <input type="password" id="password" name="password" value={password} maxLength={32} onChange={(e) => setPasswrod(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='passwordConfirm'>비밀번호 확인</label>
+                                        <input type="password" id="passwordConfirm" name="passwordConfirm" value={passwordConfirm} maxLength={32} onChange={(e) => setPasswrodConfirm(e.target.value)}/>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditUserModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [email, setEamil] = useState(data.email);
+    const [username, setUserName] = useState(data.username);
+    const [password, setPasswrod] = useState(data.password);
+    const [passwordConfirm, setPasswrodConfirm] = useState(data.password);
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                email: email,
+                username: username,
+                password: password
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자가 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자가 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 수정</h2>
+                            <p>사용자를 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='email'>이메일</label>
+                                        <input type="eamil" id="email" name="email" value={email} maxLength={16} required onChange={(e) => setEamil(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='username'>이름</label>
+                                        <input type="text" id="username" name="username" value={username} maxLength={16} onChange={(e) => setUserName(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='password'>비밀번호</label>
+                                        <input type="password" id="password" name="password" value={password} maxLength={32} onChange={(e) => setPasswrod(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='passwordConfirm'>비밀번호 확인</label>
+                                        <input type="password" id="passwordConfirm" name="passwordConfirm" value={passwordConfirm} maxLength={32} onChange={(e) => setPasswrodConfirm(e.target.value)}/>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
 export const InsertUserRoleModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
     if (!isOpen) return;
 

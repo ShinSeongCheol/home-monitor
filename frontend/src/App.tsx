@@ -25,6 +25,7 @@ import BackOfficeReactionPage from './pages/BackOfficeReactionPage';
 import BackOfficeReactionCodePage from './pages/BackOfficeReactionCodePage';
 import BackOfficeUserRoleCodePage from './pages/BackOfficeUserRoleCodePage.';
 import BackOfficeUserRolePage from './pages/BackOfficeUserRolePage';
+import BackOfficeUserPage from './pages/BackOfficeUserPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -56,7 +57,7 @@ function App() {
             <Route path="reaction" element={<BackOfficeReactionPage/>}></Route>
             <Route path="reactionCode" element={<BackOfficeReactionCodePage/>}></Route>
 
-            <Route path="user" element={SideMenuType.User}></Route>
+            <Route path="user" element={<BackOfficeUserPage/>}></Route>
             <Route path="userRole" element={<BackOfficeUserRolePage/>}></Route>
             <Route path="userRoleCode" element={<BackOfficeUserRoleCodePage/>}></Route>
 
