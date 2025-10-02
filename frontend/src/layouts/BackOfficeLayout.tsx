@@ -60,6 +60,7 @@ export type Post = {
 
 export type Comment = {
     id: number;
+    content: string;
     parentComment: number;
     comments: Comment[];
     member: Member[];
@@ -71,6 +72,12 @@ export type Comment = {
 
 export type Reaction = {
     id: number;
+}
+
+export type ReactionCode = {
+    id: number;
+    code: string;
+    name: string;
 }
 
 export type Member = {

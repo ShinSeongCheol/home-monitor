@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import type { Board, BoardRole, BoardRoleCode, Comment, Member, MemberRoleCode, Post } from '../layouts/BackOfficeLayout';
+import type { Board, BoardRole, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../layouts/BackOfficeLayout';
 import CkEditorComponent from './CkEditorComponent';
 import DOMPurify from 'dompurify';
 
@@ -969,15 +969,17 @@ export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalP
     }, []);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        if(!selectedPostId) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${selectedPostId}`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json() as Promise<Post[]>;
+            return res.json() as Promise<Post>;
         })
         .then(res => {
             setSelectedParentCommentId(undefined);
 
-            setParentComments(res.filter(value => value.id === selectedPostId)[0].comments)
+            setParentComments(res.comments)
         })
         .catch(err => console.error(err));
 
@@ -1122,13 +1124,15 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
     }, []);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        if(!selectedPostId) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${selectedPostId}`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json() as Promise<Post[]>;
+            return res.json() as Promise<Post>;
         })
         .then(res => {
-            setParentComments(res.filter(value => value.id === selectedPostId)[0].comments)
+            setParentComments(res.comments)
         })
         .catch(err => console.error(err));
 
@@ -1210,6 +1214,394 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
                                         <input type="text" id="content" name="content" value={content} maxLength={128} onChange={(e) => setContent(e.target.value)}/>
                                     </div>
 
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [posts, setPosts] = useState<Post[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [comments, setComments] = useState<Comment[]>();
+    const [reactionCodes, setReactionCodes] = useState<ReactionCode[]>();
+
+    const [selectedPostId, setSelectedPostId] = useState<number>();
+    const [selectedMemberId, setSelectedMemberId] = useState<number>();
+    const [selectedCommentId, setSelectedCommentId] = useState<number>();
+    const [selectedReactionCodeId, setSelectedReactionCodeId] = useState<number>();
+
+    // board 조회
+    const fetchPosts = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setPosts(res);
+            setSelectedPostId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+            setSelectedMemberId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // comment 조회
+    const fetchComments = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Comment[]>;
+        })
+        .then(res => {
+            setComments(res);
+            setSelectedCommentId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // reactionCode 조회
+    const fetchReactionCodes = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<ReactionCode[]>;
+        })
+        .then(res => {
+            setReactionCodes(res);
+            setSelectedReactionCodeId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchPosts();
+        fetchMembers();
+        fetchComments();
+        fetchReactionCodes();
+    }, []);
+
+    useEffect(() => {
+        if (!selectedPostId) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${selectedPostId}`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post>;
+        })
+        .then(res => {
+            setSelectedCommentId(undefined);
+            setComments(res.comments);
+        })
+        .catch(err => console.error(err));
+
+    }, [selectedPostId])
+
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                postId: selectedPostId,
+                commentId: selectedCommentId === 0 ? "" : selectedCommentId,
+                reactionCodeId: selectedReactionCodeId
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res.status;
+            return res.json();
+        })
+        .then(res => {
+            alert('반응이 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(status => {
+            if (status === 400) {
+                alert('해당 반응은 이미 존재합니다.')
+            }else if (status === 409) {
+                alert('해당 반응은 이미 존재합니다.')
+            }
+        });
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={`${styles.modal}`}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>반응 추가</h2>
+                            <p>새로운 반응을 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='post'>게시물</label>
+                                        <select name='post' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
+                                            {posts?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.title})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='comment'>댓글</label>
+                                        <select name='comment' value={selectedCommentId} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
+                                            <option value=""></option>
+                                            {comments?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.content})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='member'>작성자</label>
+                                        <select name='member' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='reactionCode'>반응 코드</label>
+                                        <select name='reactionCode' value={selectedReactionCodeId} onChange={(e) => setSelectedReactionCodeId(Number(e.target.value))}>
+                                            {reactionCodes?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditReactionModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    console.log(data);
+
+    const {accessToken} = useAuth();
+
+    const [posts, setPosts] = useState<Post[]>();
+    const [members, setMembers] = useState<Member[]>();
+    const [comments, setComments] = useState<Comment[]>();
+    const [reactionCodes, setReactionCodes] = useState<ReactionCode[]>();
+
+    const [selectedPostId, setSelectedPostId] = useState<number>(data.post.id);
+    const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
+    const [selectedCommentId, setSelectedCommentId] = useState<number>(data.comment.id);
+    const [selectedReactionCodeId, setSelectedReactionCodeId] = useState<number>(data.reactionCode.id);
+
+    // post 조회
+    const fetchPosts = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post[]>;
+        })
+        .then(res => {
+            setPosts(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // comment 조회
+    const fetchComments = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/comments`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Comment[]>;
+        })
+        .then(res => {
+            setComments(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // reactionCode 조회
+    const fetchReactionCodes = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<ReactionCode[]>;
+        })
+        .then(res => {
+            setReactionCodes(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchPosts();
+        fetchMembers();
+        fetchComments();
+        fetchReactionCodes();
+    }, []);
+
+    useEffect(() => {
+        if (!selectedPostId) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${selectedPostId}`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Post>;
+        })
+        .then(res => {
+            setComments(res.comments);
+        })
+        .catch(err => console.error(err));
+
+    }, [selectedPostId])
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactions/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                postId: selectedPostId,
+                commentId: selectedCommentId === 0 ? "" : selectedCommentId,
+                reactionCodeId: selectedReactionCodeId
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res.status;
+            return res.json();
+        })
+        .then(res => {
+            alert('반응이 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch(status => {
+            if (status === 400) {
+                alert('해당 반응은 이미 존재합니다.')
+            }else if (status === 409) {
+                alert('해당 반응은 이미 존재합니다.')
+            }
+        });
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>게시물 수정</h2>
+                            <p>게시물을 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='post'>게시물</label>
+                                        <select name='post' value={selectedPostId} onChange={(e) => setSelectedPostId(Number(e.target.value))}>
+                                            {posts?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.title})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='comment'>댓글</label>
+                                        <select name='comment' value={selectedCommentId} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
+                                            <option value=""></option>
+                                            {comments?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.id} ({value.content})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='member'>작성자</label>
+                                        <select name='member' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='reactionCode'>반응 코드</label>
+                                        <select name='reactionCode' value={selectedReactionCodeId} onChange={(e) => setSelectedReactionCodeId(Number(e.target.value))}>
+                                            {reactionCodes?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
+                                            })}
+                                        </select>
+                                    </div>
+                                </div>
                                 <div className={`${styles.buttonGroup}`}>
                                     <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
                                     <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>

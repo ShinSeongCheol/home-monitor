@@ -22,10 +22,13 @@ import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeReactionDto;
+import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
 
@@ -181,8 +184,20 @@ public class BackOfficeController {
         log.info("백오피스 게시물 조회 컨트롤러");
 
         List<BackOfficePostDto> backOfficePostDtos = backOfficeService.getPosts();
-
         return ResponseEntity.ok(backOfficePostDtos);
+    }
+
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<BackOfficePostDto> getPost(@PathVariable("postId") Long postId) {
+        log.info("백오피스 특정 게시물 조회 컨트롤러");
+
+        try {
+            BackOfficePostDto backOfficePostDto = backOfficeService.getPost(postId);
+            return ResponseEntity.ok(backOfficePostDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
     
     @PostMapping("/posts")
@@ -263,6 +278,61 @@ public class BackOfficeController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
+    @GetMapping("/reactions")
+    public ResponseEntity<List<BackOfficeReactionDto>> getReactions() {
+        log.info("리액션 조회 컨트롤러");
+
+        List<BackOfficeReactionDto> backOfficeReactionDtos = backOfficeService.getReactions();
+
+        return ResponseEntity.ok(backOfficeReactionDtos);
+    }
+
+    @PostMapping("/reactions")
+    public ResponseEntity<BackOfficeReactionDto> postReaction(@RequestBody BackOfficeReactionRequestDto requestDto) {
+        log.info("리액션 추가 컨트롤러");
+
+        try {
+            BackOfficeReactionDto backOfficeReactionDto = backOfficeService.postReaction(requestDto);
+            return ResponseEntity.ok(backOfficeReactionDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PutMapping("/reactions/{reactionId}")
+    public ResponseEntity<BackOfficeReactionDto> putReactions(@PathVariable("reactionId") Long reactionId, @RequestBody BackOfficeReactionRequestDto requestDto) {
+        log.info("리액션 수정 컨트롤러");
+
+        try {
+            BackOfficeReactionDto backOfficeReactionDto = backOfficeService.putReaction(reactionId, requestDto);
+            return ResponseEntity.ok(backOfficeReactionDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/reactions/{reactionId}")
+    public ResponseEntity<String> deleteReaction(@PathVariable("reactionId") Long reactionId) {
+        backOfficeService.deleteReaction(reactionId);
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/reactionCodes")
+    public ResponseEntity<List<ReactionCodeDto>> getReactionCodes() {
+        log.info("리액션 코드 조회 컨트롤러");
+
+        List<ReactionCodeDto> reactionCodeDtos = backOfficeService.getReactionCodes();
+
+        return ResponseEntity.ok(reactionCodeDtos);
+    }
     
     @GetMapping("/members")
     public ResponseEntity<List<BackOfficeMemberDto>> getMembers() {

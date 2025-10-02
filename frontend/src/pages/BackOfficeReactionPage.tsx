@@ -1,0 +1,227 @@
+import styles from '../styles/pages/BackOfficeBoardPage.module.css';
+import AgGridReactComponent from '../components/AgGridReactComponent';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
+import { MenuType, SideMenuType } from '../layouts/BackOfficeLayout';
+import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import type { AgGridReact } from 'ag-grid-react';
+import useFormattedDate from '../hooks/useFormattedDate';
+import { useAuth } from '../contexts/AuthContext';
+import { EditReactionModal, InsertReactionModal } from '../components/BackOfficeModal';
+
+const BackOfficeReactionPage = () => {
+
+    const {accessToken} = useAuth();
+    const { setMenu }= useBackOfficeMenu();
+    
+    // 초기화
+    useEffect(() => {
+        setMenu({
+            menu: MenuType.Board,
+            sideMenu: SideMenuType.Reaction
+        });
+    }, []);
+
+    const [isInsertModalOpen, setIsInsertModalOpenOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpenOpen] = useState(false);
+    const [editModalData, SetEditModalData] = useState();
+
+    
+    const agGridComponentRef = useRef<AgGridReact>(null);
+    
+    const {formattedDate} = useFormattedDate();
+    
+    const [rowData, setRowData] = useState<Comment[]>([
+    ]);
+    
+    const [colDefs] = useState([
+        { field: "id", headerName: "ID", filter: true, flex:1, },
+        {
+            headerName: "게시물",
+            children: [
+                {
+                    colId: "post_id",
+                    headerName: "ID",
+                    filter: true,
+                    field: "post.id",
+                    flex:1,
+                },
+                {
+                    colId: "post_title",
+                    headerName: "제목",
+                    filter: true,
+                    field: "post.title",
+                    flex:1,
+                },
+                {
+                    colId: "post_member_username",
+                    headerName: "작성자",
+                    filter: true,
+                    field: "post.member.username",
+                    flex:1,
+                },
+                {
+                    colId: "post_member_email",
+                    headerName: "이메일",
+                    filter: true,
+                    field: "post.member.email",
+                    flex:1,
+                },
+            ]
+        },
+        {
+            headerName: "댓글",
+            children: [
+                {
+                    colId: "comment_id",
+                    headerName: "ID",
+                    filter: true,
+                    field: "comment.id",
+                    flex:1,
+                },
+                {
+                    colId: "comment_content",
+                    headerName: "내용",
+                    filter: true,
+                    field: "comment.content",
+                    flex:1,
+                },
+                {
+                    colId: "comment_member_username",
+                    headerName: "작성자",
+                    filter: true,
+                    field: "comment.member.username",
+                    flex:1,
+                },
+                {
+                    colId: "comment_member_email",
+                    headerName: "이메일",
+                    filter: true,
+                    field: "comment.member.email",
+                    flex:1,
+                },
+            ]
+        },
+        {
+            headerName: "작성자",
+            children: [
+                {
+                    colId: "member_email",
+                    headerName: "이메일",
+                    filter: true,
+                    field: "member.email",
+                    flex:1,
+                },
+                {
+                    colId: "member_username",
+                    headerName: "이름",
+                    filter: true,
+                    field: "member.username",
+                    flex:1,
+                },
+            ]
+        },
+        {
+            headerName: "반응 코드",
+            children: [
+                {
+                    colId: "reactionCode.code",
+                    headerName: "코드",
+                    filter: true,
+                    field: "reactionCode.code",
+                    flex:1,
+                },
+                {
+                    colId: "reactionCode.name",
+                    headerName: "이름",
+                    filter: true,
+                    field: "reactionCode.name",
+                    flex:1,
+                },
+
+            ]
+        },
+    ]);
+
+    const fetchData = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactions`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Comment[]>;
+        })
+        .then(res => {
+            setRowData(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    const onClickEdit = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
+        setIsEditModalOpenOpen(true);
+        SetEditModalData(data);
+    }
+
+    const onClickDelete = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        const rows = ref.api.getSelectedRows();
+        if (rows.length === 0) return ;
+        const data = rows[0];
+
+        if(!confirm(`${data.id}번 반응을 삭제하시겠습니까?`)) return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactions/${data.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            alert('댓글이 삭제되었습니다.');
+            fetchData();
+        })
+        .catch(err => console.error(err));
+    }
+    
+    return (
+        <section className={`${styles.section}`}>
+            <div className={styles.container}>
+                <nav className={styles.breadcrumb} aria-label="breadcrumb">
+                    <ol>
+                        <li><Link to={'/backoffice'}>관리자</Link></li>
+                        <ChevronRight size={16} color="black" strokeWidth={1} />
+                        <li>게시판 관리</li>
+                        <ChevronRight size={16} color="black" strokeWidth={1} />
+                        <li aria-current="page">반응 목록</li>
+                    </ol>
+                </nav>
+                <div className={`${styles.buttonGroup}`}>
+                    <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
+                    <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
+                    <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `반응 목록 ${formattedDate}.csv`})}/>
+                </div>
+                <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+                <InsertReactionModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditReactionModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
+            </div>
+        </section>
+    )
+}
+
+export default BackOfficeReactionPage;

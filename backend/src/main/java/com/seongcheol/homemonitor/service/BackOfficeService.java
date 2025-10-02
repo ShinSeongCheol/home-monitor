@@ -14,6 +14,8 @@ import com.seongcheol.homemonitor.domain.CommentEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
+import com.seongcheol.homemonitor.domain.ReactionCodeEntity;
+import com.seongcheol.homemonitor.domain.ReactionEntity;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
@@ -21,10 +23,13 @@ import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeReactionDto;
+import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
 import com.seongcheol.homemonitor.repository.BoardRoleCodeRepository;
@@ -33,6 +38,8 @@ import com.seongcheol.homemonitor.repository.CommentRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
+import com.seongcheol.homemonitor.repository.ReactionCodeRepository;
+import com.seongcheol.homemonitor.repository.ReactionRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +58,10 @@ public class BackOfficeService {
     private PostRepository postRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private ReactionRepository reactionRepository;
+    @Autowired
+    private ReactionCodeRepository reactionCodeRepository;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -210,6 +221,13 @@ public class BackOfficeService {
         return postEntities.stream().map(BackOfficePostDto::fromEntity).toList();
     }
 
+    public BackOfficePostDto getPost(Long postId) {
+        log.info("특정 게시물 조회 서비스");
+
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        return BackOfficePostDto.fromEntity(postEntity);
+    }
+
     @Transactional
     public BackOfficePostDto postPost(BackOfficePostRequestDto requestDto) {
         log.info("게시물 추가 서비스");
@@ -316,6 +334,92 @@ public class BackOfficeService {
         log.info("댓글 삭제 서비스");
 
         commentRepository.deleteById(commentId);
+    }
+
+    public List<BackOfficeReactionDto> getReactions() {
+        log.info("리액션 조회 서비스");
+
+        List<ReactionEntity> reactionEntities = reactionRepository.findAll();
+        return reactionEntities.stream().map(BackOfficeReactionDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficeReactionDto postReaction(BackOfficeReactionRequestDto requestDto) {
+        log.info("리액션 추가 서비스");
+
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
+        PostEntity postEntity = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findById(requestDto.getReactionCodeId()).orElseThrow(() -> new NoSuchElementException("해당 반응 코드가 없습니다."));
+
+        CommentEntity commentEntity = null;
+        if (requestDto.getCommentId() != null) {
+            commentEntity = commentRepository.findById(requestDto.getCommentId()).orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다."));
+        }
+
+        if (commentEntity == null) {
+            if (reactionRepository.existsByPostAndMemberAndReactionCodeAndCommentIsNull(postEntity, memberEntity, reactionCodeEntity)) {
+                throw new IllegalArgumentException("해당 반응은 이미 존재합니다.");
+            }
+        }else {
+            if (reactionRepository.existsByPostAndMemberAndReactionCodeAndComment(postEntity, memberEntity, reactionCodeEntity, commentEntity)) {
+                throw new IllegalArgumentException("해당 반응은 이미 존재합니다.");
+            }
+        }
+
+        ReactionEntity reactionEntity = ReactionEntity.builder()
+        .comment(commentEntity)
+        .member(memberEntity)
+        .post(postEntity)
+        .reactionCode(reactionCodeEntity)
+        .build();
+        
+        return BackOfficeReactionDto.fromEntity(reactionRepository.save(reactionEntity));
+    }
+
+    @Transactional
+    public BackOfficeReactionDto putReaction(Long reactionId, BackOfficeReactionRequestDto requestDto) {
+        log.info("리액션 수정 서비스");
+
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자가 없습니다."));
+        PostEntity postEntity = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new NoSuchElementException("해당 게시물이 없습니다."));
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findById(requestDto.getReactionCodeId()).orElseThrow(() -> new NoSuchElementException("해당 반응 코드가 없습니다."));
+
+        CommentEntity commentEntity = null;
+        if (requestDto.getCommentId() != null) {
+            commentEntity = commentRepository.findById(requestDto.getCommentId()).orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다."));
+        }
+
+        if (commentEntity == null) {
+            if (reactionRepository.existsByPostAndMemberAndReactionCodeAndCommentIsNull(postEntity, memberEntity, reactionCodeEntity)) {
+                throw new IllegalArgumentException("해당 반응은 이미 존재합니다.");
+            }
+        }else {
+            if (reactionRepository.existsByPostAndMemberAndReactionCodeAndComment(postEntity, memberEntity, reactionCodeEntity, commentEntity)) {
+                throw new IllegalArgumentException("해당 반응은 이미 존재합니다.");
+            }
+        }
+
+        ReactionEntity reactionEntity = reactionRepository.findById(reactionId).orElseThrow(() -> new NoSuchElementException("해당 반응이 없습니다."));
+        reactionEntity.setComment(commentEntity);
+        reactionEntity.setMember(memberEntity);
+        reactionEntity.setPost(postEntity);
+        reactionEntity.setReactionCode(reactionCodeEntity);
+        
+        return BackOfficeReactionDto.fromEntity(reactionRepository.save(reactionEntity));
+    }
+
+    @Transactional
+    public void deleteReaction(Long reactionId) {
+        log.info("리액션 삭제 서비스");
+
+        reactionRepository.deleteById(reactionId);
+    }
+
+    public List<ReactionCodeDto> getReactionCodes() {
+        log.info("리액션 코드 조회 서비스");
+
+        List<ReactionCodeEntity> reactionCodeEntities = reactionCodeRepository.findAll();
+        return reactionCodeEntities.stream().map(ReactionCodeDto::fromEntity).toList();
     }
 
     public List<BackOfficeMemberDto> getMembers() {
