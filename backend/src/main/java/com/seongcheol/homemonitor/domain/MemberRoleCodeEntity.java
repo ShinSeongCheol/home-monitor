@@ -1,5 +1,6 @@
 package com.seongcheol.homemonitor.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -15,10 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "member_role_code")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,5 +35,6 @@ public class MemberRoleCodeEntity {
     private String name;
 
     @OneToMany(mappedBy = "memberRoleCode",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BoardRoleEntity> boardRole;
+    @Builder.Default
+    private Set<BoardRoleEntity> boardRole = new HashSet<>();
 }

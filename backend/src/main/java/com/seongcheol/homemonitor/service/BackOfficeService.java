@@ -28,6 +28,7 @@ import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
@@ -468,8 +469,41 @@ public class BackOfficeService {
     }
 
     public List<BackOfficeMemberRoleCodeDto> getMemberRoleCodes() {
+        log.info("사용자 권한 코드 조회 서비스");
+
         List<MemberRoleCodeEntity> memberRoleCodeEntities = memberRoleCodeRepository.findAll();
         return memberRoleCodeEntities.stream().map(BackOfficeMemberRoleCodeDto::fromEntity).toList();
     }
 
-}
+    public BackOfficeMemberRoleCodeDto postMemberRoleCode(BackOfficeMemberRoleCodeRequestDto requestDto) throws IllegalArgumentException {
+        log.info("사용자 권한 코드 추가 서비스");
+
+        if (memberRoleCodeRepository.existsByCode(requestDto.getCode())) throw new IllegalArgumentException("해당 코드는 이미 존재합니다.");
+
+        MemberRoleCodeEntity memberRoleCodeEntity = MemberRoleCodeEntity.builder()
+        .code(requestDto.getCode())
+        .name(requestDto.getName())
+        .build();
+
+        return BackOfficeMemberRoleCodeDto.fromEntity(memberRoleCodeRepository.save(memberRoleCodeEntity));
+    }
+
+    public BackOfficeMemberRoleCodeDto putMemberRoleCode(Long memberRoleCodeId, BackOfficeMemberRoleCodeRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
+        log.info("사용자 권한 코드 수정 서비스");
+
+        MemberRoleCodeEntity memberRoleCodeEntity = memberRoleCodeRepository.findById(memberRoleCodeId).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드가 없습니다."));
+
+        if(memberRoleCodeEntity.getCode().equals(requestDto.getCode()) != memberRoleCodeRepository.existsByCode(requestDto.getCode())) throw new IllegalArgumentException("해당 코드는 이미 존재합니다.");
+
+        memberRoleCodeEntity.setCode(requestDto.getCode());
+        memberRoleCodeEntity.setName(requestDto.getName());
+
+        return BackOfficeMemberRoleCodeDto.fromEntity(memberRoleCodeRepository.save(memberRoleCodeEntity));
+    }
+
+    public void deleteMemberRoleCode(Long memberRoleCodeId) {
+        log.info("사용자 권한 코드 삭제 서비스");
+
+        memberRoleCodeRepository.deleteById(memberRoleCodeId);
+    }
+}   

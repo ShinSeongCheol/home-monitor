@@ -27,6 +27,7 @@ import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
@@ -387,5 +388,41 @@ public class BackOfficeController {
 
         List<BackOfficeMemberRoleCodeDto> boardRoleDtos = backOfficeService.getMemberRoleCodes();
         return ResponseEntity.ok(boardRoleDtos);
+    }
+
+    @PostMapping("/memberRoleCodes")
+    public ResponseEntity<BackOfficeMemberRoleCodeDto> postMemberRoleCode(@RequestBody BackOfficeMemberRoleCodeRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 추가 컨트롤러");
+
+        try {
+            BackOfficeMemberRoleCodeDto boardRoleDtos = backOfficeService.postMemberRoleCode(requestDto);
+            return ResponseEntity.ok(boardRoleDtos);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PutMapping("/memberRoleCodes/{memberRoleCodeId}")
+    public ResponseEntity<BackOfficeMemberRoleCodeDto> putMemberRoleCode(@PathVariable("memberRoleCodeId") Long memberRoleCodeId, @RequestBody BackOfficeMemberRoleCodeRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 수정 컨트롤러");
+        try {
+            BackOfficeMemberRoleCodeDto memberRoleCodeDto = backOfficeService.putMemberRoleCode(memberRoleCodeId, requestDto);
+            return ResponseEntity.ok(memberRoleCodeDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/memberRoleCodes/{memberRoleCodeId}")
+    public ResponseEntity<String> deleteMemberRoleCode(@PathVariable("memberRoleCodeId") Long memberRoleCodeId) {
+        log.info("백오피스 사용자 권한 코드 삭제 컨트롤러");
+
+        backOfficeService.deleteMemberRoleCode(memberRoleCodeId);
+        return ResponseEntity.ok(null);
     }
 }

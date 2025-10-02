@@ -1771,3 +1771,160 @@ export const EditReactionCodeModal = ({isOpen, setIsOpen, fetchData, data} : edi
         </>
     )
 }
+
+export const InsertUserRoleCodeModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [code, setCode] = useState<string>("");
+    const [name, setName] = useState<string>("");
+
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoleCodes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                code: code,
+                name: name,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자 코드가 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자 코드가 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 코드 추가</h2>
+                            <p>새로운 사용자 코드를 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='code'>코드</label>
+                                        <input type="text" id="code" name="code" value={code} maxLength={16} required onChange={(e) => setCode(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='name'>이름</label>
+                                        <input type="text" id="name" name="name" value={name} maxLength={16} onChange={(e) => setName(e.target.value)}/>
+                                    </div>
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditUserRoleCodeModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [code, setCode] = useState<string>(data.code);
+    const [name, setName] = useState<string>(data.name);
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoleCodes/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                code: code,
+                name: name,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자 코드가 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자 코드가 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 코드 수정</h2>
+                            <p>사용자 코드를 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='code'>코드</label>
+                                        <input type="text" id="code" name="code" value={code} maxLength={16} required onChange={(e) => setCode(e.target.value)}/>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='name'>이름</label>
+                                        <input type="text" id="name" name="name" value={name} maxLength={16} onChange={(e) => setName(e.target.value)}/>
+                                    </div>
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}

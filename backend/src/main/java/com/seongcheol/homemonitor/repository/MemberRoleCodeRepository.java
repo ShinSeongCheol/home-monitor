@@ -8,4 +8,5 @@ import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
 
 public interface MemberRoleCodeRepository extends JpaRepository<MemberRoleCodeEntity, Long> {
     Optional<MemberRoleCodeEntity> findByCode(String code);   
+    boolean existsByCode(String code);
 }
