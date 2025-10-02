@@ -15,7 +15,7 @@ import PostCreatePage from './pages/PostCreatePage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostUpdatePage from './pages/PostUpdatePage';
 import BoardPage from './pages/BoardPage';
-import BackOfficeLayout, { SideMenuType } from './layouts/BackOfficeLayout';
+import BackOfficeLayout from './layouts/BackOfficeLayout';
 import BackOfficeBoardPage from './pages/BackOfficeBoardPage';
 import BackOfficeBoardRolePage from './pages/BackOfficeBoardRolePage';
 import BackOfficeBoardRoleCodePage from './pages/BackOfficeBoardRoleCodePage';

@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import type { Board, BoardRole, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../layouts/BackOfficeLayout';
+import type { Board, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../layouts/BackOfficeLayout';
 import CkEditorComponent from './CkEditorComponent';
 import DOMPurify from 'dompurify';
 
@@ -61,7 +61,7 @@ export const InsertBoardModal = ({isOpen, setIsOpen, fetchData} : insertModalPro
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시판이 생성되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -274,7 +274,7 @@ export const InsertBoardRoleModal = ({isOpen, setIsOpen, fetchData} : insertModa
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시판 권한이 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -419,7 +419,7 @@ export const EditBoardRoleModal = ({isOpen, setIsOpen, fetchData, data} : editMo
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시판 권한이 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -516,7 +516,7 @@ export const InsertBoardRoleCodeModal = ({isOpen, setIsOpen, fetchData} : insert
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시판 권한 코드가 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -594,7 +594,7 @@ export const EditBoardRoleCodeModal = ({isOpen, setIsOpen, fetchData, data} : ed
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시판 권한 코드가 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -713,7 +713,7 @@ export const InsertPostModal = ({isOpen, setIsOpen, fetchData} : insertModalProp
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시물이 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -860,7 +860,7 @@ export const EditPostModal = ({isOpen, setIsOpen, fetchData, data} : editModalPr
             if(!res.ok) throw new Error(`Http Status ${res.status}`);
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시물이 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1006,7 +1006,7 @@ export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalP
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('댓글이 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1158,7 +1158,7 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
             if(!res.ok) throw new Error(`Http Status ${res.status}`);
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('게시물이 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1342,7 +1342,7 @@ export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModal
             if(!res.ok) throw res.status;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('반응이 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1535,7 +1535,7 @@ export const EditReactionModal = ({isOpen, setIsOpen, fetchData, data} : editMod
             if(!res.ok) throw res.status;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('반응이 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1642,7 +1642,7 @@ export const InsertReactionCodeModal = ({isOpen, setIsOpen, fetchData} : insertM
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('반응 코드가 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1720,7 +1720,7 @@ export const EditReactionCodeModal = ({isOpen, setIsOpen, fetchData, data} : edi
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('반응 코드가 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1801,7 +1801,7 @@ export const InsertUserModal = ({isOpen, setIsOpen, fetchData} : insertModalProp
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -1894,7 +1894,7 @@ export const EditUserModal = ({isOpen, setIsOpen, fetchData, data} : editModalPr
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자가 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -2020,7 +2020,7 @@ export const InsertUserRoleModal = ({isOpen, setIsOpen, fetchData} : insertModal
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자 권한이 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -2142,7 +2142,7 @@ export const EditUserRoleModal = ({isOpen, setIsOpen, fetchData, data} : editMod
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자 권한이 수정되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -2230,7 +2230,7 @@ export const InsertUserRoleCodeModal = ({isOpen, setIsOpen, fetchData} : insertM
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자 코드가 추가되었습니다.');
             setIsOpen(false);
             fetchData();
@@ -2308,7 +2308,7 @@ export const EditUserRoleCodeModal = ({isOpen, setIsOpen, fetchData, data} : edi
             if(!res.ok) throw res;
             return res.json();
         })
-        .then(res => {
+        .then(_res => {
             alert('사용자 코드가 수정되었습니다.');
             setIsOpen(false);
             fetchData();

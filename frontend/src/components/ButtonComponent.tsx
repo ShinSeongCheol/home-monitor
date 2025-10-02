@@ -51,7 +51,7 @@ export const FileButton = ({svg, value, type, onChange}: FileButtonProps) => {
     return (
         <div>
             <label className={`${styles.label} ${styles.csv}`} htmlFor="fileInput">{svg}{value}</label>
-            <input className={styles.fileInput} type="file" name="fileInput" id="fileInput" onChange={onChange} />
+            <input className={styles.fileInput} type={type} name="fileInput" id="fileInput" onChange={onChange} />
         </div>
     )
 }
