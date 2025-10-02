@@ -29,6 +29,7 @@ import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCode
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.repository.BoardRepository;
@@ -420,6 +421,43 @@ public class BackOfficeService {
 
         List<ReactionCodeEntity> reactionCodeEntities = reactionCodeRepository.findAll();
         return reactionCodeEntities.stream().map(ReactionCodeDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public ReactionCodeDto postReactionCode(BackOfficeReactionCodeRequestDto requestDto) throws IllegalArgumentException {
+        log.info("리액션 코드 추가 서비스");
+
+        if (reactionCodeRepository.findByCode(requestDto.getCode()).isPresent()) {
+            throw new IllegalArgumentException("해당 코드는 이미 존재합니다.");
+        }
+
+        ReactionCodeEntity reactionCodeEntity = ReactionCodeEntity.builder()
+        .code(requestDto.getCode())
+        .name(requestDto.getName())
+        .build();
+
+        return ReactionCodeDto.fromEntity(reactionCodeRepository.save(reactionCodeEntity));
+    }
+
+    @Transactional
+    public ReactionCodeDto putReactionCode(Long reactionCodeId, BackOfficeReactionCodeRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
+        log.info("리액션 코드 수정 서비스");
+
+        ReactionCodeEntity reactionCodeEntity = reactionCodeRepository.findById(reactionCodeId).orElseThrow(() -> new NoSuchElementException("해당 반응 코드는 존재하지 않습니다."));
+
+        if(reactionCodeEntity.getCode().equals(requestDto.getCode()) != reactionCodeRepository.existsByCode(requestDto.getCode())) throw new IllegalArgumentException("해당 코드는 이미 존재합니다.");
+
+        reactionCodeEntity.setCode(requestDto.getCode());
+        reactionCodeEntity.setName(requestDto.getName());
+
+        return ReactionCodeDto.fromEntity(reactionCodeRepository.save(reactionCodeEntity));
+    }
+
+    @Transactional
+    public void deleteReactionCode(Long reactionCodeId) {
+        log.info("리액션 코드 삭제 서비스");
+
+        reactionCodeRepository.deleteById(reactionCodeId);
     }
 
     public List<BackOfficeMemberDto> getMembers() {

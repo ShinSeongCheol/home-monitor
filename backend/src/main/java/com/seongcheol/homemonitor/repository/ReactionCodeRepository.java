@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface ReactionCodeRepository extends JpaRepository<ReactionCodeEntity, Long> {
     
     Optional<ReactionCodeEntity> findByCode(String code);
-
+    boolean existsByCode(String code);
 }

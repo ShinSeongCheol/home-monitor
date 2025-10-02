@@ -28,6 +28,7 @@ import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCode
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
 import com.seongcheol.homemonitor.dto.request.BoardRequestDto;
 import com.seongcheol.homemonitor.service.BackOfficeService;
@@ -321,6 +322,8 @@ public class BackOfficeController {
 
     @DeleteMapping("/reactions/{reactionId}")
     public ResponseEntity<String> deleteReaction(@PathVariable("reactionId") Long reactionId) {
+        log.info("리액션 삭제 컨트롤러");
+
         backOfficeService.deleteReaction(reactionId);
         return ResponseEntity.ok(null);
     }
@@ -330,8 +333,43 @@ public class BackOfficeController {
         log.info("리액션 코드 조회 컨트롤러");
 
         List<ReactionCodeDto> reactionCodeDtos = backOfficeService.getReactionCodes();
-
         return ResponseEntity.ok(reactionCodeDtos);
+    }
+
+    @PostMapping("/reactionCodes")
+    public ResponseEntity<ReactionCodeDto> postReactionCode(@RequestBody BackOfficeReactionCodeRequestDto requestDto) {
+        log.info("리액션 코드 추가 컨트롤러");
+        try {
+            ReactionCodeDto reactionCodeDto = backOfficeService.postReactionCode(requestDto);
+            return ResponseEntity.ok(reactionCodeDto);
+        } 
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+    
+    @PutMapping("/reactionCodes/{reactionCodeId}")
+    public ResponseEntity<ReactionCodeDto> putReactionCode(@PathVariable("reactionCodeId") Long reactionCodeId, @RequestBody BackOfficeReactionCodeRequestDto requestDto) {
+        log.info("리액션 코드 수정 컨트롤러");
+
+        try {
+            ReactionCodeDto reactionCodeDto = backOfficeService.putReactionCode(reactionCodeId, requestDto);
+            return ResponseEntity.ok(reactionCodeDto);
+        } 
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    
+    @DeleteMapping("/reactionCodes/{reactionCodeId}")
+    public ResponseEntity<String> deleteReactionCode(@PathVariable("reactionCodeId") Long reactionCodeId) {
+        log.info("리액션 코드 삭제 컨트롤러");
+
+        backOfficeService.deleteReactionCode(reactionCodeId);
+        return ResponseEntity.ok(null);
     }
     
     @GetMapping("/members")
