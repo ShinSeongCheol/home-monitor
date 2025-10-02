@@ -21,6 +21,7 @@ import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeReactionDto;
 import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
@@ -28,6 +29,7 @@ import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCode
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
@@ -381,6 +383,50 @@ public class BackOfficeController {
         return ResponseEntity.ok(backOfficeMemberResponseDtos);
     }
     
+
+    @GetMapping("/memberRoles")
+    public ResponseEntity<List<BackOfficeMemberRoleDto>> getMemberRoles() {
+        log.info("백오피스 사용자 권한 코드 조회 컨트롤러");
+
+        List<BackOfficeMemberRoleDto> memberRoleDtos = backOfficeService.getMemberRoles();
+        return ResponseEntity.ok(memberRoleDtos);
+    }
+
+    @PostMapping("/memberRoles")
+    public ResponseEntity<BackOfficeMemberRoleDto> postMemberRole(@RequestBody BackOfficeMemberRoleRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 추가 컨트롤러");
+
+        try {
+            BackOfficeMemberRoleDto memberRoleDto = backOfficeService.postMemberRole(requestDto);
+            return ResponseEntity.ok(memberRoleDto);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PutMapping("/memberRoles/{memberRoleId}")
+    public ResponseEntity<BackOfficeMemberRoleDto> putMemberRole(@PathVariable("memberRoleId") Long memberRoleId, @RequestBody BackOfficeMemberRoleRequestDto requestDto) {
+        log.info("백오피스 사용자 권한 코드 수정 컨트롤러");
+        try {
+            BackOfficeMemberRoleDto memberRoleDto = backOfficeService.putMemberRole(memberRoleId, requestDto);
+            return ResponseEntity.ok(memberRoleDto);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/memberRoles/{memberRoleId}")
+    public ResponseEntity<String> deleteMemberRole(@PathVariable("memberRoleId") Long memberRoleId) {
+        log.info("백오피스 사용자 권한 코드 삭제 컨트롤러");
+
+        backOfficeService.deleteMemberRole(memberRoleId);
+        return ResponseEntity.ok(null);
+    }
 
     @GetMapping("/memberRoleCodes")
     public ResponseEntity<List<BackOfficeMemberRoleCodeDto>> getMemberRoleCodes() {

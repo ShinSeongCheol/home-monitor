@@ -4,15 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type BoardRole } from '../layouts/BackOfficeLayout';
+import { MenuType, SideMenuType, type ReactionCode } from '../layouts/BackOfficeLayout';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
-import { EditBoardRoleModal, InsertBoardRoleModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
 import useFormattedDate from '../hooks/useFormattedDate';
-import type { ValueFormatterParams } from 'ag-grid-community';
 import { useAuth } from '../contexts/AuthContext';
+import { EditUserRoleModal, InsertUserRoleModal } from '../components/BackOfficeModal';
+import type { ValueFormatterParams } from 'ag-grid-community';
 
-const BackOfficeBoardRole = () => {
+const BackOfficeUserRolePage = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -20,8 +20,8 @@ const BackOfficeBoardRole = () => {
     // 초기화
     useEffect(() => {
         setMenu({
-            menu: MenuType.Board,
-            sideMenu: SideMenuType.BoardRole
+            menu: MenuType.User,
+            sideMenu: SideMenuType.UserRole
         });
     }, []);
 
@@ -29,56 +29,38 @@ const BackOfficeBoardRole = () => {
     const [isEditModalOpen, setIsEditModalOpenOpen] = useState(false);
     const [editModalData, SetEditModalData] = useState();
 
-
+    
     const agGridComponentRef = useRef<AgGridReact>(null);
-
+    
     const {formattedDate} = useFormattedDate();
-
-    const [rowData, setRowData] = useState<BoardRole[]>([
+    
+    const [rowData, setRowData] = useState<ReactionCode[]>([
     ]);
     
     const [colDefs] = useState([
         { field: "id", headerName: "ID", filter: true, flex:1, },
         {
-            headerName: "게시판",
+            headerName: "사용자",
             children: [
                 {
-                    colId: "board_category_code",
-                    headerName: "코드",
+                    colId: "member_email",
+                    headerName: "이메일",
                     filter: true,
-                    field: "board.categoryCode",
+                    field: "member.email",
                     flex:1,
                 },
                 {
-                    colId: "board_category_name",
+                    colId: "member_username",
                     headerName: "이름",
                     filter: true,
-                    field: "board.categoryCode",
+                    field: "member.username",
                     flex:1,
                 },
                 {
-                    colId: "board_comment",
-                    headerName: "설명",
-                    field: "board.comment",
-                    flex:1,
-                },
-            ]
-        },
-        {
-            headerName: "게시판 권한 코드",
-            children: [
-                {
-                    colId: "board_role_code_code",
-                    headerName: "코드",
+                    colId: "member_password",
+                    headerName: "비밀번호",
                     filter: true,
-                    field: "boardRoleCode.code",
-                    flex:1,
-                },
-                {
-                    colId: "board_role_code_name",
-                    headerName: "이름",
-                    filter: true,
-                    field: "boardRoleCode.name",
+                    field: "member.password",
                     flex:1,
                 },
             ]
@@ -111,10 +93,10 @@ const BackOfficeBoardRole = () => {
     ]);
 
     const fetchData = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRoles`)
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoles`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json() as Promise<BoardRole[]>;
+            return res.json() as Promise<ReactionCode[]>;
         })
         .then(res => {
             setRowData(res);
@@ -146,9 +128,9 @@ const BackOfficeBoardRole = () => {
         if (rows.length === 0) return ;
         const data = rows[0];
 
-        if(!confirm(`${data.id}번 게시판 권한을 삭제하시겠습니까?`)) return;
+        if(!confirm(`${data.id}번을 삭제하시겠습니까?`)) return;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/boardRole/${data.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoles/${data.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +139,6 @@ const BackOfficeBoardRole = () => {
         })
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            alert('게시판이 삭제되었습니다.');
             fetchData();
         })
         .catch(err => console.error(err));
@@ -172,21 +153,21 @@ const BackOfficeBoardRole = () => {
                         <ChevronRight size={16} color="black" strokeWidth={1} />
                         <li>게시판 관리</li>
                         <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">게시판 권한</li>
+                        <li aria-current="page">사용자 권한 코드</li>
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
                     <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
                     <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
                     <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시판 권한 목록 ${formattedDate}.csv`})}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `사용자 권한 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertBoardRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
-                <EditBoardRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
+                <InsertUserRoleModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditUserRoleModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
             </div>
         </section>
     )
 }
 
-export default BackOfficeBoardRole;
+export default BackOfficeUserRolePage;

@@ -13,6 +13,7 @@ import com.seongcheol.homemonitor.domain.BoardRoleEntity;
 import com.seongcheol.homemonitor.domain.CommentEntity;
 import com.seongcheol.homemonitor.domain.MemberEntity;
 import com.seongcheol.homemonitor.domain.MemberRoleCodeEntity;
+import com.seongcheol.homemonitor.domain.MemberRoleEntity;
 import com.seongcheol.homemonitor.domain.PostEntity;
 import com.seongcheol.homemonitor.domain.ReactionCodeEntity;
 import com.seongcheol.homemonitor.domain.ReactionEntity;
@@ -22,6 +23,7 @@ import com.seongcheol.homemonitor.dto.backOffice.BackOfficeBoardRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeCommentDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleCodeDto;
+import com.seongcheol.homemonitor.dto.backOffice.BackOfficeMemberRoleDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficePostDto;
 import com.seongcheol.homemonitor.dto.backOffice.BackOfficeReactionDto;
 import com.seongcheol.homemonitor.dto.backOffice.ReactionCodeDto;
@@ -29,6 +31,7 @@ import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleCode
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeBoardRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeCommentRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleCodeRequestDto;
+import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeMemberRoleRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficePostRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionCodeRequestDto;
 import com.seongcheol.homemonitor.dto.backOffice.request.BackOfficeReactionRequestDto;
@@ -39,6 +42,7 @@ import com.seongcheol.homemonitor.repository.BoardRoleRepository;
 import com.seongcheol.homemonitor.repository.CommentRepository;
 import com.seongcheol.homemonitor.repository.MemberRepository;
 import com.seongcheol.homemonitor.repository.MemberRoleCodeRepository;
+import com.seongcheol.homemonitor.repository.MemberRoleRepository;
 import com.seongcheol.homemonitor.repository.PostRepository;
 import com.seongcheol.homemonitor.repository.ReactionCodeRepository;
 import com.seongcheol.homemonitor.repository.ReactionRepository;
@@ -66,6 +70,8 @@ public class BackOfficeService {
     private ReactionCodeRepository reactionCodeRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberRoleRepository memberRoleRepository;
     @Autowired
     private MemberRoleCodeRepository memberRoleCodeRepository;
 
@@ -468,6 +474,53 @@ public class BackOfficeService {
         return memberEntities.stream().map(BackOfficeMemberDto::fromEntity).toList();
     }
 
+    public List<BackOfficeMemberRoleDto> getMemberRoles() {
+        log.info("사용자 권한 조회 서비스");
+
+        List<MemberRoleEntity> memberRoleEntities = memberRoleRepository.findAll();
+        return memberRoleEntities.stream().map(BackOfficeMemberRoleDto::fromEntity).toList();
+    }
+
+    @Transactional
+    public BackOfficeMemberRoleDto postMemberRole(BackOfficeMemberRoleRequestDto requestDto) throws IllegalArgumentException, NoSuchElementException {
+        log.info("사용자 권한 추가 서비스");
+
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자는 없습니다"));
+        MemberRoleCodeEntity memberRoleCodeEntity = memberRoleCodeRepository.findById(requestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드는 없습니다"));
+
+        if (memberRoleRepository.existsByMemberAndMemberRoleCode(memberEntity, memberRoleCodeEntity)) throw new IllegalArgumentException("해당 사용자 권한은 존재합니다.");
+
+        MemberRoleEntity memberRoleEntity = MemberRoleEntity.builder()
+        .member(memberEntity)
+        .memberRoleCode(memberRoleCodeEntity)
+        .build();
+
+        return BackOfficeMemberRoleDto.fromEntity(memberRoleRepository.save(memberRoleEntity));
+    }
+
+    @Transactional
+    public BackOfficeMemberRoleDto putMemberRole(Long memberRoleId, BackOfficeMemberRoleRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
+        log.info("사용자 권한 수정 서비스");
+
+        MemberEntity memberEntity = memberRepository.findById(requestDto.getMemberId()).orElseThrow(() -> new NoSuchElementException("해당 사용자는 없습니다"));
+        MemberRoleCodeEntity memberRoleCodeEntity = memberRoleCodeRepository.findById(requestDto.getMemberRoleCodeId()).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한 코드는 없습니다"));
+
+        if (memberRoleRepository.existsByMemberAndMemberRoleCode(memberEntity, memberRoleCodeEntity)) throw new IllegalArgumentException("해당 사용자 권한은 존재합니다.");
+
+        MemberRoleEntity memberRoleEntity = memberRoleRepository.findById(memberRoleId).orElseThrow(() -> new NoSuchElementException("해당 사용자 권한은 없습니다."));
+        memberRoleEntity.setMember(memberEntity);
+        memberRoleEntity.setMemberRoleCode(memberRoleCodeEntity);
+
+        return BackOfficeMemberRoleDto.fromEntity(memberRoleRepository.save(memberRoleEntity));
+    }
+
+    @Transactional
+    public void deleteMemberRole(Long memberRoleId) {
+        log.info("사용자 권한 삭제 서비스");
+
+        memberRoleRepository.deleteById(memberRoleId);
+    }
+
     public List<BackOfficeMemberRoleCodeDto> getMemberRoleCodes() {
         log.info("사용자 권한 코드 조회 서비스");
 
@@ -475,6 +528,7 @@ public class BackOfficeService {
         return memberRoleCodeEntities.stream().map(BackOfficeMemberRoleCodeDto::fromEntity).toList();
     }
 
+    @Transactional
     public BackOfficeMemberRoleCodeDto postMemberRoleCode(BackOfficeMemberRoleCodeRequestDto requestDto) throws IllegalArgumentException {
         log.info("사용자 권한 코드 추가 서비스");
 
@@ -488,6 +542,7 @@ public class BackOfficeService {
         return BackOfficeMemberRoleCodeDto.fromEntity(memberRoleCodeRepository.save(memberRoleCodeEntity));
     }
 
+    @Transactional
     public BackOfficeMemberRoleCodeDto putMemberRoleCode(Long memberRoleCodeId, BackOfficeMemberRoleCodeRequestDto requestDto) throws NoSuchElementException, IllegalArgumentException {
         log.info("사용자 권한 코드 수정 서비스");
 
@@ -501,6 +556,7 @@ public class BackOfficeService {
         return BackOfficeMemberRoleCodeDto.fromEntity(memberRoleCodeRepository.save(memberRoleCodeEntity));
     }
 
+    @Transactional
     public void deleteMemberRoleCode(Long memberRoleCodeId) {
         log.info("사용자 권한 코드 삭제 서비스");
 

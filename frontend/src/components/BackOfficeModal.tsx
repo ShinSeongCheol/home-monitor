@@ -1772,6 +1772,251 @@ export const EditReactionCodeModal = ({isOpen, setIsOpen, fetchData, data} : edi
     )
 }
 
+export const InsertUserRoleModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [members, setMembers] = useState<Member[]>();
+    const [memberRoleCodes, setMemberRoleCodes] = useState<MemberRoleCode[]>();
+
+    const [selectedMemberId, setSelectedMemberId] = useState<number>();
+    const [selectedMemberRoleCodeId, setSelectedMemberRoleCodeId] = useState<number>();
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+            setSelectedMemberId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // memberRoleCode 조회
+    const fetchMemberRoleCode = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoleCodes`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<MemberRoleCode[]>;
+        })
+        .then(res => {
+            setMemberRoleCodes(res);
+            setSelectedMemberRoleCodeId(res[0].id);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchMembers();
+        fetchMemberRoleCode();
+    }, []);
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoles`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                memberRoleCodeId: selectedMemberRoleCodeId,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자 권한이 추가되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자 권한이 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 권한 추가</h2>
+                            <p>새로운 사용자 권한을 추가합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='member'>사용자</label>
+                                        <select name='member' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='memberRoleCode'>사용자 권한 코드</label>
+                                        <select name='memberRoleCode' value={selectedMemberRoleCodeId} onChange={(e) => setSelectedMemberRoleCodeId(Number(e.target.value))}>
+                                            {memberRoleCodes?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
+
+export const EditUserRoleModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
+    if (!isOpen) return;
+
+    const {accessToken} = useAuth();
+
+    const [members, setMembers] = useState<Member[]>();
+    const [memberRoleCodes, setMemberRoleCodes] = useState<MemberRoleCode[]>();
+
+    const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
+    const [selectedMemberRoleCodeId, setSelectedMemberRoleCodeId] = useState<number>(data.memberRoleCode.id);
+
+    // member 조회
+    const fetchMembers = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<Member[]>;
+        })
+        .then(res => {
+            setMembers(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    // memberRoleCode 조회
+    const fetchMemberRoleCode = () => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoleCodes`)
+        .then(res => {
+            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            return res.json() as Promise<MemberRoleCode[]>;
+        })
+        .then(res => {
+            setMemberRoleCodes(res);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchMembers();
+        fetchMemberRoleCode();
+    }, []);
+
+    const onClickSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/memberRoles/${data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                memberId: selectedMemberId,
+                memberRoleCodeId: selectedMemberRoleCodeId,
+            })
+        })
+        .then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        })
+        .then(res => {
+            alert('사용자 권한이 수정되었습니다.');
+            setIsOpen(false);
+            fetchData();
+        })
+        .catch((res :Response)=> {
+            if (res.status === 409) {
+                alert('해당 사용자 권한이 존재합니다.');
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalPortal>
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+
+                        <X className={styles.exit} color='grey' size={24} strokeWidth={1} onClick={() => setIsOpen(false)}/>
+
+                        <div className={`${styles.modalHeader}`}>
+                            <h2>사용자 권한 수정</h2>
+                            <p>사용자 권한을 수정합니다.</p>
+                        </div>
+
+                        <div className={`${styles.modalBody}`}>
+                            <form className={styles.modalForm} onSubmit={onClickSubmit}>
+                                <div className={`${styles.formFields}`}>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='member'>사용자</label>
+                                        <select name='member' value={selectedMemberId} onChange={(e) => setSelectedMemberId(Number(e.target.value))}>
+                                            {members?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor='memberRoleCode'>사용자 권한 코드</label>
+                                        <select name='memberRoleCode' value={selectedMemberRoleCodeId} onChange={(e) => setSelectedMemberRoleCodeId(Number(e.target.value))}>
+                                            {memberRoleCodes?.map((value) => {
+                                                return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
+                                            })}
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div className={`${styles.buttonGroup}`}>
+                                    <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>
+                                    <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ModalPortal>
+        </>
+    )
+}
 export const InsertUserRoleCodeModal = ({isOpen, setIsOpen, fetchData} : insertModalProps) => {
     if (!isOpen) return;
 
