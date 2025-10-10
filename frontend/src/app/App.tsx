@@ -4,8 +4,6 @@ import ForecastAdministrativeDistrictPage from '../pages/ForecastAdministrativeD
 import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import Header from '../components/Header';
-import Navigation from '../components/Navigation';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { DashboardPage } from '../pages/dashboard';
 import AuthPage from '../pages/AuthPage';
@@ -26,6 +24,8 @@ import BackOfficeReactionCodePage from '../pages/BackOfficeReactionCodePage';
 import BackOfficeUserRoleCodePage from '../pages/BackOfficeUserRoleCodePage.';
 import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
+import { HeaderWidget } from '../widgets/Header';
+import { NavigationWidget } from '../widgets/Navigation';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -34,8 +34,9 @@ function App() {
   return (
     <div className={styles.app}>
       <BrowserRouter>
-        <Header></Header>
-        <Navigation></Navigation>
+        <HeaderWidget/>
+        <NavigationWidget/>
+        
         <Routes>
           {/* DashBoard */}
           <Route path="/" element={<DashboardPage/>}></Route>

@@ -1,9 +1,9 @@
-import styles from '../styles/components/Navigation.module.css';
+import styles from './NavigationWidget.module.css';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { LayoutDashboard, Settings, SquarePen } from 'lucide-react';
 
-const navigation = () => {
+export const NavigationWidget = () => {
 
     const location = useLocation();
     const { user } = useAuth();
@@ -34,5 +34,3 @@ const navigation = () => {
         </nav>
     )
 }
-
-export default navigation;

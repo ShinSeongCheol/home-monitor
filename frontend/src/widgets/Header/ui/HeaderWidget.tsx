@@ -1,10 +1,10 @@
-import styles from '../styles/components/Header.module.css';
+import styles from './HeaderWidget.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, CircleUser, LogIn, LogOut, Settings, Thermometer } from 'lucide-react';
 
-const Header = () => {
+export const HeaderWidget = () => {
 
     const navigate = useNavigate();
 
@@ -76,5 +76,3 @@ const Header = () => {
         </header>
     )
 }
-
-export default Header
