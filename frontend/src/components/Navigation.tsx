@@ -24,7 +24,7 @@ const navigation = () => {
                         ?
                         <li className={location.pathname.includes('/backoffice') ? `${styles.active}` : ""}>
                             <Settings size={"16px"} color={"gray"} strokeWidth={1} />
-                            <Link to={"/backoffice"}>설정</Link>
+                            <Link to={"/backoffice/board"}>설정</Link>
                         </li>
                         :
                         ""
