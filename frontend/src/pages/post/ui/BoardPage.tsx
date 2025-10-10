@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react';
-import BoardCardComponent from '../components/BoardCardComponent';
-import styles from '../styles/pages/BoardPage.module.css';
-import { useAuth } from '../contexts/AuthContext';
-
-export type Board = {
-    categoryCode: string;
-    categoryName: string | null;
-    comment: string | null;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-    posts: Post[];
-    boardRoles: BoardRole[];
-}
+import BoardCardComponent from '../../../components/BoardCardComponent';
+import styles from './BoardPage.module.css';
+import { useAuth } from '../../../contexts/AuthContext';
+import { getBoards, type Board } from '../../../entities/Board';
 
 type Post = {
     id: number;
@@ -26,32 +17,19 @@ type Post = {
     }
 }
 
-type BoardRole = {
-    boardRoleCode: BoardRoleCode;
-    memberRoleCode: MemberRoleCode | null;
-}
-
-type BoardRoleCode = {
-    code: string;
-    name: string;
-}
-
 type MemberRoleCode = {
     code: string;
     name: string;
 }
 
-const BoardPage = () => {
+export const BoardPage = () => {
 
     const {user} = useAuth();
     const [boardList, setBoardList] = useState<Board[]>([]);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards`)
-        .then(res => {
-            if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json();
-        })
+
+        getBoards()
         .then(data => {
             setBoardList(data);
         })
@@ -77,5 +55,3 @@ const BoardPage = () => {
         </main>
     )
 }
-
-export default BoardPage;

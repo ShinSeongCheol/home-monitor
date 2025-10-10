@@ -1,13 +1,14 @@
+import styles from './PostDetailPage.module.css';
+
 import { useEffect, useState } from 'react';
-import styles from '../styles/pages/PostDetailPage.module.css';
 import DOMPurify from "dompurify";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
-import { useAuth } from '../contexts/AuthContext';
-import Comment from '../components/CommentComponent'
-import type { Board } from '../pages/BoardPage';
+import { useAuth } from '../../../contexts/AuthContext';
+import Comment from '../../../components/CommentComponent'
 import { Heart } from 'lucide-react';
-import { CancleButton, DeleteButton, InsertButton } from '../components/ButtonComponent';
+import { CancleButton, DeleteButton, InsertButton } from '../../../components/ButtonComponent';
+import type { Board } from '../../../entities/Board';
 
 export type PostComment = {
     id: number;
@@ -32,7 +33,7 @@ export type Reaction = {
     }
 }
 
-const PostDetailPage = () => {
+export const PostDetailPage = () => {
 
     const {user, accessToken} = useAuth();
 
@@ -220,5 +221,3 @@ const PostDetailPage = () => {
         </main>
     )
 }
-
-export default PostDetailPage;

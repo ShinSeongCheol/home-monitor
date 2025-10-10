@@ -1,13 +1,13 @@
-import styles from '../styles/pages/PostCreatePage.module.css';
+import styles from './PostCreatePage.module.css';
 
-import CkEditorComponent from "../components/CkEditorComponent";
+import CkEditorComponent from "../../../components/CkEditorComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import type { Board } from "../pages/BoardPage";
-import { CancleButton, InsertButton } from '../components/ButtonComponent';
+import { useAuth } from "../../../contexts/AuthContext";
+import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
+import { getBoard, postBoard, type Board } from '../../../entities/Board';
 
-const PostCreatePage = () => {
+export const PostCreatePage = () => {
 
     const {user,accessToken} = useAuth();
 
@@ -19,11 +19,7 @@ const PostCreatePage = () => {
     const [board, setBoard] = useState<Board>();
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}`)
-        .then(res => {
-            if (!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json();
-        })
+        getBoard(categoryCode)
         .then(data => {
             setBoard(data);
         })
@@ -46,29 +42,17 @@ const PostCreatePage = () => {
     }
 
     // 게시판 등록
-    const handleSubmit:FormEventHandler = (e) => {
+    const handleSubmit:FormEventHandler = async (e) => {
         e.preventDefault()
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/post`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({
-                title: title,
-                content: content
-            })
-        })
-        .then(res => {
-            if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            alert('글 등록 되었습니다.');
-            navigate(-1);
-        })
-        .catch(err => {
-            console.error(err);
+        const res = await postBoard(categoryCode, accessToken, {                
+            title: title,
+            content: content
         })
         
+        if(!res.ok) throw new Error(`Http Error ${res.status}`);
+        alert('글 등록 되었습니다.');
+        navigate(-1);
     }
 
     return(
@@ -87,5 +71,3 @@ const PostCreatePage = () => {
         </main>
     )
 }
-
-export default PostCreatePage;

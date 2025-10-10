@@ -1,11 +1,12 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import styles from '../styles/pages/PostPage.module.css';
-import { useEffect, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import type { Board } from '../pages/BoardPage';
-import { CancleButton, InsertButton } from '../components/ButtonComponent';
+import styles from './PostPage.module.css';
 
-const PostPage = () => {
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../../contexts/AuthContext';
+import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
+import { getBoard, type Board } from '../../../entities/Board';
+
+export const PostPage = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -14,18 +15,16 @@ const PostPage = () => {
     const [board, setBoard] = useState<Board>();
     const {user} = useAuth();
 
+    // 게시판 조회
     useEffect(() => {
         const categoryCode = params.categoryCode;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}`)
-        .then(res => {
-            if (!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json();
-        })
+        getBoard(categoryCode)
         .then(data => {
             setBoard(data);
         })
         .catch(err => console.error(err));
+
     }, [])
 
     useEffect(() => {
@@ -86,5 +85,3 @@ const PostPage = () => {
         </main>
     )
 }
-
-export default PostPage;

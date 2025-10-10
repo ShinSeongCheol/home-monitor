@@ -1,14 +1,14 @@
-import styles from '../styles/pages/PostCreatePage.module.css';
+import styles from './PostCreatePage.module.css';
 
-import CkEditorComponent from "../components/CkEditorComponent";
+import CkEditorComponent from "../../../components/CkEditorComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import DOMPurify from "dompurify";
-import type { Board } from "../pages/BoardPage";
-import { CancleButton, InsertButton } from '../components/ButtonComponent';
+import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
+import type { Board } from '../../../entities/Board';
 
-const PostUpdatePage = () => {
+export const PostUpdatePage = () => {
 
     const {user, accessToken} = useAuth();
 
@@ -112,5 +112,3 @@ const PostUpdatePage = () => {
         </main>
     )
 }
-
-export default PostUpdatePage;

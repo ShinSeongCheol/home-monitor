@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEventHandler } from "react";
 import styles from '../styles/components/Comment.module.css';
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import type { Reaction } from "../pages/PostDetailPage";
+import type { Reaction } from "../pages/post/ui/PostDetailPage";
 import { Heart } from "lucide-react";
 
 type CommentProps = {

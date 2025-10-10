@@ -7,12 +7,7 @@ import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { DashboardPage } from '../pages/dashboard';
 import AuthPage from '../pages/AuthPage';
-import PostPage from '../pages/PostPage';
 import ProfilePage from '../pages/ProfilePage';
-import PostCreatePage from '../pages/PostCreatePage';
-import PostDetailPage from '../pages/PostDetailPage';
-import PostUpdatePage from '../pages/PostUpdatePage';
-import BoardPage from '../pages/BoardPage';
 import BackOfficeLayout from '../layouts/BackOfficeLayout';
 import BackOfficeBoardPage from '../pages/BackOfficeBoardPage';
 import BackOfficeBoardRolePage from '../pages/BackOfficeBoardRolePage';
@@ -26,6 +21,7 @@ import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
 import { HeaderWidget } from '../widgets/Header';
 import { NavigationWidget } from '../widgets/Navigation';
+import { BoardPage, PostCreatePage, PostDetailPage, PostPage, PostUpdatePage } from '../pages/post';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
