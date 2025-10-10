@@ -42,17 +42,19 @@ export const PostCreatePage = () => {
     }
 
     // 게시판 등록
-    const handleSubmit:FormEventHandler = async (e) => {
+    const handleSubmit:FormEventHandler = (e) => {
         e.preventDefault()
 
-        const res = await postBoard(categoryCode, accessToken, {                
+        postBoard(categoryCode, accessToken, {                
             title: title,
             content: content
         })
-        
-        if(!res.ok) throw new Error(`Http Error ${res.status}`);
-        alert('글 등록 되었습니다.');
-        navigate(-1);
+        .then(_data => {
+            alert('글 등록 되었습니다.');
+            navigate(-1);
+        })
+        .catch(err => console.error(err))
+        ;
     }
 
     return(
