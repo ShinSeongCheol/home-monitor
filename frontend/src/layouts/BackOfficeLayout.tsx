@@ -59,7 +59,7 @@ export type Post = {
 }
 
 export type Comment = {
-    id: number;
+    id: number | null;
     content: string;
     parentComment: number;
     comments: Comment[];

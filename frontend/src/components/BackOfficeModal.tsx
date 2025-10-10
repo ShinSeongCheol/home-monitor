@@ -1053,7 +1053,7 @@ export const InsertCommentModal = ({isOpen, setIsOpen, fetchData} : insertModalP
                                         <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
                                             <option value="">{''}</option>
                                             {parentComments?.map((value) => {
-                                                return <option key={value.id} value={value.id}>{value.id}</option>
+                                                return <option key={value.id} value={value.id ?? ""}>{value.id}</option>
                                             })}
                                         </select>
                                     </div>
@@ -1086,11 +1086,11 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
     const [posts, setPosts] = useState<Post[]>();
     const [members, setMembers] = useState<Member[]>();
     const [parentComments, setParentComments] = useState<Comment[]>();
-    const [content, setContent] = useState<string>("");
-
+    
     const [selectedPostId, setSelectedPostId] = useState<number>(data.post.id);
     const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
     const [selectedParentCommentId, setSelectedParentCommentId] = useState<number>(data.parentComment?.id);
+    const [content, setContent] = useState<string>(data.content);
 
     // board 조회
     const fetchPosts = () => {
@@ -1204,7 +1204,7 @@ export const EditCommentModal = ({isOpen, setIsOpen, fetchData, data} : editModa
                                         <select name='parentCommentId' value={selectedParentCommentId} onChange={(e) => setSelectedParentCommentId(Number(e.target.value))}>
                                             <option value="">{''}</option>
                                             {parentComments?.map((value) => {
-                                                return <option key={value.id} value={value.id}>{value.id}</option>
+                                                return <option key={value.id} value={value.id ?? ""}>{value.id}</option>
                                             })}
                                         </select>
                                     </div>
@@ -1239,7 +1239,7 @@ export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModal
 
     const [selectedPostId, setSelectedPostId] = useState<number>();
     const [selectedMemberId, setSelectedMemberId] = useState<number>();
-    const [selectedCommentId, setSelectedCommentId] = useState<number>();
+    const [selectedCommentId, setSelectedCommentId] = useState<number | undefined>();
     const [selectedReactionCodeId, setSelectedReactionCodeId] = useState<number>();
 
     // board 조회
@@ -1279,7 +1279,8 @@ export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModal
         })
         .then(res => {
             setComments(res);
-            setSelectedCommentId(res[0].id);
+            if (res[0].id)
+                setSelectedCommentId(res[0].id);
         })
         .catch(err => console.error(err));
     }
@@ -1383,10 +1384,10 @@ export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModal
 
                                     <div className={styles.formGroup}>
                                         <label htmlFor='comment'>댓글</label>
-                                        <select name='comment' value={selectedCommentId} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
+                                        <select name='comment' value={selectedCommentId ?? undefined} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
                                             <option value=""></option>
                                             {comments?.map((value) => {
-                                                return <option key={value.id} value={value.id}>{value.id} ({value.content})</option>
+                                                return <option key={value.id} value={value.id ?? ""}>{value.id} ({value.content})</option>
                                             })}
                                         </select>
                                     </div>
@@ -1427,8 +1428,6 @@ export const InsertReactionModal = ({isOpen, setIsOpen, fetchData} : insertModal
 export const EditReactionModal = ({isOpen, setIsOpen, fetchData, data} : editModalProps) => {
     if (!isOpen) return;
 
-    console.log(data);
-
     const {accessToken} = useAuth();
 
     const [posts, setPosts] = useState<Post[]>();
@@ -1438,7 +1437,7 @@ export const EditReactionModal = ({isOpen, setIsOpen, fetchData, data} : editMod
 
     const [selectedPostId, setSelectedPostId] = useState<number>(data.post.id);
     const [selectedMemberId, setSelectedMemberId] = useState<number>(data.member.id);
-    const [selectedCommentId, setSelectedCommentId] = useState<number>(data.comment.id);
+    const [selectedCommentId, setSelectedCommentId] = useState<number | undefined>(data.comment?.id);
     const [selectedReactionCodeId, setSelectedReactionCodeId] = useState<number>(data.reactionCode.id);
 
     // post 조회
@@ -1576,10 +1575,10 @@ export const EditReactionModal = ({isOpen, setIsOpen, fetchData, data} : editMod
 
                                     <div className={styles.formGroup}>
                                         <label htmlFor='comment'>댓글</label>
-                                        <select name='comment' value={selectedCommentId} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
+                                        <select name='comment' value={selectedCommentId ?? undefined} onChange={(e) => setSelectedCommentId(Number(e.target.value))}>
                                             <option value=""></option>
                                             {comments?.map((value) => {
-                                                return <option key={value.id} value={value.id}>{value.id} ({value.content})</option>
+                                                return <option key={value.id} value={value.id ?? ""}>{value.id} ({value.content})</option>
                                             })}
                                         </select>
                                     </div>

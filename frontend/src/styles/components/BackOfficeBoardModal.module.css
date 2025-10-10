@@ -113,6 +113,7 @@
 .formGroup select {
     flex: 1;
 
+    min-width: 0;
     height: 30px;
 
     border: none;
