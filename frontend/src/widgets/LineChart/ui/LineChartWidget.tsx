@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import styles from '../styles/components/LineChartComponent.module.css';
+import styles from './LineChartWidget.module.css'
 import * as d3 from 'd3';
-import type { Data, Datasets } from '../pages/DashboardPage';
+import type { Datasets } from '../models/Datasets';
+import type { Data } from '../models/Data';
 
 
 type LineChartComponentProps = {
@@ -10,7 +11,7 @@ type LineChartComponentProps = {
     datasets: Datasets[];
 };
 
-const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) => {
+export const LineChartWidget = ({ title, icon, datasets }: LineChartComponentProps) => {
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [containerWidth, setContainerWidth] = useState(containerRef.current?.offsetWidth ?? 1024);
@@ -119,5 +120,3 @@ const LineChartComponent = ({ title, icon, datasets }: LineChartComponentProps) 
     )
 
 }
-
-export default LineChartComponent;

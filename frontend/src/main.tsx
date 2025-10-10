@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import './styles/reset.css'
-import App from './App.tsx'
+import App from './app/App.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(

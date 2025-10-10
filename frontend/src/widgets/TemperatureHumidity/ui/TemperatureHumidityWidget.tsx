@@ -1,8 +1,11 @@
-import styles from '../styles/components/WeatherComponent.module.css';
+import styles from './TemperatureHumidityWidget.module.css';
 import { useEffect, useState } from 'react';
 import { Droplet, Thermometer } from 'lucide-react';
 
-const weatherComponent = () => {
+import { getDht11LatestLog } from '../../../features/dht11';
+import { getForecastRegionLatest } from '../../../features/forecast';
+
+export const TemperatureHumidityWidget = () => {
 
     const [insideTemperature, setInsideTemperature] = useState<string | null>(null);
     const [insideHumidity, setInsideHumidity] = useState<string | null>(null);
@@ -13,53 +16,40 @@ const weatherComponent = () => {
     const [outsideMeasurementTime, setOutsideMeasurementTime] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchData = () => {
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/dht11/log/latest`)
-                .then(res => {
-                    if (res.ok) {
-                        return res.json();
-                    } else {
-                        throw new Error(`Http Error : ${res.status}`);
-                    }
-                })
-                .then(data => {
-                    const temperature = data.temperature;
-                    const humidity = data.humidity;
-                    const measurementTime:Date = new Date(data.measurementTime);
 
-                    setInsideTemperature(temperature);
-                    setInsideHumidity(humidity);
-                    setInsideMeasurementTime(measurementTime.toLocaleString());
-                })
-        }
+        getDht11LatestLog()
+        .then(data => {
+            const temperature = data.temperature;
+            const humidity = data.humidity;
+            const measurementTime:Date = new Date(data.measurementTime);
 
-        fetchData();
+            setInsideTemperature(temperature);
+            setInsideHumidity(humidity);
+            setInsideMeasurementTime(measurementTime.toLocaleString());
+        })
+        .catch(err => console.error(err))
+        ;
 
-        const interval = setInterval(fetchData, 1000 * 60);
+        getDht11LatestLog();
 
+        const interval = setInterval(getDht11LatestLog, 1000 * 60);
         return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
-        const fetchData = () => {
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/region/latest`)
-            .then(res => {
-                if(!res.ok) throw new Error(`Http Error ${res.status}`);
-                return res.json();
-            })
-            .then(data => {
-                setOutsideTemperature(data.t1h);
-                setOutsideHumidity(data.reh);
-                setOutsideMeasurementTime(new Date(data.baseDate + " " + data.baseTime).toLocaleString());
-            })
-            .catch(err => {
-                console.error(err);
-            })
-        }
 
-        fetchData();
+        getForecastRegionLatest()
+        .then(data => {
+            setOutsideTemperature(data.t1h);
+            setOutsideHumidity(data.reh);
+            setOutsideMeasurementTime(new Date(data.baseDate + " " + data.baseTime).toLocaleString());
+        })
+        .catch(err => console.error(err))
+        ;
 
-        const interval = setInterval(fetchData, 1000 * 60);
+        getForecastRegionLatest();
+
+        const interval = setInterval(getForecastRegionLatest, 1000 * 60);
 
         return () => clearInterval(interval);
     }, [])
@@ -110,4 +100,4 @@ const weatherComponent = () => {
     )
 }
 
-export default weatherComponent;
+export default TemperatureHumidityWidget;

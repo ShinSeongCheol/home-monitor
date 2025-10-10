@@ -1,0 +1,1 @@
+export {TemperatureHumidityWidget} from './ui/TemperatureHumidityWidget';

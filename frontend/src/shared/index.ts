@@ -1,0 +1,1 @@
+export { backendUrl } from "./config/backendUrl";

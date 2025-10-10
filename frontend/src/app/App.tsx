@@ -1,31 +1,31 @@
-import styles from './styles/App.module.css'
+import styles from './App.module.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ForecastAdministrativeDistrictPage from './pages/ForecastAdministrativeDistrictPage';
-import MiddleForecastAreaDistrict from './pages/MiddleForecastAreaDistrict';
+import ForecastAdministrativeDistrictPage from '../pages/ForecastAdministrativeDistrictPage';
+import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import Header from './components/Header';
-import Navigation from './components/Navigation';
-import ProtectedRoute from './components/ProtectedRoute';
-import DashboardPage from './pages/DashboardPage';
-import AuthPage from './pages/AuthPage';
-import PostPage from './pages/PostPage';
-import ProfilePage from './pages/ProfilePage';
-import PostCreatePage from './pages/PostCreatePage';
-import PostDetailPage from './pages/PostDetailPage';
-import PostUpdatePage from './pages/PostUpdatePage';
-import BoardPage from './pages/BoardPage';
-import BackOfficeLayout from './layouts/BackOfficeLayout';
-import BackOfficeBoardPage from './pages/BackOfficeBoardPage';
-import BackOfficeBoardRolePage from './pages/BackOfficeBoardRolePage';
-import BackOfficeBoardRoleCodePage from './pages/BackOfficeBoardRoleCodePage';
-import BackOfficePostPage from './pages/BackOfficePostPage';
-import BackOfficeCommentPage from './pages/BackOfficeCommentPage';
-import BackOfficeReactionPage from './pages/BackOfficeReactionPage';
-import BackOfficeReactionCodePage from './pages/BackOfficeReactionCodePage';
-import BackOfficeUserRoleCodePage from './pages/BackOfficeUserRoleCodePage.';
-import BackOfficeUserRolePage from './pages/BackOfficeUserRolePage';
-import BackOfficeUserPage from './pages/BackOfficeUserPage';
+import Header from '../components/Header';
+import Navigation from '../components/Navigation';
+import ProtectedRoute from '../components/ProtectedRoute';
+import { DashboardPage } from '../pages/dashboard';
+import AuthPage from '../pages/AuthPage';
+import PostPage from '../pages/PostPage';
+import ProfilePage from '../pages/ProfilePage';
+import PostCreatePage from '../pages/PostCreatePage';
+import PostDetailPage from '../pages/PostDetailPage';
+import PostUpdatePage from '../pages/PostUpdatePage';
+import BoardPage from '../pages/BoardPage';
+import BackOfficeLayout from '../layouts/BackOfficeLayout';
+import BackOfficeBoardPage from '../pages/BackOfficeBoardPage';
+import BackOfficeBoardRolePage from '../pages/BackOfficeBoardRolePage';
+import BackOfficeBoardRoleCodePage from '../pages/BackOfficeBoardRoleCodePage';
+import BackOfficePostPage from '../pages/BackOfficePostPage';
+import BackOfficeCommentPage from '../pages/BackOfficeCommentPage';
+import BackOfficeReactionPage from '../pages/BackOfficeReactionPage';
+import BackOfficeReactionCodePage from '../pages/BackOfficeReactionCodePage';
+import BackOfficeUserRoleCodePage from '../pages/BackOfficeUserRoleCodePage.';
+import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
+import BackOfficeUserPage from '../pages/BackOfficeUserPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
