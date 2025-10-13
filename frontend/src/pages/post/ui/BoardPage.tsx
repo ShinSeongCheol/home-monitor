@@ -1,26 +1,7 @@
 import { useEffect, useState } from 'react';
-import BoardCardComponent from '../../../components/BoardCardComponent';
 import styles from './BoardPage.module.css';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getBoards, type Board } from '../../../entities/Board';
-
-type Post = {
-    id: number;
-    title: string | null;
-    content: string | null;
-    view: number | null;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-    member: {
-        email: string | null;
-        nickname: string | null;
-    }
-}
-
-type MemberRoleCode = {
-    code: string;
-    name: string;
-}
+import { BoardCard, getBoards, type Board } from '../../../entities/board';
 
 export const BoardPage = () => {
 
@@ -48,7 +29,7 @@ export const BoardPage = () => {
                     {
                         boardList
                         .filter(board => board.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode?.code ?? ""))))
-                        .map(board => <BoardCardComponent key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)
+                        .map(board => <BoardCard key={board.categoryCode} categoryCode={board.categoryCode} categoryName={board?.categoryName ?? ""} comment={board?.comment ?? ""} count={board?.posts.length} latestPost={board?.posts.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime())[0]}/>)
                     }
                 </div>
             </section>
