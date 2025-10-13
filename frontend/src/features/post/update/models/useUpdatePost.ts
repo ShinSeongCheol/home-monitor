@@ -2,6 +2,7 @@ import { useEffect, useState, type ChangeEventHandler, type FormEventHandler } f
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { sanitize } from "../../../../shared";
+import { updatePost } from "../api/updatePost";
 
 export const useUpdatePost = () => {
 
@@ -42,29 +43,17 @@ export const useUpdatePost = () => {
     }
 
     // 게시판 수정
-    const handleSubmit:FormEventHandler = (e) => {
+    const handleSubmit:FormEventHandler = async (e) => {
         e.preventDefault()
-
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({
-                title: title,
-                content: content
-            })
-        })
-        .then(res => {
-            if(!res.ok) throw new Error(`Http Error ${res.status}`);
+        try {
+            await updatePost(categoryCode, postId, title, content, accessToken);
             alert('글 수정 되었습니다.');
             navigate(-1);
-        })
-        .catch(err => {
+        }
+        catch(err) {
             console.error(err);
-        })
-        
+        }
+
     }
 
     const goBack = () => {
