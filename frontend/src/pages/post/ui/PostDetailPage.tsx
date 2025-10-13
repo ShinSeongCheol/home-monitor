@@ -1,14 +1,14 @@
 import styles from './PostDetailPage.module.css';
 
 import { useEffect, useState } from 'react';
-import DOMPurify from "dompurify";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from '../../../contexts/AuthContext';
 import Comment from '../../../components/CommentComponent'
 import { Heart } from 'lucide-react';
 import { CancleButton, DeleteButton, InsertButton } from '../../../components/ButtonComponent';
-import type { Board } from '../../../entities/Board';
+import type { Board } from '../../../entities/board';
+import { sanitize } from '../../../shared';
 
 export type PostComment = {
     id: number;
@@ -48,18 +48,6 @@ export const PostDetailPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    DOMPurify.addHook('uponSanitizeElement', (node, data) => {
-        if(data.tagName === 'iframe') {
-            const el = node as Element;
-            const src = el.getAttribute('src') || '';
-            const allowedSrc = ['https://www.youtube.com/embed/', 'https://www.dailymotion.com/embed/']
-
-            const isAllowed = allowedSrc.some(prefix => src.startsWith(prefix));
-            if(!isAllowed)
-                el.remove()
-        }
-    })
-
     useEffect(() => {
         fetch((`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}`), {
             headers: {
@@ -71,12 +59,12 @@ export const PostDetailPage = () => {
             return res.json();
         })
         .then(data => {
-            const santiizedContent = DOMPurify.sanitize(data.content, {
+            const santiizedContent = sanitize(data.content, {
                 ADD_TAGS: ["iframe"],
                 ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
             });
 
-            setTitle(DOMPurify.sanitize(data.title));
+            setTitle(sanitize(data.title));
             setContent(santiizedContent);
 
             setMemberEmail(data.member.email);

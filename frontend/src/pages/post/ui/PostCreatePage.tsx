@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
-import { getBoard, postBoard, type Board } from '../../../entities/Board';
+import { getBoard, postBoard, type Board } from '../../../entities/board';
 
 export const PostCreatePage = () => {
 

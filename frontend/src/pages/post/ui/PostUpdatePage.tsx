@@ -6,7 +6,7 @@ import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } 
 import { useAuth } from "../../../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
-import type { Board } from '../../../entities/Board';
+import type { Board } from '../../../entities/board';
 
 export const PostUpdatePage = () => {
 
