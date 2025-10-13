@@ -3,20 +3,19 @@ import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock
 import 'ckeditor5/ckeditor5.css';
 import coreTransitions from "ckeditor5/translations/ko.js";
 import { type Dispatch, type SetStateAction } from "react";
-import styles from '../styles/components/CkEditorComponent.module.css';
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 type CkEditorProps = {
     data: string;
     handleChange: Dispatch<SetStateAction<string>>;
 }
 
-const CkEditorComponent = ({ data, handleChange }: CkEditorProps) => {
+export const CkEditor = ({ data, handleChange }: CkEditorProps) => {
 
     const {accessToken} = useAuth();
 
     return (
-        <div className={styles.editor}>
+        <div className='{styles.editor}'>
             <CKEditor
                 data={data}
                 
@@ -80,13 +79,10 @@ const CkEditorComponent = ({ data, handleChange }: CkEditorProps) => {
                         previewsInData: true
                     },
                 }}
-                onChange={(event, editor) => {
-                    console.debug(event);
+                onChange={(_event, editor) => {
                     handleChange(editor.getData());
                 }}
             />
         </div>
     )
 }
-
-export default CkEditorComponent;

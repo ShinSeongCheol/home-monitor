@@ -1,12 +1,12 @@
 import styles from './PostCreatePage.module.css';
 
-import CkEditorComponent from "../../../components/CkEditorComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
 import type { Board } from '../../../entities/board';
+import { CkEditor } from '../../../shared/ui';
 
 export const PostUpdatePage = () => {
 
@@ -102,7 +102,7 @@ export const PostUpdatePage = () => {
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <input className={styles.inputTitle} type="text" name="title" id="title" placeholder="제목을 입력하세요." maxLength={32} required value={title} onChange={handleTitleChange}/>
                     <hr />
-                    <CkEditorComponent data={content} handleChange={(content) => setContent(content)}/>
+                    <CkEditor data={content} handleChange={(content) => setContent(content)}/>
                     <div className={styles.buttonContainer}>
                         <CancleButton svg={null} type='button' value='취소' onClick={() => navigate(-1)}/>
                         <InsertButton svg={null} type='submit' value='수정' onClick={() => {}}/>

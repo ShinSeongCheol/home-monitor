@@ -1,11 +1,4 @@
-import type { ReactNode } from "react";
-
-type ButtonProps = {
-    svg: ReactNode;
-    value: string;
-    type: "button" | "submit" | "reset";
-    onClick: () => void;
-}
+import type { ButtonProps } from "../models/ButtonProps"
 
 export const InsertButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (

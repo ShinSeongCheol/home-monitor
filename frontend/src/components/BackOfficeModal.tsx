@@ -6,8 +6,8 @@ import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import type { Board, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../layouts/BackOfficeLayout';
-import CkEditorComponent from './CkEditorComponent';
 import DOMPurify from 'dompurify';
+import { CkEditor } from '../shared/ui';
 
 type ModalPortalProps = {
     children: ReactNode;
@@ -760,7 +760,7 @@ export const InsertPostModal = ({isOpen, setIsOpen, fetchData} : insertModalProp
                                         <input type="text" id="title" name="title" value={title} maxLength={16} onChange={(e) => setTitle(e.target.value)}/>
                                     </div>
 
-                                    <CkEditorComponent data={content} handleChange={setContent}></CkEditorComponent>
+                                    <CkEditor data={content} handleChange={setContent}/>
 
                                 </div>
 
@@ -906,7 +906,7 @@ export const EditPostModal = ({isOpen, setIsOpen, fetchData, data} : editModalPr
                                         <input type="text" id="title" name="title" value={title} maxLength={16} onChange={(e) => setTitle(e.target.value)}/>
                                     </div>
 
-                                    <CkEditorComponent data={content} handleChange={setContent}></CkEditorComponent>
+                                    <CkEditor data={content} handleChange={setContent}/>
 
                                 <div className={`${styles.buttonGroup}`}>
                                     <CancleButton svg={null} value='취소' type='button' onClick={() => setIsOpen(false)}></CancleButton>

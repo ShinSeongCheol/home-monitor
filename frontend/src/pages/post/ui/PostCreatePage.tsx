@@ -1,21 +1,18 @@
 import styles from './PostCreatePage.module.css';
 
-import CkEditorComponent from "../../../components/CkEditorComponent";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, type FormEventHandler,  type ChangeEventHandler, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { CancleButton, InsertButton } from '../../../components/ButtonComponent';
-import { getBoard, postBoard, type Board } from '../../../entities/board';
+import { getBoard, type Board } from '../../../entities/board';
+import { PostCreateForm } from '../../../features/post/create';
 
 export const PostCreatePage = () => {
 
-    const {user,accessToken} = useAuth();
+    const {user} = useAuth();
 
     const navigate = useNavigate();
     const {categoryCode} = useParams();
 
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
     const [board, setBoard] = useState<Board>();
 
     useEffect(() => {
@@ -36,39 +33,10 @@ export const PostCreatePage = () => {
         };
     }, [board])
 
-    //title 변경
-    const handleTitleChange:ChangeEventHandler<HTMLInputElement> = (e) => {
-        setTitle(e.target.value);
-    }
-
-    // 게시판 등록
-    const handleSubmit:FormEventHandler = (e) => {
-        e.preventDefault()
-
-        postBoard(categoryCode, accessToken, {                
-            title: title,
-            content: content
-        })
-        .then(_data => {
-            alert('글 등록 되었습니다.');
-            navigate(-1);
-        })
-        .catch(err => console.error(err))
-        ;
-    }
-
     return(
         <main className={styles.main}>
             <section className={styles.section}>
-                <form className={styles.form} onSubmit={handleSubmit}>
-                    <input className={styles.inputTitle} type="text" name="title" id="title" placeholder="제목을 입력하세요." maxLength={32} required value={title} onChange={handleTitleChange}/>
-                    <hr />
-                    <CkEditorComponent data="" handleChange={(content) => setContent(content)}/>
-                    <div className={styles.buttonContainer}>
-                        <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
-                        <InsertButton svg={null} type='submit' value='등록' onClick={() => {}}/>
-                    </div>
-                </form>
+                <PostCreateForm />
             </section>
         </main>
     )
