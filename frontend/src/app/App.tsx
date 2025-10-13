@@ -21,7 +21,8 @@ import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
 import { HeaderWidget } from '../widgets/Header';
 import { NavigationWidget } from '../widgets/Navigation';
-import { BoardPage, PostCreatePage, PostDetailPage, PostPage, PostUpdatePage } from '../pages/post';
+import { BoardPage, PostCreatePage, PostDetailPage, PostUpdatePage } from '../pages/post';
+import { BoardInfoPage } from '../pages/post/ui/BoardInfoPage';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,7 +40,7 @@ function App() {
 
           {/* Board */}
           <Route path="/boards/" element={<BoardPage/>}></Route>
-          <Route path="/boards/:categoryCode" element={<PostPage />}></Route>
+          <Route path="/boards/:categoryCode" element={<BoardInfoPage />}></Route>
           <Route path="/boards/:categoryCode/post" element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}></Route>
           <Route path="/boards/:categoryCode/:postId" element={<PostDetailPage/>}></Route>
           <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
