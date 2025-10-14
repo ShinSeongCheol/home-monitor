@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getBoard } from "../api/getBoard";
-import type { Board } from "../models/Board";
+import type { Board } from "../model/Board";
 import { useNavigate } from "react-router-dom";
 
 

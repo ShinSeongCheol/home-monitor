@@ -1,5 +1,5 @@
 import { CancleButton, CkEditor, InsertButton } from "../../../../shared/ui";
-import { usePostCreate } from "../models/usePostCreate";
+import { usePostCreate } from "../model/usePostCreate";
 
 export const PostCreateForm = () => {
 

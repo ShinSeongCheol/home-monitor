@@ -1,5 +1,5 @@
 import { CancleButton, CkEditor, InsertButton } from "../../../../shared/ui"
-import { useUpdatePost } from "../models/useUpdatePost";
+import { useUpdatePost } from "../model/useUpdatePost";
 
 export const PostUpdateForm = () => {
 

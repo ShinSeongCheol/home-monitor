@@ -1,4 +1,4 @@
-import type { ButtonProps } from "../models/ButtonProps"
+import type { ButtonProps } from "../model/ButtonProps"
 
 export const CancleButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './LineChartWidget.module.css'
 import * as d3 from 'd3';
-import type { Datasets } from '../models/Datasets';
-import type { Data } from '../models/Data';
+import type { Datasets } from '../model/Datasets';
+import type { Data } from '../model/Data';
 
 
 type LineChartComponentProps = {

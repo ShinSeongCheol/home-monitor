@@ -5,6 +5,6 @@ export { postBoard } from './api/postBoard';
 
 export { BoardCard } from './ui/BoardCard';
 
-export type { Board } from './models/Board';
-export type { BoardRole } from './models/BoardRole';
-export type { BoardRoleCode } from './models/BoardRoleCode';
+export type { Board } from './model/Board';
+export type { BoardRole } from './model/BoardRole';
+export type { BoardRoleCode } from './model/BoardRoleCode';
