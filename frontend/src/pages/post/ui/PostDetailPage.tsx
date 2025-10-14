@@ -5,10 +5,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from '../../../contexts/AuthContext';
 import Comment from '../../../components/CommentComponent'
-import { Heart } from 'lucide-react';
 import { CancleButton, DeleteButton, InsertButton } from '../../../components/ButtonComponent';
 import type { Board } from '../../../entities/board';
 import { sanitize } from '../../../shared';
+import { PostDetail } from '../../../entities/post';
+import { usePostDetail } from '../../../entities/post/model/usePostDetail';
+import { ReactionFeature } from '../../../features/reaction';
 
 export type PostComment = {
     id: number;
@@ -36,6 +38,8 @@ export type Reaction = {
 export const PostDetailPage = () => {
 
     const {user, accessToken} = useAuth();
+
+    const {post} = usePostDetail();
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -174,14 +178,8 @@ export const PostDetailPage = () => {
     return(
         <main className={styles.main}>
             <section className={styles.section}>
-                <h2 className={styles.title}>{title}</h2>
-                <hr />
-                <div className={styles.container}>
-                    <div className="ck-content" dangerouslySetInnerHTML={{__html: content}}></div>
-                    <div className={styles.react}>
-                        <Heart size={"24px"} fill={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'none'} color={reactions.some(value => value.member.email === user?.email) ? '#f38383ff' : 'black'} strokeWidth={1} onClick={handleReact}/> {reactions.length}
-                    </div>
-                </div>
+
+                <PostDetail post={post} ReactionButton={<ReactionFeature/>}/>
 
                 <div className={styles.buttonContainer}>
                     <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
