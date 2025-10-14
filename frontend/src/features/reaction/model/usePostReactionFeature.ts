@@ -2,13 +2,31 @@ import { useParams } from "react-router-dom";
 import { deleteReaction } from "../api/deleteReaction";
 import { postReaction } from "../api/postReaction";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useReactionButton } from "../../../entities/reaction";
+import type { Reaction } from "../../../entities/reaction/model/type";
+import { useEffect, useState } from "react";
+import { getPostReactions } from "../api/getPostReactions";
 
-export const useReactionFeature = () => {
+export const usePostReactionFeature = () => {
 
     const { categoryCode, postId } = useParams();
     const {user, accessToken} = useAuth();
-    const {isReactionExist, fetchData} = useReactionButton();
+
+    const [reactions, setReactions] = useState<Reaction[]>([]);
+    const isReactionExist = reactions?.some((value) => value?.member.email === user?.email)
+
+    const fetchData = async () => {
+        try {
+            const reactions = await getPostReactions(categoryCode, postId)
+            setReactions(reactions);
+        }
+        catch(err) {
+            console.error(err);
+        }
+    }
+    
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleReaction = async () => {
         if (!user?.email) {
@@ -32,5 +50,5 @@ export const useReactionFeature = () => {
         }
     }
 
-    return { handleReaction };
+    return { reactions, isReactionExist, handleReaction };
 }

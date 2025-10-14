@@ -1,13 +1,13 @@
 import { Heart } from "lucide-react"
-import { useReactionButton } from "../model/useReactionButton";
+import type { Reaction } from "../model/type";
 
-type ReactionButtonProps = {
+type PostReactionButtonProps = {
+    reactions: Reaction[];
+    isReactionExist: boolean | undefined;
     handleReaction: () => void;
 }
 
-export const ReactionButton = ({handleReaction}: ReactionButtonProps) => {
-
-    const {reactions, isReactionExist} = useReactionButton();
+export const PostReactionButton = ({reactions, isReactionExist, handleReaction}: PostReactionButtonProps) => {
 
     return (
         <div className='flex justify-start items-center gap-2 select-none hover:cursor-pointer'>

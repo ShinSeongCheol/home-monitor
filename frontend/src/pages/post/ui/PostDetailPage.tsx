@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from '../../../contexts/AuthContext';
-import Comment from '../../../components/CommentComponent'
 import { CancleButton, DeleteButton, InsertButton } from '../../../components/ButtonComponent';
 import type { Board } from '../../../entities/board';
-import { sanitize } from '../../../shared';
 import { PostDetail } from '../../../entities/post';
 import { usePostDetail } from '../../../entities/post/model/usePostDetail';
-import { ReactionFeature } from '../../../features/reaction';
+import { PostReactionFeature } from '../../../features/reaction';
+import { CommentList } from '../../../entities/comment';
 
 export type PostComment = {
     id: number;
@@ -46,50 +45,10 @@ export const PostDetailPage = () => {
 
     const [memberEmail, setMemberEmail] = useState("");
     const [board, setBoard] = useState<Board>();
-    const [reactions, setReactions] = useState<Reaction[]>([]);
 
     const {categoryCode, postId} = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-
-    useEffect(() => {
-        fetch((`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}`), {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-        .then(res => {
-            if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json();
-        })
-        .then(data => {
-            const santiizedContent = sanitize(data.content, {
-                ADD_TAGS: ["iframe"],
-                ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
-            });
-
-            setTitle(sanitize(data.title));
-            setContent(santiizedContent);
-
-            setMemberEmail(data.member.email);
-            setBoard(data.board);
-        })
-        .catch(err => console.error(err));
-
-        fetch((`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/reactions`), {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-        .then(res => {
-            if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json();
-        })
-        .then(res => {
-            setReactions(res);
-        })
-        .catch(err => console.error(err));
-    }, [])
 
     useEffect(() => {
         const boardRoles = board?.boardRoles;
@@ -126,60 +85,11 @@ export const PostDetailPage = () => {
         })
     }
 
-    const handleReact = () => {
-        if(!user?.email) {
-            alert('로그인 후 이용 가능합니다.')
-            return;
-        }
-
-        let isReactionExist = reactions.some((value) => value.member.email === user.email);
-
-        // 반응 삭제
-        if (isReactionExist) {
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/reactions`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    code: "HEART"
-                })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error(`Http Error ${res.status}`);
-                setReactions(reactions.filter((value) => value.member.email !== user.email));
-            })
-            .catch(err => console.error(err));
-
-        //반응 추가
-        }else {
-            fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/reactions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    code: "HEART"
-                })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error(`Http Error ${res.status}`);
-                return res.json();
-            })
-            .then(res => {
-                setReactions((prev) => [...prev, res]);
-            })
-            .catch(err => console.error(err));
-        }
-    }
-
     return(
         <main className={styles.main}>
             <section className={styles.section}>
 
-                <PostDetail post={post} ReactionButton={<ReactionFeature/>}/>
+                <PostDetail post={post} ReactionButton={<PostReactionFeature/>}/>
 
                 <div className={styles.buttonContainer}>
                     <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
@@ -203,7 +113,8 @@ export const PostDetailPage = () => {
                     } 
                 </div>
             </section>
-            <Comment></Comment>
+            {/* <Comment></Comment> */}
+            <CommentList handleSubmit={() => console.log()} ReactionButton={<PostReactionFeature/>} />
         </main>
     )
 }
