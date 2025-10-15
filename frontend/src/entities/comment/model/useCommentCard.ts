@@ -1,10 +1,14 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import type {Comment} from "./type.ts";
 
-export const useCommentCard = () => {
+export const useCommentCard = (comment: Comment | undefined) => {
 
-    const [comment, setComment] = useState<Comment>();
+    const [content, setContent] = useState<string>("");
 
-    return {comment};
+    useEffect(() => {
+        setContent(comment?.content ?? "");
+    }, [comment]);
+
+    return {content, setContent};
 
 }

@@ -1,2 +1,2 @@
-export {Reply} from './ui/Reply.tsx';
+export {ReplyButton} from './ui/ReplyButton.tsx';
 export {ReplyForm} from './ui/ReplyForm.tsx';
