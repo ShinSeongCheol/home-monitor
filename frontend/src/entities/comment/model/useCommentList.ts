@@ -6,8 +6,6 @@ import { useParams } from "react-router-dom";
 export const useCommentList = () => {
 
     const {categoryCode, postId} = useParams();
-
-    const [comment, setComment] = useState("");
     const [comments, setComments] = useState<Comment[]>();
 
     const fetchData = async () => {
@@ -22,7 +20,9 @@ export const useCommentList = () => {
 
     useEffect(() => {
         fetchData();
-    }, [comments])
+    }, [])
+
+    const sortedComments = comments?.sort((a, b) => a.id - b.id);
 
     function countAllChildren(comments: Comment[]): number {
         return comments.reduce((acc, comment) => {
@@ -30,5 +30,5 @@ export const useCommentList = () => {
         }, 0);
     }
 
-    return {comment, setComment, comments, fetchData, countAllChildren};
+    return {comments, fetchData, sortedComments, countAllChildren};
 }

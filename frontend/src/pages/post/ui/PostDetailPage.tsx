@@ -10,6 +10,7 @@ import { PostDetail } from '../../../entities/post';
 import { usePostDetail } from '../../../entities/post/model/usePostDetail';
 import { PostReactionFeature } from '../../../features/reaction';
 import { CommentList } from '../../../entities/comment';
+import {Comment} from '../../../widgets/Comment';
 
 export type PostComment = {
     id: number;
@@ -114,7 +115,20 @@ export const PostDetailPage = () => {
                 </div>
             </section>
             {/* <Comment></Comment> */}
-            <CommentList handleSubmit={() => console.log()} ReactionButton={<PostReactionFeature/>} />
+            <Comment/>
+            {/*<CommentList*/}
+            {/*    handleSubmit={() => console.log()}*/}
+            {/*    ReactionButton={<PostReactionFeature/>}*/}
+            {/*    handleUpdate={function (id: number): void {*/}
+            {/*        throw new Error("Function not implemented.");*/}
+            {/*    }}*/}
+            {/*    handleDelete={function (id: number): void {*/}
+            {/*        throw new Error("Function not implemented.");*/}
+            {/*    }}*/}
+            {/*    handleReply={function (id: number): void {*/}
+            {/*        throw new Error("Function not implemented.");*/}
+            {/*    }}*/}
+            {/*/>*/}
         </main>
     )
 }
