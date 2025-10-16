@@ -1,1 +1,1 @@
-export { PostReactionButton } from './ui/PostReactionButton';
+export { ReactionButton } from './ui/ReactionButton.tsx';

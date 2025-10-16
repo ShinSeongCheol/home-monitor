@@ -1,24 +1,28 @@
 import {CancleButton, InsertButton} from "../../../../shared/ui";
-import type {Comment} from "../../../../entities/comment/model/type.ts";
 import {useReplyForm} from "../model/useReplyForm.ts";
-import React from "react";
 
 type ReplyFormProps = {
-    comment?: Comment;
-    setReplyId?: React.Dispatch<React.SetStateAction<number|null>>;
+    id: number | undefined;
+    fetchData: () => void;
+    handleCancel: () => void;
 }
 
-export const ReplyForm = ({comment, setReplyId}: ReplyFormProps) => {
+export const ReplyForm = ({id, fetchData, handleCancel}: ReplyFormProps) => {
 
-    const {replyComment, setReplyComment, handleReply} = useReplyForm();
+    const {replyComment, handleReplyCommentChange, handleReplyCommentSubmit} = useReplyForm({
+        id,
+        fetchData,
+        handleCancel
+    });
 
     return (
-        <>
-            <textarea className="w-full resize-none border border-gray-300" name="replyComment" id="replyComment" value={replyComment ?? ""} onChange={(e) => setReplyComment(e.target.value)}></textarea>
+        <form onSubmit={handleReplyCommentSubmit}>
+            <textarea className="w-full min-h-0 border border-gray-300 mt-3" name="replyComment" id="replyComment"
+                    value={replyComment ?? ""} onChange={handleReplyCommentChange}></textarea>
             <div className="flex justify-end gap-1">
-                <InsertButton value={"등록"} type={"button"} onClick={() => handleReply(comment.id)}/>
-                <CancleButton value={"취소"} type={"button"} onClick={() => setReplyId(null)}/>
+                <InsertButton value={"등록"} type={"submit"}/>
+                <CancleButton value={"취소"} type={"button"} onClick={handleCancel}/>
             </div>
-        </>
+        </form>
     )
 }

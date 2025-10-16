@@ -8,8 +8,7 @@ import { CancleButton, DeleteButton, InsertButton } from '../../../components/Bu
 import type { Board } from '../../../entities/board';
 import { PostDetail } from '../../../entities/post';
 import { usePostDetail } from '../../../entities/post/model/usePostDetail';
-import { PostReactionFeature } from '../../../features/reaction';
-import { CommentList } from '../../../entities/comment';
+import { PostReaction } from '../../../features/reaction';
 import {Comment} from '../../../widgets/Comment';
 
 export type PostComment = {
@@ -90,7 +89,7 @@ export const PostDetailPage = () => {
         <main className={styles.main}>
             <section className={styles.section}>
 
-                <PostDetail post={post} ReactionButton={<PostReactionFeature/>}/>
+                <PostDetail post={post} postReaction={<PostReaction/>}/>
 
                 <div className={styles.buttonContainer}>
                     <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
@@ -114,21 +113,7 @@ export const PostDetailPage = () => {
                     } 
                 </div>
             </section>
-            {/* <Comment></Comment> */}
             <Comment/>
-            {/*<CommentList*/}
-            {/*    handleSubmit={() => console.log()}*/}
-            {/*    ReactionButton={<PostReactionFeature/>}*/}
-            {/*    handleUpdate={function (id: number): void {*/}
-            {/*        throw new Error("Function not implemented.");*/}
-            {/*    }}*/}
-            {/*    handleDelete={function (id: number): void {*/}
-            {/*        throw new Error("Function not implemented.");*/}
-            {/*    }}*/}
-            {/*    handleReply={function (id: number): void {*/}
-            {/*        throw new Error("Function not implemented.");*/}
-            {/*    }}*/}
-            {/*/>*/}
         </main>
     )
 }

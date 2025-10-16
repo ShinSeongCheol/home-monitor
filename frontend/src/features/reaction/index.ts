@@ -1,1 +1,1 @@
-export { PostReactionFeature } from './ui/PostReactionFeature';
+export { PostReaction } from './ui/PostReaction.tsx';

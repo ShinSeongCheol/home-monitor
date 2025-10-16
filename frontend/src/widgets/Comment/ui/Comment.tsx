@@ -4,6 +4,7 @@ import {CommentList} from "../../../entities/comment";
 import {ReplyButton, ReplyForm} from "../../../features/comment/reply";
 import {UpdateComment} from "../../../features/comment/update";
 import {DeleteComment} from "../../../features/comment/delete";
+import {CommentReaction} from "../../../features/reaction/ui/CommentReaction.tsx";
 
 export const Comment = () => {
 
@@ -11,16 +12,29 @@ export const Comment = () => {
 
     return (
         <section className='w-full lg:w-5xl'>
-            <CommentList renderActions={(id, content) =>
+            <CommentList
+                reactions={(comment, fetchData) => <CommentReaction comment={comment} fetchData={fetchData}/>}
+                actions={(comment, content, fetchData, toggleIsReply, isEdit, handleIsEdit) =>
                 (
-                    <div className={"flex justify-end gap-1"}>
-                        <ReplyButton id={id} content={content}/>
-                        <UpdateComment id={id}/>
-                        <DeleteComment id={id}/>
-                    </div>
+                    <>
+                        <ReplyButton handleClick={toggleIsReply}/>
+                        {comment?.member.email === user?.email &&
+                            <>
+                                <UpdateComment id={comment?.id} content={content} fetchData={fetchData} isEdit={isEdit} handleIsEdit={handleIsEdit}/>
+                                <DeleteComment id={comment?.id} fetchData={fetchData}/>
+                            </>
+                        }
+                    </>
                 )
-            }/>
-            {user?.email && <CommentForm/>}
+            }
+
+                replyForm={(id, fetchData, handleIsReply) => (
+                    <ReplyForm id={id} fetchData={fetchData} handleCancel={() => handleIsReply(false)}/>
+                )
+            }
+                commentForm = {(fetchData) => (user?.email && <CommentForm fetchData={fetchData}/>)}
+            />
+
         </section>
     )
 }

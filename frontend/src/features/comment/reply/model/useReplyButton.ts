@@ -1,12 +1,11 @@
-import {useState} from "react";
+import React from "react";
 
-export const useReplyButton = () => {
-
-    const [isReplying, setIsReplying] = useState<boolean>(false);
+export const useReplyButton = (setIsReplying: React.Dispatch<React.SetStateAction<boolean>>) => {
 
     const handleClick = () => {
-        setIsReplying(!isReplying);
+        setIsReplying(true);
     }
 
-    return {isReplying, handleClick};
+
+    return {handleClick};
 }

@@ -22,6 +22,10 @@ export const useCommentList = () => {
         fetchData();
     }, [])
 
+    useEffect(() => {
+
+    }, [comments]);
+
     const sortedComments = comments?.sort((a, b) => a.id - b.id);
 
     function countAllChildren(comments: Comment[]): number {
