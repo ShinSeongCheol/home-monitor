@@ -1,10 +1,12 @@
-export { getBoards } from './api/getBoards';
-export { getBoard } from './api/getBoard';
+export type {Board} from './model/Board.ts';
+export type { BoardRole } from "./model/BoardRole.ts";
+export type { BoardRoleCode } from './model/BoardRoleCode.ts';
 
-export { postBoard } from './api/postBoard';
+export { getBoards } from './api/getBoards.ts';
+export { getBoard } from './api/getBoard.ts';
 
-export { BoardCard } from './ui/BoardCard';
+export { postBoard } from './api/postBoard.ts';
 
-export type { Board } from './model/Board';
-export type { BoardRole } from './model/BoardRole';
-export type { BoardRoleCode } from './model/BoardRoleCode';
+export {BoardInfo} from './ui/BoardInfo.tsx';
+export { BoardCard } from './ui/BoardCard.tsx';
+

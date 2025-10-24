@@ -1,4 +1,4 @@
-import type { BoardRoleCode } from "./BoardRoleCode";
+import type { BoardRoleCode } from './BoardRoleCode.ts';
 
 export type BoardRole = {
     boardRoleCode: BoardRoleCode;

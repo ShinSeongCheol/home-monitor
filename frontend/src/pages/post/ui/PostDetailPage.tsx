@@ -1,11 +1,9 @@
-import styles from './PostDetailPage.module.css';
-
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { useAuth } from '../../../contexts/AuthContext';
 import { CancleButton, DeleteButton, InsertButton } from '../../../components/ButtonComponent';
-import type { Board } from '../../../entities/board';
+import type { Board } from '../../../entities/Board';
 import { PostDetail } from '../../../entities/post';
 import { usePostDetail } from '../../../entities/post/model/usePostDetail';
 import { PostReaction } from '../../../features/reaction';
@@ -39,9 +37,6 @@ export const PostDetailPage = () => {
     const {user, accessToken} = useAuth();
 
     const {post} = usePostDetail();
-
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
 
     const [memberEmail, setMemberEmail] = useState("");
     const [board, setBoard] = useState<Board>();
@@ -86,12 +81,12 @@ export const PostDetailPage = () => {
     }
 
     return(
-        <main className={styles.main}>
-            <section className={styles.section}>
+        <main className={'lg:w-full lg:p-2 lg:box-border flex flex-col items-center'}>
+            <section className={'w-full lg:w-5xl'}>
 
                 <PostDetail post={post} postReaction={<PostReaction/>}/>
 
-                <div className={styles.buttonContainer}>
+                <div className={'flex justify-end mt-2 gap-2'}>
                     <CancleButton svg={null} type='button' value='목록' onClick={() => navigate(-1)}/>
                     {
                     memberEmail === user?.email && board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'MODIFY' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))

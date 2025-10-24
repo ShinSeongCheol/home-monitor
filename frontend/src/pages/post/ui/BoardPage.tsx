@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import styles from './BoardPage.module.css';
 import { useAuth } from '../../../contexts/AuthContext';
-import { BoardCard, getBoards, type Board } from '../../../entities/board';
+import { BoardCard, getBoards, type Board } from '../../../entities/Board';
 
 export const BoardPage = () => {
 
@@ -18,14 +17,14 @@ export const BoardPage = () => {
     }, [])
 
     return(
-        <main className={styles.main}>
-            <section className={styles.section}>
-                <div className={styles.title}>
-                    <h2>게시판</h2>
-                    <p>다양한 주제의 게시판을 둘러보세요.</p>
+        <main className={'w-full h-full flex justify-center'}>
+            <section className={'w-5xl mt-4 p-2'}>
+                <div>
+                    <h2 className={'text-3xl'}>게시판</h2>
+                    <p className={'mt-2'}>다양한 주제의 게시판을 둘러보세요.</p>
                 </div>
 
-                <div className={styles.gridContainer}>
+                <div className={'h-50 mt-6 grid grid-cols-2 lg:grid-cols-3 justify-center gap-4'}>
                     {
                         boardList
                         .filter(board => board.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode?.code ?? ""))))

@@ -1,9 +1,8 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getBoard, type Board } from '../../../entities/board';
+import { getBoard, type Board, BoardInfo } from '../../../entities/Board';
 import { InsertButton, CancleButton } from '../../../shared/ui';
-import { BoardInfo } from '../../../entities/board/ui/BoardInfo';
 
 export const BoardInfoPage = () => {
 

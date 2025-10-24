@@ -1,9 +1,7 @@
-import styles from './PostCreatePage.module.css';
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { getBoard, type Board } from '../../../entities/board';
+import { getBoard, type Board } from '../../../entities/Board';
 import { PostCreateForm } from '../../../features/post/create';
 
 export const PostCreatePage = () => {
@@ -34,8 +32,8 @@ export const PostCreatePage = () => {
     }, [board])
 
     return(
-        <main className={styles.main}>
-            <section className={styles.section}>
+        <main className={'w-full h-full flex justify-center'}>
+            <section className={'w-full lg:w-5xl h-full'}>
                 <PostCreateForm />
             </section>
         </main>
