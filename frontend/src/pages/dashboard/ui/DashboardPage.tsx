@@ -1,4 +1,3 @@
-import styles from './DashboardPage.module.css'
 import { useEffect, useState } from 'react';
 import { Droplet, Thermometer } from 'lucide-react';
 
@@ -87,8 +86,8 @@ export const DashboardPage = () => {
     }, [])
     
     return (
-        <main className={styles.main}>
-            <section className={styles.section}>
+        <main className={'w-full h-full'}>
+            <section className={'w-full my-0 mx-auto p-4 lg:w-5xl'}>
                 <TemperatureHumidityWidget/>
                 <LineChartWidget title='온도 추이 (24 시간)' icon={<Thermometer width={"24px"} height={"24px"} fill='#ffa2a2ff' color='#ffa2a2ff' strokeWidth={1}/>} datasets={temperatureDatasets}></LineChartWidget>
                 <LineChartWidget title='습도 추이 (24 시간)' icon={<Droplet width={"24px"} height={"24px"} fill='#99ddfdff' color='#99ddfdff' strokeWidth={1}/>} datasets={humidityDatasets}></LineChartWidget>
