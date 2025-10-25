@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import type { Board } from '../../../entities/Board';
+import type { Board } from '../../../entities/board';
 import { PostUpdateForm } from '../../../features/post/update/ui/PostUpdateForm';
 
 export const PostUpdatePage = () => {

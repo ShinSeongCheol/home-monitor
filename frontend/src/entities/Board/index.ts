@@ -5,7 +5,7 @@ export type { BoardRoleCode } from './model/BoardRoleCode.ts';
 export { getBoards } from './api/getBoards.ts';
 export { getBoard } from './api/getBoard.ts';
 
-export { postBoard } from './api/postBoard.ts';
+export { postBoard } from './api/postBoard.ts'
 
 export {BoardInfo} from './ui/BoardInfo.tsx';
 export { BoardCard } from './ui/BoardCard.tsx';

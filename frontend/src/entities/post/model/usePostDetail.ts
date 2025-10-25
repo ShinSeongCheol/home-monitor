@@ -9,26 +9,29 @@ export const usePostDetail = () => {
 
     const { categoryCode, postId } = useParams();
 
-    useEffect(() => {
-        getPost(categoryCode, postId)
-        .then(data => {
-            const santiizedContent = sanitize(data.content, {
-                ADD_TAGS: ["iframe"],
-                ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
-            });
+    const fetchPost = async () => {
+        const data = await getPost(categoryCode, postId);
 
-            setPost({
-                title: data.title,
-                content: santiizedContent,
-                view: data.number,
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-                member: {
-                    email: data.member.email,
-                    nickname: data.member.nickname,
-                },
-            })
+        const santinizedContent = sanitize(data.content, {
+            ADD_TAGS: ["iframe"],
+            ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
         });
+
+        setPost({
+            title: data.title,
+            content: santinizedContent,
+            view: data.number,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            member: {
+                email: data.member.email,
+                nickname: data.member.nickname,
+            },
+        })
+    }
+
+    useEffect(() => {
+        void fetchPost();
     }, [])
 
     return {post, setPost};

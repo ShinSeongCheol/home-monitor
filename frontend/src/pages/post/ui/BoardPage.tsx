@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { BoardCard, getBoards, type Board } from '../../../entities/Board';
+import { BoardCard, getBoards, type Board } from '../../../entities/board';
 
 export const BoardPage = () => {
 
