@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import type { Board } from '../../../entities/board';
-import { PostUpdateForm } from '../../../features/post/update/ui/PostUpdateForm';
+import { PostUpdateForm } from '../../../features/post/update';
 
 export const PostUpdatePage = () => {
 
@@ -35,7 +35,7 @@ export const PostUpdatePage = () => {
         if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'MODIFY' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
             alert('수정 권한이 없습니다.');
             navigate(-1);
-        };
+        }
     }, [board])
 
     return(

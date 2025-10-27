@@ -3,7 +3,7 @@ import { useUpdatePost } from "../model/useUpdatePost";
 
 export const PostUpdateForm = () => {
 
-    const {title, content, handleSubmit, handleTitleChange, setContent, goBack} = useUpdatePost();
+    const {title, content, handleSubmit, handleTitleChange, setContent, handleCancel} = useUpdatePost();
 
     return (
         <form className='mt-4 flex flex-col gap-2' onSubmit={handleSubmit}>
@@ -11,8 +11,8 @@ export const PostUpdateForm = () => {
             <hr />
             <CkEditor data={content} handleChange={(content) => setContent(content)} />
             <div className='flex justify-end gap-2'>
-                <CancleButton svg={null} type='button' value='취소' onClick={goBack} />
-                <InsertButton type='submit' value='수정'/>
+                <CancleButton svg={null} type='button' value='취소' onClick={handleCancel} />
+                <InsertButton type='submit' value='저장'/>
             </div>
         </form>
     )
