@@ -1,13 +1,13 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getBoard, type Board, BoardInfo } from '../../../entities/board';
-import { InsertButton, CancleButton } from '../../../shared/ui';
+import { CancleButton } from '../../../shared/ui';
+import {CreatePostButton} from "../../../features/post/create";
 
 export const BoardInfoPage = () => {
 
     const navigate = useNavigate();
-    const location = useLocation();
     const params = useParams();
 
     const [board, setBoard] = useState<Board>();
@@ -34,7 +34,7 @@ export const BoardInfoPage = () => {
         if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'READ' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
             alert('읽기 권한이 없습니다.');
             navigate(-1);
-        };
+        }
     }, [board])
 
     return (
@@ -45,13 +45,7 @@ export const BoardInfoPage = () => {
 
                 <div className='flex justify-end py-2 gap-2'>
                     <CancleButton svg={null} type='button' value='뒤로가기' onClick={() => navigate(-1)}/>
-                    {
-                    board?.boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'WRITE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))
-                        ?
-                        <InsertButton svg={null} type='button' value='글쓰기' onClick={() => navigate(`${location.pathname}/post`)}/>
-                        :
-                        ""
-                    }
+                    <CreatePostButton />
                 </div>
             </section>
         </main>
