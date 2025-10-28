@@ -1,4 +1,3 @@
-import styles from './App.module.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ForecastAdministrativeDistrictPage from '../pages/ForecastAdministrativeDistrictPage';
 import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
@@ -29,7 +28,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 function App() {
 
   return (
-    <div className={styles.app}>
+    <div className='h-full flex flex-col items-center'>
       <BrowserRouter>
         <HeaderWidget/>
         <NavigationWidget/>
