@@ -1,30 +1,9 @@
-import { useEffect, useState } from "react";
-import { getBoard } from "../api/getBoard";
-import type { Board } from "../model/Board";
-import {useNavigate, useParams} from "react-router-dom";
+import {useBoardInfo} from "../model/useBoardInfo.ts";
 
 
 export const BoardInfo = () => {
 
-    const navigate = useNavigate();
-    const {categoryCode} = useParams();
-    const [board, setBoard] = useState<Board>();
-
-    // 게시판 데이터 조회
-    useEffect(() => {
-        (async () => {
-            try {
-                const board = await getBoard(categoryCode);
-                setBoard(board);
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }, []);
-
-    const handleClick = (postId: number) => {
-        navigate(`${location.pathname}/${postId}`);
-    }
+    const {board, handleClick} = useBoardInfo();
 
     return (
         <>
