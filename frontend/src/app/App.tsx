@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import ForecastAdministrativeDistrictPage from '../pages/ForecastAdministrativeDistrictPage';
 import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 
-import {AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import {AllCommunityModule, ModuleRegistry} from 'ag-grid-community';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { DashboardPage } from '../pages/dashboard';
+import {DashboardPage} from '../pages/dashboard';
 import AuthPage from '../pages/AuthPage';
 import ProfilePage from '../pages/ProfilePage';
 import BackOfficeLayout from '../layouts/BackOfficeLayout';
@@ -18,60 +18,65 @@ import BackOfficeReactionCodePage from '../pages/BackOfficeReactionCodePage';
 import BackOfficeUserRoleCodePage from '../pages/BackOfficeUserRoleCodePage.';
 import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
-import { HeaderWidget } from '../widgets/Header';
-import { NavigationWidget } from '../widgets/Navigation';
-import { BoardPage, PostCreatePage, PostDetailPage, PostUpdatePage } from '../pages/post';
-import { BoardInfoPage } from '../pages/post/ui/BoardInfoPage';
+import {HeaderWidget} from '../widgets/Header';
+import {NavigationWidget} from '../widgets/Navigation';
+import {BoardPage, PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
+import {BoardInfoPage} from '../pages/post/ui/BoardInfoPage';
+import {PostLayout} from "../pages/post/ui/PostLayout.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 function App() {
 
-  return (
-    <div className='h-full flex flex-col items-center'>
-      <BrowserRouter>
-        <HeaderWidget/>
-        <NavigationWidget/>
-        
-        <Routes>
-          {/* DashBoard */}
-          <Route path="/" element={<DashboardPage/>}></Route>
+    return (
+        <div className='h-full flex flex-col items-center'>
+            <BrowserRouter>
+                <HeaderWidget/>
+                <NavigationWidget/>
 
-          {/* Board */}
-          <Route path="/boards/" element={<BoardPage/>}></Route>
-          <Route path="/boards/:categoryCode" element={<BoardInfoPage />}></Route>
-          <Route path="/boards/:categoryCode/post" element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}></Route>
-          <Route path="/boards/:categoryCode/:postId" element={<PostDetailPage/>}></Route>
-          <Route path="/boards/:categoryCode/:postId/edit" element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
+                <Routes>
+                    {/* DashBoard */}
+                    <Route path="/" element={<DashboardPage/>}></Route>
 
-          {/* Admin */}
-          <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout /></ProtectedRoute> }>
-            <Route path="board" element={<BackOfficeBoardPage/>}></Route>
-            <Route path="BoardRole" element={<BackOfficeBoardRolePage/>}></Route>
-            <Route path="BoardRoleCode" element={<BackOfficeBoardRoleCodePage/>}></Route>
-            <Route path="post" element={<BackOfficePostPage/>}></Route>
-            <Route path="comment" element={<BackOfficeCommentPage/>}></Route>
-            <Route path="reaction" element={<BackOfficeReactionPage/>}></Route>
-            <Route path="reactionCode" element={<BackOfficeReactionCodePage/>}></Route>
+                    {/* Board */}
+                    <Route path={"/boards"} element={<PostLayout/>}>
+                        <Route path="" element={<BoardPage/>}></Route>
+                        <Route path=":categoryCode" element={<BoardInfoPage/>}></Route>
+                        <Route path=":categoryCode/post"
+                               element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}></Route>
+                        <Route path=":categoryCode/:postId" element={<PostDetailPage/>}></Route>
+                        <Route path=":categoryCode/:postId/edit"
+                               element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
+                    </Route>
 
-            <Route path="user" element={<BackOfficeUserPage/>}></Route>
-            <Route path="userRole" element={<BackOfficeUserRolePage/>}></Route>
-            <Route path="userRoleCode" element={<BackOfficeUserRoleCodePage/>}></Route>
+                    {/* Admin */}
+                    <Route path='/backoffice' element={<ProtectedRoute><BackOfficeLayout/></ProtectedRoute>}>
+                        <Route path="board" element={<BackOfficeBoardPage/>}></Route>
+                        <Route path="BoardRole" element={<BackOfficeBoardRolePage/>}></Route>
+                        <Route path="BoardRoleCode" element={<BackOfficeBoardRoleCodePage/>}></Route>
+                        <Route path="post" element={<BackOfficePostPage/>}></Route>
+                        <Route path="comment" element={<BackOfficeCommentPage/>}></Route>
+                        <Route path="reaction" element={<BackOfficeReactionPage/>}></Route>
+                        <Route path="reactionCode" element={<BackOfficeReactionCodePage/>}></Route>
 
-            <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrictPage/>}></Route>
-            <Route path="areaDistrict" element={<MiddleForecastAreaDistrict/>}></Route>
-          </Route>
+                        <Route path="user" element={<BackOfficeUserPage/>}></Route>
+                        <Route path="userRole" element={<BackOfficeUserRolePage/>}></Route>
+                        <Route path="userRoleCode" element={<BackOfficeUserRoleCodePage/>}></Route>
 
-          {/* Auth */}
-          <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
-          <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}></Route>
+                        <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrictPage/>}></Route>
+                        <Route path="areaDistrict" element={<MiddleForecastAreaDistrict/>}></Route>
+                    </Route>
 
-          {/* Error */}
-          <Route path="*" element={<div>Page Not Found</div>}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
-  )
+                    {/* Auth */}
+                    <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
+                    <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}></Route>
+
+                    {/* Error */}
+                    <Route path="*" element={<div>Page Not Found</div>}></Route>
+                </Routes>
+            </BrowserRouter>
+        </div>
+    )
 }
 
 export default App

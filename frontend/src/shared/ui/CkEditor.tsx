@@ -15,7 +15,7 @@ export const CkEditor = ({ data, handleChange }: CkEditorProps) => {
     const {accessToken} = useAuth();
 
     return (
-        <div className='{styles.editor}'>
+        <div className=''>
             <CKEditor
                 data={data}
                 

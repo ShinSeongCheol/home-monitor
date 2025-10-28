@@ -28,14 +28,10 @@ export const PostCreatePage = () => {
         if(!boardRoles.some(boardRole => boardRole.boardRoleCode.code === 'WRITE' && (!boardRole.memberRoleCode?.code || user?.authorities.includes(boardRole.memberRoleCode.code)))) {
             alert('쓰기 권한이 없습니다.');
             navigate(-1);
-        };
+        }
     }, [board])
 
     return(
-        <main className={'w-full h-full flex justify-center'}>
-            <section className={'w-full lg:w-5xl h-full'}>
-                <PostCreateForm />
-            </section>
-        </main>
+        <PostCreateForm />
     )
 }

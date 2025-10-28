@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getBoard, type Board, BoardInfo } from '../../../entities/board';
-import { CancleButton } from '../../../shared/ui';
-import {CreatePostButton} from "../../../features/post/create";
+import { getBoard, type Board } from '../../../entities/board';
+import {PostListWidget} from "../../../widgets/post";
 
 export const BoardInfoPage = () => {
 
@@ -38,16 +37,6 @@ export const BoardInfoPage = () => {
     }, [board])
 
     return (
-        <main className='w-full flex justify-center'>
-            <section className='w-full md:w-5xl p-2 md:p-0'>
-                
-                <BoardInfo categoryCode={categoryCode} />
-
-                <div className='flex justify-end py-2 gap-2'>
-                    <CancleButton svg={null} type='button' value='뒤로가기' onClick={() => navigate(-1)}/>
-                    <CreatePostButton />
-                </div>
-            </section>
-        </main>
+        <PostListWidget />
     )
 }

@@ -39,10 +39,6 @@ export const PostUpdatePage = () => {
     }, [board])
 
     return(
-        <main className={'w-full h-full flex justify-center'}>
-            <section className={'w-full lg:w-5xl h-full'}>
-                <PostUpdateForm/>
-            </section>
-        </main>
+        <PostUpdateForm/>
     )
 }

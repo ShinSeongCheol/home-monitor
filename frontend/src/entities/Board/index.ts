@@ -10,3 +10,4 @@ export { postBoard } from './api/postBoard.ts'
 export {BoardInfo} from './ui/BoardInfo.tsx';
 export { BoardCard } from './ui/BoardCard.tsx';
 
+

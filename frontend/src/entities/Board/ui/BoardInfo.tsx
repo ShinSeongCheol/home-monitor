@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getBoard } from "../api/getBoard";
 import type { Board } from "../model/Board";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 
-export const BoardInfo = ({ categoryCode }: { categoryCode: string | undefined }) => {
+export const BoardInfo = () => {
 
     const navigate = useNavigate();
+    const {categoryCode} = useParams();
     const [board, setBoard] = useState<Board>();
 
     // 게시판 데이터 조회
