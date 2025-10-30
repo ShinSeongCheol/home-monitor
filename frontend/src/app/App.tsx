@@ -20,8 +20,8 @@ import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
 import {HeaderWidget} from '../widgets/Header';
 import {NavigationWidget} from '../widgets/Navigation';
-import {BoardPage, PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
-import {BoardInfoPage} from '../pages/post/ui/BoardInfoPage';
+import {BoardInfoPage, BoardPage} from "../pages/board";
+import {PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
 import {PostLayout} from "../pages/post/ui/PostLayout.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -40,13 +40,14 @@ function App() {
 
                     {/* Board */}
                     <Route path={"/boards"} element={<PostLayout/>}>
-                        <Route path="" element={<BoardPage/>}></Route>
-                        <Route path=":categoryCode" element={<BoardInfoPage/>}></Route>
-                        <Route path=":categoryCode/post"
-                               element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}></Route>
-                        <Route path=":categoryCode/:postId" element={<PostDetailPage/>}></Route>
-                        <Route path=":categoryCode/:postId/edit"
-                               element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}></Route>
+                        {/*게시판*/}
+                        <Route path="" element={<BoardPage/>}/>
+                        <Route path=":categoryCode" element={<BoardInfoPage/>}/>
+
+                        {/*게시글*/}
+                        <Route path=":categoryCode/post" element={<ProtectedRoute><PostCreatePage/></ProtectedRoute>}/>
+                        <Route path=":categoryCode/:postId" element={<PostDetailPage/>}/>
+                        <Route path=":categoryCode/:postId/edit" element={<ProtectedRoute><PostUpdatePage/></ProtectedRoute>}/>
                     </Route>
 
                     {/* Admin */}

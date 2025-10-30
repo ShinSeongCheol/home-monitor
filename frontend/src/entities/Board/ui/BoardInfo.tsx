@@ -1,9 +1,13 @@
 import {useBoardInfo} from "../model/useBoardInfo.ts";
+import type {Board} from "../model/type.ts";
 
+type BoardInfoProps = {
+    board: Board | undefined;
+};
 
-export const BoardInfo = () => {
+export const BoardInfo = ({board}: BoardInfoProps) => {
 
-    const {board, handleClick} = useBoardInfo();
+    const {handleClick} = useBoardInfo();
 
     return (
         <>

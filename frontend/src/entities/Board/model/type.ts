@@ -1,5 +1,3 @@
-import type { BoardRole } from "./BoardRole";
-
 export type Board = {
     categoryCode: string;
     categoryName: string | null;
@@ -19,4 +17,17 @@ export type Board = {
         }
     }[];
     boardRoles: BoardRole[];
+}
+
+export type BoardRole = {
+    boardRoleCode: BoardRoleCode;
+    memberRoleCode: {
+        code: string;
+        name: string;
+    } | null;
+}
+
+export type BoardRoleCode = {
+    code: string;
+    name: string;
 }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-type User = {
+export type User = {
     email: string;
     name: string;
     authorities: string[];
