@@ -7,20 +7,18 @@ export const PostCreateForm = () => {
 
 
     return (
-        <section className={'w-full lg:w-5xl h-full'}>
-            <form className='flex flex-col gap-2 mt-4' onSubmit={handleSubmit}>
-                <input className='outline-0 text-lg' type="text" name="title" id="title" placeholder="제목을 입력하세요."
-                       maxLength={32} required value={title} onChange={handleTitleChange}/>
+        <form className='flex flex-col gap-2 mt-4' onSubmit={handleSubmit}>
+            <input className='outline-0 text-lg' type="text" name="title" id="title" placeholder="제목을 입력하세요."
+                   maxLength={32} required value={title} onChange={handleTitleChange}/>
 
-                <hr/>
+            <hr/>
 
-                <CkEditor data={content} handleChange={(content) => setContent(content)}/>
+            <CkEditor data={content} handleChange={(content) => setContent(content)}/>
 
-                <div className='flex justify-end gap-2'>
-                    <CancleButton type='button' value='목록' onClick={goBack}/>
-                    <InsertButton type='submit' value='등록'/>
-                </div>
-            </form>
-        </section>
+            <div className='flex justify-end gap-2'>
+                <CancleButton type='button' value='목록' onClick={goBack}/>
+                <InsertButton type='submit' value='등록'/>
+            </div>
+        </form>
     )
 }

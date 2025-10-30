@@ -20,7 +20,7 @@ export const PostListWidget = () => {
                     <BoardInfo board={board}/>
                 ) :
                 (
-                    <p className="text-center text-gray-500 py-8">게시판을 볼 권한이 없습니다.</p>
+                    <p className="text-center text-gray-500 py-8">읽기 권한이 없습니다.</p>
                 )
             }
             <div className='flex justify-end py-2 gap-2'>
