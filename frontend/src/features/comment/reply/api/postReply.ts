@@ -1,7 +1,7 @@
 import {backendUrl} from "../../../../shared";
 
-export const postReply = async (categoryCode:string|undefined, postId:string|undefined, accessToken: string|null, commentId: number|undefined, comment: string) => {
-    const res =await fetch(`${backendUrl}/api/v1/boards/${categoryCode}/${postId}/comment/${commentId}/reply`, {
+export const postReply = async (categoryCode: string | undefined, postId: string | undefined, accessToken: string | undefined, commentId: number | undefined, comment: string) => {
+    const res = await fetch(`${backendUrl}/api/v1/boards/${categoryCode}/${postId}/comment/${commentId}/reply`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -14,6 +14,6 @@ export const postReply = async (categoryCode:string|undefined, postId:string|und
         )
     })
 
-    if(!res.ok) throw res;
+    if (!res.ok) throw res;
     return await res.json();
 }

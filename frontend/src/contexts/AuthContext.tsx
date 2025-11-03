@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const fetchAuth = async () => {
             try {
-                const accessToken = localStorage.getItem('access_token');
+                const accessToken = localStorage.getItem('access_token')    ;
 
                 if(!accessToken) return;
 

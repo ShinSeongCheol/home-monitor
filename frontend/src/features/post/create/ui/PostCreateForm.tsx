@@ -1,4 +1,4 @@
-import {CancleButton, CkEditor, InsertButton} from "../../../../shared/ui";
+import {CancelButton, CkEditor, InsertButton} from "../../../../shared/ui";
 import {usePostCreate} from "../model/usePostCreate";
 
 export const PostCreateForm = () => {
@@ -16,7 +16,7 @@ export const PostCreateForm = () => {
             <CkEditor data={content} handleChange={(content) => setContent(content)}/>
 
             <div className='flex justify-end gap-2'>
-                <CancleButton type='button' value='목록' onClick={goBack}/>
+                <CancelButton type='button' value='목록' onClick={goBack}/>
                 <InsertButton type='submit' value='등록'/>
             </div>
         </form>

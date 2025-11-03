@@ -1,5 +1,5 @@
 import { useAuth } from "../../../contexts/AuthContext";
-import { InsertButton, EditButton, DeleteButton, CancleButton } from "../../../shared/ui";
+import { InsertButton, EditButton, DeleteButton, CancelButton } from "../../../shared/ui";
 import type { Comment } from "../model/type"
 import { useCommentItem } from "../model/useCommentItem";
 
@@ -65,7 +65,7 @@ export const CommentItem = ({ comment, ReactionButton, handleUpdate, handleDelet
                             <textarea className="border border-gray-300" name="replyComment" id="replyComment" value={replyComment ?? ""} onChange={(e) => setReplyComment(e.target.value)}></textarea>
                             <div className="flex justify-end gap-1">
                                 <InsertButton value={"등록"} type={"button"} onClick={() => handleReply(comment.id)}/>
-                                <CancleButton value={"취소"} type={"button"} onClick={() => setReplyId(null)} />
+                                <CancelButton value={"취소"} type={"button"} onClick={() => setReplyId(null)} />
                             </div>
                         </div>
                     )

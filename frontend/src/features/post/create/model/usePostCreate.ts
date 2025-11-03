@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../../../../contexts/AuthContext";
 import { useState, type ChangeEventHandler, type FormEventHandler } from "react";
 import { postBoard } from "../../../../entities/board";
+import {useAuth} from "../../../../shared";
 
 export const usePostCreate = () => {
-    const { accessToken } = useAuth();
+    const { auth } = useAuth();
 
     const navigate = useNavigate();
     const { categoryCode } = useParams();
@@ -21,7 +21,7 @@ export const usePostCreate = () => {
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault()
 
-        postBoard(categoryCode, accessToken, {
+        postBoard(categoryCode, auth?.accessToken, {
             title: title,
             content: content
         })

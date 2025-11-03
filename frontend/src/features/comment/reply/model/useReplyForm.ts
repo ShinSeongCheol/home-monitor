@@ -1,7 +1,7 @@
 import {type ChangeEvent, type FormEventHandler, useState} from "react";
 import {postReply} from "../api/postReply.ts";
 import {useParams} from "react-router-dom";
-import {useAuth} from "../../../../contexts/AuthContext.tsx";
+import {useAuth} from "../../../../shared";
 
 type useReplyFormProps = {
     id: number|undefined;
@@ -10,7 +10,7 @@ type useReplyFormProps = {
 }
 
 export const useReplyForm = ({id, fetchData, handleCancel}: useReplyFormProps) => {
-    const {accessToken} = useAuth();
+    const {auth} = useAuth();
     const {categoryCode, postId} = useParams();
     const [replyComment, setReplyComment] = useState("");
 
@@ -22,7 +22,7 @@ export const useReplyForm = ({id, fetchData, handleCancel}: useReplyFormProps) =
         e.preventDefault();
 
         try {
-            await postReply(categoryCode, postId, accessToken, id, replyComment)
+            await postReply(categoryCode, postId, auth?.accessToken, id, replyComment)
 
             fetchData();
             handleCancel();

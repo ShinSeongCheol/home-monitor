@@ -1,15 +1,15 @@
-import {useAuth} from "../../../../contexts/AuthContext.tsx";
 import {checkPostAccess} from "../lib/checkPostAccess.ts";
 import {type Board} from "../../../../entities/board";
 import type {Post} from "../../../../entities/post";
+import {useAuth} from "../../../../shared";
 
 export const usePostAccess = (board: Board|undefined, post?:Post|undefined) => {
-    const {user} = useAuth();
+    const {auth} = useAuth();
 
-    const canRead = user && board ? checkPostAccess(user, board, "READ") : false;
-    const canWrite = user && board ? checkPostAccess(user, board, "WRITE") : false;
-    const canModify = user && board && post ? checkPostAccess(user, board,"MODIFY", post ) : false;
-    const canDelete = user && board && post ? checkPostAccess(user, board, "DELETE", post) : false;
+    const canRead = auth && board ? checkPostAccess(auth, board, "READ") : false;
+    const canWrite = auth && board ? checkPostAccess(auth, board, "WRITE") : false;
+    const canModify = auth && board && post ? checkPostAccess(auth, board,"MODIFY", post ) : false;
+    const canDelete = auth && board && post ? checkPostAccess(auth, board, "DELETE", post) : false;
 
     return {canRead, canWrite, canModify, canDelete};
 

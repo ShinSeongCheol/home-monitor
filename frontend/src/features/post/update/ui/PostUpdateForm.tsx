@@ -1,4 +1,4 @@
-import {CancleButton, CkEditor, InsertButton} from "../../../../shared/ui"
+import {CancelButton, CkEditor, InsertButton} from "../../../../shared/ui"
 import {useUpdatePost} from "../model/useUpdatePost";
 
 export const PostUpdateForm = () => {
@@ -13,7 +13,7 @@ export const PostUpdateForm = () => {
                 <hr/>
                 <CkEditor data={content} handleChange={(content) => setContent(content)}/>
                 <div className='flex justify-end gap-2'>
-                    <CancleButton svg={null} type='button' value='취소' onClick={handleCancel}/>
+                    <CancelButton svg={null} type='button' value='취소' onClick={handleCancel}/>
                     <InsertButton type='submit' value='저장'/>
                 </div>
             </form>

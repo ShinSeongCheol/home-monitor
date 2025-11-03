@@ -12,14 +12,14 @@ export const usePostDetail = () => {
     const fetchPost = async () => {
         const data = await getPost(categoryCode, postId);
 
-        const santinizedContent = sanitize(data.content, {
+        const sanitizedContent = sanitize(data.content, {
             ADD_TAGS: ["iframe"],
             ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
         });
 
         setPost({
             title: data.title,
-            content: santinizedContent,
+            content: sanitizedContent,
             view: data.number,
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,

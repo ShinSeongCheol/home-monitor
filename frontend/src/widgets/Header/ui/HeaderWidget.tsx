@@ -1,8 +1,8 @@
 import styles from './HeaderWidget.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, CircleUser, LogIn, LogOut, Settings, Thermometer } from 'lucide-react';
+import {useAuth} from "../../../shared";
 
 export const HeaderWidget = () => {
 
@@ -10,10 +10,10 @@ export const HeaderWidget = () => {
 
     const onClickLogin = () => {
         setIsProfileOpen(false);
-        navigate('/auth');
+        navigate('/auth/login');
     }
 
-    const { user, accessToken, logout } = useAuth();
+    const { auth, setAuth } = useAuth();
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const accountContainerRef = useRef<HTMLDivElement>(null);
@@ -29,8 +29,10 @@ export const HeaderWidget = () => {
     }, []);
 
     const handleLogout = () => {
-        logout();
-        alert('로그아웃 되었습니다.');
+        // logout();
+        setAuth(null);
+        localStorage.removeItem("access_token");
+
         navigate('/');
     }
 
@@ -42,18 +44,18 @@ export const HeaderWidget = () => {
                     <h1>ClimaHome</h1>
                 </div>
 
-                { accessToken ? 
+                { auth ?
                     (   
                         <div className={styles.accountContainer} ref={accountContainerRef}>
                             <div className={styles.account} onClick={() => setIsProfileOpen(!isProfileOpen)}>
                                 <CircleUser size={'24px'} color={'#789DE5'} strokeWidth={1}  />
-                                <span>{user?.name}</span>
+                                <span>{auth.name}</span>
                                 <ChevronDown size={'16px'} strokeWidth={1} />
                             </div>
                             { isProfileOpen && 
                                 (
                                     <div className={styles.profile}>
-                                        <p>{user?.name} 님 안녕하세요</p>
+                                        <p>{auth.name} 님 안녕하세요</p>
                                         <hr />
                                         <div className={styles.buttonContainer}>
                                             <button className={`${styles.button} ${styles.editProfile}`} onClick={() => navigate('/profile')}><Settings size={'16px'} color='gray' strokeWidth={1} />내 정보 수정</button>

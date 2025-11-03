@@ -7,8 +7,6 @@ type ReplyProps = {
 export const ReplyButton = ({handleClick}: ReplyProps) => {
 
     return (
-        <>
-            <InsertButton value={"답글"} type={"button"} onClick={handleClick}/>
-        </>
+        <InsertButton value={"답글"} type={"button"} onClick={handleClick}/>
     )
 }

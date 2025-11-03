@@ -1,5 +1,7 @@
-export const postComment = async (categoryCode: string|undefined, postId: string|undefined, accessToken: string|null, comment: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/boards/${categoryCode}/${postId}/comment`, {
+import {backendUrl} from "../../../../shared";
+
+export const postComment = async (categoryCode: string | undefined, postId: string | undefined, accessToken: string | undefined, comment: string) => {
+    const res = await fetch(`${backendUrl}/api/v1/boards/${categoryCode}/${postId}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

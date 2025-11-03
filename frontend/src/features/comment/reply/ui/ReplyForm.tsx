@@ -1,4 +1,4 @@
-import {CancleButton, InsertButton} from "../../../../shared/ui";
+import {CancelButton, InsertButton} from "../../../../shared/ui";
 import {useReplyForm} from "../model/useReplyForm.ts";
 
 type ReplyFormProps = {
@@ -21,7 +21,7 @@ export const ReplyForm = ({id, fetchData, handleCancel}: ReplyFormProps) => {
                     value={replyComment ?? ""} onChange={handleReplyCommentChange}></textarea>
             <div className="flex justify-end gap-1">
                 <InsertButton value={"등록"} type={"submit"}/>
-                <CancleButton value={"취소"} type={"button"} onClick={handleCancel}/>
+                <CancelButton value={"취소"} type={"button"} onClick={handleCancel}/>
             </div>
         </form>
     )

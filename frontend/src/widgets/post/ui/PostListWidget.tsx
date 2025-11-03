@@ -1,5 +1,5 @@
 import {BoardInfo, useBoard} from "../../../entities/board";
-import {CancleButton} from "../../../shared/ui";
+import {CancelButton} from "../../../shared/ui";
 import {CreatePostButton} from "../../../features/post/create";
 import {useNavigate} from "react-router-dom";
 import {usePostAccess} from "../../../features/post/access";
@@ -24,7 +24,7 @@ export const PostListWidget = () => {
                 )
             }
             <div className='flex justify-end py-2 gap-2'>
-                <CancleButton svg={null} type='button' value='뒤로가기' onClick={() => navigate(-1)}/>
+                <CancelButton svg={null} type='button' value='뒤로가기' onClick={() => navigate(-1)}/>
                 {canWrite && <CreatePostButton/>}
             </div>
         </section>

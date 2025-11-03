@@ -1,5 +1,5 @@
 export { InsertButton } from './InsertButton';
-export { CancleButton } from './CancleButton';
+export { CancelButton } from './CancelButton';
 export { EditButton } from './EditButton';
 export { DeleteButton } from './DeleteButton';
 

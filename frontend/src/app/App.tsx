@@ -23,6 +23,9 @@ import {NavigationWidget} from '../widgets/Navigation';
 import {BoardInfoPage, BoardPage} from "../pages/board";
 import {PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
 import {PostLayout} from "../pages/post/ui/PostLayout.tsx";
+import {AuthLayout} from "../pages/auth";
+import {LoginPage} from "../pages/auth/ui/LoginPage.tsx";
+import {SignupPage} from "../pages/auth/ui/SignupPage.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -69,8 +72,11 @@ function App() {
                     </Route>
 
                     {/* Auth */}
-                    <Route path='/auth' element={<AuthPage></AuthPage>}></Route>
-                    <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}></Route>
+                    <Route path={'/auth'} element={<AuthLayout/>}>
+                        <Route path='login' element={<LoginPage />}/>
+                        <Route path='signup' element={<SignupPage />}/>
+                        {/*<Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}></Route>*/}
+                    </Route>
 
                     {/* Error */}
                     <Route path="*" element={<div>Page Not Found</div>}></Route>

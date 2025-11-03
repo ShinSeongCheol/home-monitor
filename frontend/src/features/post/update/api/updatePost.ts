@@ -1,6 +1,6 @@
 import { backendUrl } from "../../../../shared";
 
-export const updatePost = async (categoryCode:string | undefined, postId:string | undefined, title:string, content:string, accessToken:string | null) => {
+export const updatePost = async (categoryCode:string | undefined, postId:string | undefined, title:string, content:string, accessToken:string | undefined) => {
 
     const res = await fetch(`${backendUrl}/api/v1/boards/${categoryCode}/${postId}`, {
         method: 'PUT',

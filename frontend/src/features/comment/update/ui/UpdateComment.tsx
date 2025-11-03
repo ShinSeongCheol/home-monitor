@@ -14,8 +14,6 @@ export const UpdateComment = ({id, content, fetchData, isEdit, handleIsEdit}: Up
     const {handleClick} = useUpdateComment({id, content, fetchData, isEdit, handleIsEdit});
 
     return (
-        <>
-            <EditButton value={"수정"} type={"button"} onClick={handleClick}/>
-        </>
+        <EditButton value={"수정"} type={"button"} onClick={handleClick}/>
     )
 }

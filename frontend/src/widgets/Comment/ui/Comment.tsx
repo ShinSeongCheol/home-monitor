@@ -1,14 +1,14 @@
 import {CommentForm} from "../../../features/comment/create";
-import {useAuth} from "../../../contexts/AuthContext.tsx";
 import {CommentList} from "../../../entities/comment";
 import {ReplyButton, ReplyForm} from "../../../features/comment/reply";
 import {UpdateComment} from "../../../features/comment/update";
 import {DeleteComment} from "../../../features/comment/delete";
 import {CommentReaction} from "../../../features/reaction/ui/CommentReaction.tsx";
+import {useAuth} from "../../../shared";
 
 export const Comment = () => {
 
-    const {user} = useAuth();
+    const {auth} = useAuth();
 
     return (
         <section className='w-full lg:w-5xl'>
@@ -18,7 +18,7 @@ export const Comment = () => {
                 (
                     <>
                         <ReplyButton handleClick={toggleIsReply}/>
-                        {comment?.member.email === user?.email &&
+                        {comment?.member.email === auth?.email &&
                             <>
                                 <UpdateComment id={comment?.id} content={content} fetchData={fetchData} isEdit={isEdit} handleIsEdit={handleIsEdit}/>
                                 <DeleteComment id={comment?.id} fetchData={fetchData}/>
@@ -32,7 +32,7 @@ export const Comment = () => {
                     <ReplyForm id={id} fetchData={fetchData} handleCancel={() => handleIsReply(false)}/>
                 )
             }
-                commentForm = {(fetchData) => (user?.email && <CommentForm fetchData={fetchData}/>)}
+                commentForm = {(fetchData) => (auth?.email && <CommentForm fetchData={fetchData}/>)}
             />
 
         </section>

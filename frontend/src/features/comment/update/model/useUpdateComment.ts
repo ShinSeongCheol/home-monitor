@@ -1,6 +1,6 @@
 import {updateComment} from "../api/updateComment.ts";
-import {useAuth} from "../../../../contexts/AuthContext.tsx";
 import {useParams} from "react-router-dom";
+import {useAuth} from "../../../../shared";
 
 type useUpdateCommentProps = {
     id: number | undefined;
@@ -12,13 +12,13 @@ type useUpdateCommentProps = {
 
 export const useUpdateComment = ({id, content, fetchData, isEdit, handleIsEdit}: useUpdateCommentProps) => {
 
-    const {accessToken} = useAuth();
+    const {auth} = useAuth();
     const {categoryCode, postId} = useParams();
 
     const handleClick = async () => {
         if(!isEdit) return handleIsEdit(true);
         try {
-            await updateComment(categoryCode, postId, accessToken, id, content)
+            await updateComment(categoryCode, postId, auth?.accessToken, id, content)
             fetchData();
 
             handleIsEdit(false);

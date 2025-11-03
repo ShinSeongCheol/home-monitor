@@ -1,6 +1,6 @@
 import { backendUrl } from "../../../shared";
 
-export const postBoard = async (categoryCode: string | undefined, accessToken: string | null, data: object) => {
+export const postBoard = async (categoryCode: string | undefined, accessToken: string | undefined, data: object) => {
     const res = await fetch(`${backendUrl}/api/v1/boards/${categoryCode}/post`, {
             method: 'POST',
             headers: {

@@ -1,7 +1,6 @@
 import {useEffect, useState, type ChangeEventHandler, type FormEventHandler} from "react";
-import {useAuth} from "../../../../contexts/AuthContext";
 import {useNavigate, useParams} from "react-router-dom";
-import {sanitize} from "../../../../shared";
+import {sanitize, useAuth} from "../../../../shared";
 import {updatePost} from "../api/updatePost";
 import {getPost} from "../../../../entities/post/api/getPost.ts";
 
@@ -10,7 +9,7 @@ export const useUpdatePost = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-    const {accessToken} = useAuth();
+    const {auth} = useAuth();
 
     const navigate = useNavigate();
     const {categoryCode, postId} = useParams();
@@ -18,13 +17,13 @@ export const useUpdatePost = () => {
     const fetchPost = async () => {
         try {
             const data = await getPost(categoryCode, postId);
-            const santiizedContent = sanitize(data.content, {
+            const sanitizedContent = sanitize(data.content, {
                 ADD_TAGS: ["iframe"],
                 ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
             });
 
             setTitle(sanitize(data.title));
-            setContent(santiizedContent);
+            setContent(sanitizedContent);
 
         } catch (err) {
             console.error(err);
@@ -41,7 +40,7 @@ export const useUpdatePost = () => {
         e.preventDefault();
 
         try {
-            await updatePost(categoryCode, postId, title, content, accessToken);
+            await updatePost(categoryCode, postId, title, content, auth?.accessToken);
             navigate(-1);
         } catch (err) {
             console.error(err);

@@ -1,11 +1,11 @@
 import {type ChangeEvent, type FormEventHandler, useState} from "react";
-import {useAuth} from "../../../../contexts/AuthContext.tsx";
 import {useParams} from "react-router-dom";
 import {postComment} from "../api/postComment.ts";
+import {useAuth} from "../../../../shared";
 
 export const useCommentForm = (fetchData: () => void) => {
 
-    const {accessToken} = useAuth();
+    const {auth} = useAuth();
     const {categoryCode, postId} = useParams();
 
     const [comment, setComment] = useState("");
@@ -17,7 +17,7 @@ export const useCommentForm = (fetchData: () => void) => {
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         try {
-            await postComment(categoryCode, postId, accessToken, comment);
+            await postComment(categoryCode, postId, auth?.accessToken, comment);
             setComment("");
 
             fetchData();
