@@ -42,7 +42,6 @@ export const useUpdatePost = () => {
 
         try {
             await updatePost(categoryCode, postId, title, content, accessToken);
-            alert('글 수정 되었습니다.');
             navigate(-1);
         } catch (err) {
             console.error(err);

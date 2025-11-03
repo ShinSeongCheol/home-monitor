@@ -8,8 +8,8 @@ export const usePostAccess = (board: Board|undefined, post?:Post|undefined) => {
 
     const canRead = user && board ? checkPostAccess(user, board, "READ") : false;
     const canWrite = user && board ? checkPostAccess(user, board, "WRITE") : false;
-    const canModify = user && board ? checkPostAccess(user, board,"MODIFY", post ) : false;
-    const canDelete = user && board ? checkPostAccess(user, board, "DELETE", post) : false;
+    const canModify = user && board && post ? checkPostAccess(user, board,"MODIFY", post ) : false;
+    const canDelete = user && board && post ? checkPostAccess(user, board, "DELETE", post) : false;
 
     return {canRead, canWrite, canModify, canDelete};
 

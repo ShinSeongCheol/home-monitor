@@ -8,8 +8,8 @@ export const checkPostAccess = (user: User | null, board: Board, permission: Boa
     if (!(user && board)) return false;
     const roles = board.boardRoles ?? [];
 
-    if(post && post.member.email === user.email) {
-        return true;
+    if(post && post.member.email !== user.email) {
+        return false;
     }
 
     return roles.some(boardRole => boardRole.boardRoleCode.code === permission && (!boardRole.memberRoleCode?.code || user.authorities.includes(boardRole.memberRoleCode?.code)));
