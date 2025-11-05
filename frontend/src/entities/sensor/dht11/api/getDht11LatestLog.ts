@@ -1,4 +1,4 @@
-import { backendUrl } from "../../../shared";
+import {backendUrl} from "../../../../shared";
 
 export const getDht11LatestLog = async () => {
     const res = await fetch(`${backendUrl}/api/v1/dht11/log/latest`)
