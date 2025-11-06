@@ -3,7 +3,7 @@ import { Alignment, Autoformat, BlockQuote, Bold, ClassicEditor, Code, CodeBlock
 import 'ckeditor5/ckeditor5.css';
 import coreTransitions from "ckeditor5/translations/ko.js";
 import { type Dispatch, type SetStateAction } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import {useAuth} from "../context/AuthProvider.tsx";
 
 type CkEditorProps = {
     data: string;
@@ -12,7 +12,7 @@ type CkEditorProps = {
 
 export const CkEditor = ({ data, handleChange }: CkEditorProps) => {
 
-    const {accessToken} = useAuth();
+    const {auth} = useAuth();
 
     return (
         <div className=''>
@@ -72,7 +72,7 @@ export const CkEditor = ({ data, handleChange }: CkEditorProps) => {
                     simpleUpload: {
                         uploadUrl: `${import.meta.env.VITE_API_URL}/api/v1/boards/image`,
                         headers: {
-                            'Authorization': `Bearer ${accessToken}`
+                            'Authorization': `Bearer ${auth?.accessToken ?? ""}`
                         }
                     },
                     mediaEmbed: {

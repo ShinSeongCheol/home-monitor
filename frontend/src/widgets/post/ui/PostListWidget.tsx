@@ -14,7 +14,7 @@ export const PostListWidget = () => {
     if (isLoading) return null;
 
     return (
-        <section className='w-full md:w-5xl p-2 md:p-0'>
+        <section className='w-full max-w-5xl p-2 md:p-0'>
             {canRead ?
                 (
                     <BoardInfo board={board}/>
