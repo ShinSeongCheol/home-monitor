@@ -17,13 +17,13 @@ export const Navigation = () => {
                     <Link to={"/"}>대시보드</Link>
                 </li>
 
-                <li className={`flex items-center gap-1 font-[DMSans] text-base ${location.pathname === '/boards' ? active : ''}`}>
+                <li className={`flex items-center gap-1 font-[DMSans] text-base ${location.pathname.includes('/boards') ? active : ''}`}>
                     <SquarePen size={"16px"} color={"gray"} strokeWidth={1}/>
                     <Link to={"/boards"}>게시판</Link>
                 </li>
 
                 {isAdmin &&
-                    <li className={`flex items-center gap-1 font-[DMSans] text-base ${location.pathname === '/backoffice/board' ? active : ''}`}>
+                    <li className={`flex items-center gap-1 font-[DMSans] text-base ${location.pathname.includes('/backoffice') ? active : ''}`}>
                         <Settings size={"16px"} color={"gray"} strokeWidth={1}/>
                         <Link to={"/backoffice/board"}>설정</Link>
                     </li>
