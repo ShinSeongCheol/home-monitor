@@ -30,7 +30,7 @@ export const useProfileForm = () => {
         setNewConfirmPassword(e.target.value);
     };
 
-    const handleSubmit = (e:FormEvent<Element>) => {
+    const handleSubmit = async (e:FormEvent<Element>) => {
         e.preventDefault();
 
         if(newPassword !== newConfirmPassword) {
@@ -39,14 +39,14 @@ export const useProfileForm = () => {
 
         if(!auth) return;
 
-        putProfile(email, auth.name, nickname, password, newPassword, auth.accessToken)
-        .then(() => {
-            alert('비밀번호가 변경되었습니다.');
-            navigate('/');
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        const res = await putProfile(email, auth.name, nickname, password, newPassword, auth.accessToken)
+
+        if(!res.ok) {
+            console.error(res.status);
+        }
+
+        alert('비밀번호가 변경되었습니다.');
+        navigate('/');
     };
 
     return {email, nickname, handleChangeNickname, handleChangePassword, handleChangeNewPassword, handleChangeConfirmNewPassword, handleSubmit};
