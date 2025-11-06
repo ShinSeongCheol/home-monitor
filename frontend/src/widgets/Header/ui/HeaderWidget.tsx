@@ -7,7 +7,7 @@ export const HeaderWidget = () => {
             <div className={'max-w-5xl h-full mx-auto my-0 flex justify-between items-center px-2'}>
                 <div className={'flex items-center'}>
                     <Thermometer size={'32px'} fill={"#d47878ff"} color={'#d47878ff'}/>
-                    <h1 className={'font-[DMSans] text-2xl'}>ClimaHome</h1>
+                    <h1 className={'font-[DMSans] text-2xl text-red-300'}>ClimaHome</h1>
                 </div>
 
                 <LoginButton />
