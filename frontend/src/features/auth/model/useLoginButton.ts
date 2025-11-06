@@ -22,7 +22,7 @@ export const useLoginButton = () => {
     };
 
     const handleClickProfile = () => {
-        navigate('/profile');
+        navigate('/auth/profile');
     }
 
     useEffect(() => {
