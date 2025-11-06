@@ -11,7 +11,7 @@ export const Comment = () => {
     const {auth} = useAuth();
 
     return (
-        <section className='w-full lg:w-5xl'>
+        <section className='w-full max-w-5xl'>
             <CommentList
                 reactions={(comment, fetchData) => <CommentReaction comment={comment} fetchData={fetchData}/>}
                 actions={(comment, content, fetchData, toggleIsReply, isEdit, handleIsEdit) =>

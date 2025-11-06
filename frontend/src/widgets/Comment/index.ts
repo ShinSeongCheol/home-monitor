@@ -1,1 +1,1 @@
-export {Comment} from './ui/Comment';
+export {Comment} from './ui/Comment.tsx'

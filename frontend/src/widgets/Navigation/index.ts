@@ -1,1 +1,1 @@
-export {NavigationWidget} from './ui/NavigationWidget';
+export {NavigationWidget} from './ui/NavigationWidget.tsx'

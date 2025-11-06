@@ -5,7 +5,6 @@ import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 import {AllCommunityModule, ModuleRegistry} from 'ag-grid-community';
 import ProtectedRoute from '../components/ProtectedRoute';
 import {DashboardPage} from '../pages/dashboard';
-import ProfilePage from '../pages/ProfilePage';
 import BackOfficeLayout from '../layouts/BackOfficeLayout';
 import BackOfficeBoardPage from '../pages/BackOfficeBoardPage';
 import BackOfficeBoardRolePage from '../pages/BackOfficeBoardRolePage';
@@ -17,14 +16,14 @@ import BackOfficeReactionCodePage from '../pages/BackOfficeReactionCodePage';
 import BackOfficeUserRoleCodePage from '../pages/BackOfficeUserRoleCodePage.';
 import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
 import BackOfficeUserPage from '../pages/BackOfficeUserPage';
-import {HeaderWidget} from '../widgets/Header';
-import {NavigationWidget} from '../widgets/Navigation';
 import {BoardInfoPage, BoardPage} from "../pages/board";
 import {PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
 import {PostLayout} from "../pages/post/ui/PostLayout.tsx";
 import {AuthLayout} from "../pages/auth";
 import {LoginPage} from "../pages/auth/ui/LoginPage.tsx";
 import {SignupPage} from "../pages/auth/ui/SignupPage.tsx";
+import {HeaderWidget} from "../widgets/header";
+import {NavigationWidget} from "../widgets/navigation";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

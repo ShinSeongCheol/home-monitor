@@ -3,7 +3,6 @@ import {PostReaction} from "../../../features/reaction";
 import {CancleButton} from "../../../components/ButtonComponent.tsx";
 import {UpdatePostButton} from "../../../features/post/update";
 import {DeletePostButton} from "../../../features/post/delete";
-import {Comment} from "../../Comment";
 import {usePostDetail} from "../../../entities/post";
 import {useNavigate} from "react-router-dom";
 import {useBoard} from "../../../entities/board";
@@ -19,7 +18,7 @@ export const PostDetailWidget = () => {
     if(isLoading) return null;
 
     return (
-        <section className={'w-full lg:w-5xl'}>
+        <>
             {canRead ?
                 (
                     <PostDetail post={post} postReaction={<PostReaction/>}/>
@@ -35,8 +34,6 @@ export const PostDetailWidget = () => {
                 {canModify && <UpdatePostButton/>}
                 {canDelete && <DeletePostButton/>}
             </div>
-
-            <Comment/>
-        </section>
+        </>
     )
 }
