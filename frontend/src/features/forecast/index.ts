@@ -1,1 +1,0 @@
-export {getForecastRegionToday} from './api/getForecastRegionToday';

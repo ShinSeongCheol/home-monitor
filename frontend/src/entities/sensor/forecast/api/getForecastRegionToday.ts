@@ -1,4 +1,4 @@
-import { backendUrl } from "../../../shared/index";
+import {backendUrl} from "../../../../shared";
 
 export const getForecastRegionToday = async () => {
     const res = await fetch(`${backendUrl}/api/v1/forecast/region/today`)
