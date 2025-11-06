@@ -37,7 +37,7 @@ export const LoginButton = () => {
                 )
                 :
                 (
-                    <div className={'flex items-center gap-1 font-[DMSans] text-lg text-blue-300 border border-blue-300 rounded-sm hover:cursor-pointer hover:bg-gray-100'} onClick={handleLogin}>
+                    <div className={'flex items-center gap-1 font-[DMSans] text-lg text-blue-300 border border-blue-300 rounded-sm hover:cursor-pointer hover:bg-gray-100 px-1'} onClick={handleLogin}>
                         <LogIn width={"16px"} height={"16px"} color="#82c5ff" strokeWidth={1}/>
                         <p>로그인</p>
                     </div>
