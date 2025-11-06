@@ -1,36 +1,9 @@
-import styles from './NavigationWidget.module.css';
-import {Link, useLocation} from 'react-router-dom';
-import {LayoutDashboard, Settings, SquarePen} from 'lucide-react';
-import {useAuth} from "../../../shared";
+import {Navigation} from "../../../features/navigation";
 
 export const NavigationWidget = () => {
-
-    const location = useLocation();
-    const {auth} = useAuth();
-
     return (
-        <nav className={styles.navigation}>
-            <div className={styles.container}>
-                <ul className={styles.menuContainer}>
-                    <li className={location.pathname === '/' ? `${styles.active}` : ""}>
-                        <LayoutDashboard size={"16px"} color={"gray"} strokeWidth={1}/>
-                        <Link to={"/"}>대시보드</Link>
-                    </li>
-                    <li className={location.pathname.includes('boards') ? `${styles.active}` : ""}>
-                        <SquarePen size={"16px"} color={"gray"} strokeWidth={1}/>
-                        <Link to={"/boards"}>게시판</Link>
-                    </li>
-                    {auth?.authorities.includes({authority: "ROLE_ADMIN"})
-                        ?
-                        <li className={location.pathname.includes('/backoffice') ? `${styles.active}` : ""}>
-                            <Settings size={"16px"} color={"gray"} strokeWidth={1}/>
-                            <Link to={"/backoffice/board"}>설정</Link>
-                        </li>
-                        :
-                        ""
-                    }
-                </ul>
-            </div>
+        <nav className={'w-full h-[29px] bg-white border-b-gray-100 sticky flex justify-center items-center'}>
+            <Navigation/>
         </nav>
     )
 }
