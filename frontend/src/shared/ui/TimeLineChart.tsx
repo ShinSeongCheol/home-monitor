@@ -41,7 +41,7 @@ export const TimeLineChart = ({icon, title, data}: TimeLineChartProps) => {
                 {icon} {title}
             </h2>
 
-            <div className={'h-48 sm:h-64 md:h-96'}>
+            <div className={'h-48 sm:h-64 md:h-80'}>
                 <ResponsiveLine
                     animate={true}
                     data={data}
