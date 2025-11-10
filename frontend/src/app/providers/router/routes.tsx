@@ -7,7 +7,7 @@ import {AuthLayout} from "../../../pages/auth";
 import {LoginPage} from "../../../pages/auth/ui/LoginPage.tsx";
 import {SignupPage} from "../../../pages/auth/ui/SignupPage.tsx";
 import {MainLayout} from "../layout/MainLayout.tsx";
-import ProfilePage from "../../../pages/ProfilePage.tsx";
+import ProfilePage from "../../../pages/auth/ui/ProfilePage.tsx";
 
 export const routes: RouteObject[] = [
     {
