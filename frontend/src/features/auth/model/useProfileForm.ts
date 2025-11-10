@@ -39,7 +39,7 @@ export const useProfileForm = () => {
 
         if(!auth) return;
 
-        const res = await putProfile(email, auth.name, nickname, password, newPassword, auth.accessToken)
+        const res = await putProfile({email: email, name: auth.name, nickname: nickname, password: password, newPassword: newPassword, accessToken: auth.accessToken})
 
         if(!res.ok) {
             console.error(res.status);

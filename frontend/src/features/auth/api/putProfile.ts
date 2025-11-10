@@ -1,9 +1,9 @@
 import {backendUrl} from "../../../shared";
 
 type putProfileParams = {
-    email: string;
+    email: string|undefined;
     name: string;
-    nickname: string;
+    nickname: string|undefined;
     password: string;
     newPassword: string;
     accessToken: string;
