@@ -7,7 +7,7 @@ import { ChevronRight, Download, File, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import AgGridReactComponent from "../components/AgGridReactComponent";
 import type { AgGridReact } from "ag-grid-react";
-import { MenuType, SideMenuType } from "../layouts/BackOfficeLayout";
+import { MenuType, SideMenuType } from "./backoffice/ui/BackOfficeLayout.tsx";
 import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
 import useFormattedDate from "../hooks/useFormattedDate";
 import { CsvButton, FileButton, InsertButton } from "../components/ButtonComponent";

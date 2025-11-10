@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type BoardRole } from '../layouts/BackOfficeLayout';
+import { MenuType, SideMenuType, type BoardRole } from './backoffice/ui/BackOfficeLayout.tsx';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditBoardRoleCodeModal, InsertBoardRoleCodeModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';

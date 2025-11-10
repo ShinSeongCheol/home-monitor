@@ -1,5 +1,3 @@
-import styles from '../styles/components/AgGridReactComponent.module.css';
-
 import { AG_GRID_LOCALE_KR } from "@ag-grid-community/locale";
 import { type DateTimeDataTypeDefinition, type RowSelectionOptions, type SizeColumnsToFitGridStrategy, themeBalham, type ValueFormatterParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -71,7 +69,7 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
     }, [rowData]);
     
     return(
-        <div ref={divRef} className={styles.container}>
+        <div ref={divRef} className={'h-full'}>
             <AgGridReact 
                 ref={agGridRef} 
                 theme={themeBalham} 

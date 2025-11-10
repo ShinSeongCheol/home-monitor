@@ -5,8 +5,6 @@ import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 import {AllCommunityModule, ModuleRegistry} from 'ag-grid-community';
 import ProtectedRoute from '../components/ProtectedRoute';
 import {DashboardPage} from '../pages/dashboard';
-import BackOfficeLayout from '../layouts/BackOfficeLayout';
-import BackOfficeBoardPage from '../pages/BackOfficeBoardPage';
 import BackOfficeBoardRolePage from '../pages/BackOfficeBoardRolePage';
 import BackOfficeBoardRoleCodePage from '../pages/BackOfficeBoardRoleCodePage';
 import BackOfficePostPage from '../pages/BackOfficePostPage';

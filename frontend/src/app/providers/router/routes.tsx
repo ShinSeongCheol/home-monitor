@@ -8,6 +8,7 @@ import {LoginPage} from "../../../pages/auth/ui/LoginPage.tsx";
 import {SignupPage} from "../../../pages/auth/ui/SignupPage.tsx";
 import {MainLayout} from "../layout/MainLayout.tsx";
 import ProfilePage from "../../../pages/auth/ui/ProfilePage.tsx";
+import {BackOfficeBoardPage, BackOfficeLayout} from "../../../pages/backoffice";
 
 export const routes: RouteObject[] = [
     {
@@ -23,13 +24,20 @@ export const routes: RouteObject[] = [
                     {path: ':categoryCode/:postId/edit', element: <PostUpdatePage/>},
                 ]
             },
+
             {
                 path: '/auth', element: <AuthLayout/>, children: [
                     {path: 'login', element: <LoginPage/>},
                     {path: 'signup', element: <SignupPage/>},
                 ],
             },
-            {path: '/auth/profile', element: <ProfilePage />},
+            {path: '/auth/profile', element: <ProfilePage/>},
+
+            {
+                path: '/backoffice', element: <BackOfficeLayout/>, children: [
+                    {path: 'board', element: <BackOfficeBoardPage />},
+                ]
+            },
         ]
     }
 ]

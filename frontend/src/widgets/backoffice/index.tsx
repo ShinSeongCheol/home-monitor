@@ -1,0 +1,1 @@
+export {BackOfficeBoardWidget} from './ui/BackOfficeBoardWidget.tsx'

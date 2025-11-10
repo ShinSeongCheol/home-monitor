@@ -1,24 +1,13 @@
 import styles from '../styles/components/BackOfficeBoardModal.module.css';
 
-import { useEffect, useState, type FormEventHandler, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState, type FormEventHandler } from "react";
 import { CancleButton, InsertButton } from './ButtonComponent';
 import { X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import type { Board, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../layouts/BackOfficeLayout';
+import type { Board, BoardRoleCode, Comment, Member, MemberRoleCode, Post, ReactionCode } from '../pages/backoffice/ui/BackOfficeLayout.tsx';
 import DOMPurify from 'dompurify';
 import { CkEditor } from '../shared/ui';
-
-type ModalPortalProps = {
-    children: ReactNode;
-}
-
-const ModalPortal = ({children} : ModalPortalProps) => {
-    const modalRoot = document.getElementById('modal-root');
-    if(!modalRoot) return;
-
-    return createPortal(children, modalRoot);
-}
+import {ModalPortal} from "../shared";
 
 type insertModalProps = {
     isOpen: boolean;
