@@ -2,6 +2,8 @@ import {useEffect, useRef, useState} from "react";
 import type {AgGridReact} from "ag-grid-react";
 import type {Board} from "../../../../entities/board";
 import {getBackOfficeBoards} from "../../../../entities/board/api/getBackOfficeBoards.ts";
+import {deleteBoard} from "../api/deleteBoard.ts";
+import {useAuth} from "../../../../shared";
 
 export const useBackOfficeBoard = () => {
 
@@ -20,6 +22,8 @@ export const useBackOfficeBoard = () => {
         {field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true, flex: 1},
     ]);
 
+    const {auth} = useAuth();
+
     const fetchBoard = async () => {
         try {
             const data: Board[] = await getBackOfficeBoards();
@@ -29,9 +33,34 @@ export const useBackOfficeBoard = () => {
         }
     }
 
+    const handleClickDelete = async () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        try {
+            const data = ref.api.getSelectedRows()[0];
+            if (!confirm(`${data.id} 삭제하시겠습니까?`)) return;
+
+            await deleteBoard(data.id, auth?.accessToken);
+            await fetchBoard();
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     useEffect(() => {
         fetchBoard().catch(console.error);
     }, []);
 
-    return {isInsertOpen, isEditOpen, agGridComponentRef, colDefs, rowData, setIsInsertOpen, setIsEditOpen, fetchBoard};
+    return {
+        isInsertOpen,
+        isEditOpen,
+        agGridComponentRef,
+        colDefs,
+        rowData,
+        setIsInsertOpen,
+        setIsEditOpen,
+        fetchBoard,
+        handleClickDelete
+    };
 }
