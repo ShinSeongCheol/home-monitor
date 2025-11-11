@@ -1,6 +1,5 @@
 import {BackOfficeModalLayout} from "../../../../shared";
-import {CancleButton} from "../../../../components/ButtonComponent.tsx";
-import {InsertButton} from "../../../../shared/ui";
+import {CancelButton, InsertButton} from "../../../../shared/ui";
 import {useInsertBoardForm} from "../model/useInsertBoardForm.ts";
 
 type InsertBoardFormProps = {
@@ -32,7 +31,7 @@ export const InsertBoardForm = ({fetchBoard, handleClickCancel}: InsertBoardForm
             </div>
 
             <div className={`flex justify-end gap-1`}>
-                <CancleButton svg={null} value='취소' type='button' onClick={handleClickCancel}></CancleButton>
+                <CancelButton svg={null} value='취소' type='button' onClick={handleClickCancel}></CancelButton>
                 <InsertButton svg={null} value='추가' type='submit'></InsertButton>
             </div>
         </form>
