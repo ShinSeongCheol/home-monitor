@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import type {AgGridReact} from "ag-grid-react";
 import type {Board} from "../../../../entities/board";
-import {getBackOfficeBoards} from "../../../../entities/board/api/getBackOfficeBoards.ts";
+import {getBackOfficeBoards} from "../../api/getBackOfficeBoards.ts";
 import {deleteBoard} from "../api/deleteBoard.ts";
 import {useAuth} from "../../../../shared";
 import {useFormattedDate} from "../../../../shared/lib";

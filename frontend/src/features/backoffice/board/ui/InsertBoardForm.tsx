@@ -12,7 +12,7 @@ export const InsertBoardForm = ({fetchBoard, handleClickCancel}: InsertBoardForm
     const {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit} = useInsertBoardForm();
 
     const form = (
-        <form className={'flex flex-col gap-4'} onSubmit={(e) => handleClickSubmit(e, fetchBoard)}>
+        <form className={'flex flex-col gap-4'} onSubmit={(e) => handleClickSubmit(e, fetchBoard, handleClickCancel)}>
             <div className={`flex flex-col gap-2`}>
                 <div className={'flex items-center'}>
                     <label className={'w-28 text-center select-none'} htmlFor='code'>코드</label>

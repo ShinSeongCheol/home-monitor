@@ -34,12 +34,13 @@ export const useInsertBoardForm = () => {
         setComment(e.target.value);
     };
 
-    const handleClickSubmit = async (e:FormEvent<HTMLFormElement> , fetchBoard: () => Promise<void>) => {
+    const handleClickSubmit = async (e:FormEvent<HTMLFormElement> , fetchBoard: () => Promise<void>, handleClickCancel: () => void) => {
         e.preventDefault();
 
         try {
             await postBoard(code, name, comment, auth?.accessToken)
             await fetchBoard();
+            handleClickCancel();
         }catch(err) {
             // Todo 에러 처리 필요
             console.error(err);

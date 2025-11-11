@@ -25,11 +25,12 @@ export const useUpdateBoardForm = (agGridReact: AgGridReact | null) => {
         setComment(e.target.value);
     };
 
-    const handleClickSubmit = async (e: FormEvent<HTMLFormElement>, fetchBoard: () => void ) => {
+    const handleClickSubmit = async (e: FormEvent<HTMLFormElement>, fetchBoard: () => Promise<void>, handleClickCancel: () => void ) => {
         e.preventDefault();
 
         await updateBoard(selectedRow.id, code, name, comment, auth?.accessToken).catch(console.error);
-        fetchBoard();
+        await fetchBoard();
+        handleClickCancel();
     };
 
     return {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit};
