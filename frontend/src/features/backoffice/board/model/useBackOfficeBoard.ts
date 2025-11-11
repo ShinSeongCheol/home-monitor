@@ -4,6 +4,7 @@ import type {Board} from "../../../../entities/board";
 import {getBackOfficeBoards} from "../../../../entities/board/api/getBackOfficeBoards.ts";
 import {deleteBoard} from "../api/deleteBoard.ts";
 import {useAuth} from "../../../../shared";
+import {useFormattedDate} from "../../../../shared/lib";
 
 export const useBackOfficeBoard = () => {
 
@@ -23,6 +24,7 @@ export const useBackOfficeBoard = () => {
     ]);
 
     const {auth} = useAuth();
+    const {formattedDate} = useFormattedDate();
 
     const fetchBoard = async () => {
         try {
@@ -48,6 +50,13 @@ export const useBackOfficeBoard = () => {
         }
     }
 
+    const handleClickDownload = () => {
+        const ref = agGridComponentRef.current;
+        if (!ref) return;
+
+        ref.api.exportDataAsCsv({fileName: `게시판 목록 ${formattedDate}.csv`})
+    }
+
     useEffect(() => {
         fetchBoard().catch(console.error);
     }, []);
@@ -61,6 +70,7 @@ export const useBackOfficeBoard = () => {
         setIsInsertOpen,
         setIsEditOpen,
         fetchBoard,
-        handleClickDelete
+        handleClickDelete,
+        handleClickDownload
     };
 }

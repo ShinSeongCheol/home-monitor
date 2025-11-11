@@ -8,9 +8,9 @@ import { MenuType, SideMenuType } from './backoffice/ui/BackOfficeLayout.tsx';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditCommentModal, InsertCommentModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
-import useFormattedDate from '../hooks/useFormattedDate';
 import { useAuth } from '../contexts/AuthContext';
 import type { ValueFormatterParams } from 'ag-grid-community';
+import {useFormattedDate} from "../shared/lib";
 
 const BackOfficeCommentPage = () => {
 

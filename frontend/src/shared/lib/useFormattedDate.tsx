@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useFormattedDate = () => {
+export const useFormattedDate = () => {
 
     const [formattedDate, setFormattedDate] = useState('');
 
@@ -20,5 +20,3 @@ const useFormattedDate = () => {
 
     return {formattedDate};
 }
-
-export default useFormattedDate;

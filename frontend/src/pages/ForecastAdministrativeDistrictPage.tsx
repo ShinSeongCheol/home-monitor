@@ -9,8 +9,8 @@ import AgGridReactComponent from "../components/AgGridReactComponent";
 import type { AgGridReact } from "ag-grid-react";
 import { MenuType, SideMenuType } from "./backoffice/ui/BackOfficeLayout.tsx";
 import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
-import useFormattedDate from "../hooks/useFormattedDate";
 import { CsvButton, FileButton, InsertButton } from "../components/ButtonComponent";
+import {useFormattedDate} from "../shared/lib";
 
 interface AdministartiveDistrict {
     type: string;

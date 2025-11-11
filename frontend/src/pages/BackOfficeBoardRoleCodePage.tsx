@@ -8,8 +8,8 @@ import { MenuType, SideMenuType, type BoardRole } from './backoffice/ui/BackOffi
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import { EditBoardRoleCodeModal, InsertBoardRoleCodeModal } from '../components/BackOfficeModal';
 import type { AgGridReact } from 'ag-grid-react';
-import useFormattedDate from '../hooks/useFormattedDate';
 import { useAuth } from '../contexts/AuthContext';
+import {useFormattedDate} from "../shared/lib";
 
 const BackOfficeBoardRoleCode = () => {
 

@@ -7,10 +7,10 @@ import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../compone
 import { MenuType, SideMenuType, type ReactionCode } from './backoffice/ui/BackOfficeLayout.tsx';
 import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
 import type { AgGridReact } from 'ag-grid-react';
-import useFormattedDate from '../hooks/useFormattedDate';
 import { useAuth } from '../contexts/AuthContext';
 import { EditUserRoleModal, InsertUserRoleModal } from '../components/BackOfficeModal';
 import type { ValueFormatterParams } from 'ag-grid-community';
+import {useFormattedDate} from "../shared/lib";
 
 const BackOfficeUserRolePage = () => {
 
