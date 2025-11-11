@@ -5,12 +5,7 @@ import {useAuth} from "../../../../shared";
 
 export const useUpdateBoardForm = (agGridReact: AgGridReact | null) => {
 
-    if (!agGridReact) return;
-    const selectedRow = agGridReact.api.getSelectedRows()[0];
-
-    if (selectedRow.length === 0) return;
-
-    console.log(selectedRow)
+    const selectedRow = agGridReact?.api.getSelectedRows()[0];
 
     const [code, setCode] = useState(selectedRow.categoryCode);
     const [name, setName] = useState(selectedRow.categoryName);
@@ -37,5 +32,5 @@ export const useUpdateBoardForm = (agGridReact: AgGridReact | null) => {
         fetchBoard();
     };
 
-    return {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit}
+    return {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit};
 }
