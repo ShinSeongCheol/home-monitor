@@ -8,14 +8,12 @@ import { MenuType, SideMenuType, type BoardRole } from './BackOfficeLayout.tsx';
 import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
 import { EditPostModal, InsertPostModal } from '../../../components/BackOfficeModal.tsx';
 import type { AgGridReact } from 'ag-grid-react';
-import { useAuth } from '../../../contexts/AuthContext.tsx';
 import {useFormattedDate} from "../../../shared/lib";
+import {useAuth} from "../../../shared";
+import {BackOfficePostWidget} from "../../../widgets/backoffice";
 
 export const BackOfficePostPage = () => {
 
-    const {accessToken} = useAuth();
-    const { setMenu }= useBackOfficeMenu();
-    
     // 초기화
     useEffect(() => {
         setMenu({
@@ -23,6 +21,11 @@ export const BackOfficePostPage = () => {
             sideMenu: SideMenuType.Post
         });
     }, []);
+
+
+    const {auth} = useAuth();
+    const { setMenu }= useBackOfficeMenu();
+
 
     const [isInsertModalOpen, setIsInsertModalOpenOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpenOpen] = useState(false);
@@ -125,7 +128,7 @@ export const BackOfficePostPage = () => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ${auth?.accessToken}`
             }
         })
         .then(res => {
@@ -137,27 +140,28 @@ export const BackOfficePostPage = () => {
     }
     
     return (
-        <section className={`${styles.section}`}>
-            <div className={styles.container}>
-                <nav className={styles.breadcrumb} aria-label="breadcrumb">
-                    <ol>
-                        <li><Link to={'/backoffice'}>관리자</Link></li>
-                        <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li>게시판 관리</li>
-                        <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">게시물 목록</li>
-                    </ol>
-                </nav>
-                <div className={`${styles.buttonGroup}`}>
-                    <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
-                    <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
-                    <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시물 목록 ${formattedDate}.csv`})}/>
-                </div>
-                <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertPostModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
-                <EditPostModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
-            </div>
-        </section>
+        <BackOfficePostWidget />
+        // <section className={`${styles.section}`}>
+        //     <div className={styles.container}>
+        //         <nav className={styles.breadcrumb} aria-label="breadcrumb">
+        //             <ol>
+        //                 <li><Link to={'/backoffice'}>관리자</Link></li>
+        //                 <ChevronRight size={16} color="black" strokeWidth={1} />
+        //                 <li>게시판 관리</li>
+        //                 <ChevronRight size={16} color="black" strokeWidth={1} />
+        //                 <li aria-current="page">게시물 목록</li>
+        //             </ol>
+        //         </nav>
+        //         <div className={`${styles.buttonGroup}`}>
+        //             <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
+        //             <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
+        //             <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
+        //             <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시물 목록 ${formattedDate}.csv`})}/>
+        //         </div>
+        //         <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+        //         <InsertPostModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+        //         <EditPostModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
+        //     </div>
+        // </section>
     )
 }
