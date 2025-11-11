@@ -109,7 +109,7 @@ export const BackOfficeLayout = () => {
 
     return (
         <div className={'w-full h-[calc(100dvh-(29px+39px))] flex'}>
-            <aside className={'w-[240px] border border-gray-200 bg-white'}>
+            <aside className={'w-[240px] border border-gray-200 bg-white shrink-0'}>
                 <div className={'flex justify-between items-center p-4 border-b border-b-gray-300'}>메뉴<TextAlignJustify strokeWidth={1} /></div>
                 <nav className={''}>
                     <ul>
