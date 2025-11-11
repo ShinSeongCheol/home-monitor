@@ -1,17 +1,17 @@
-import styles from '../styles/pages/BackOfficeBoardPage.module.css';
-import AgGridReactComponent from '../components/AgGridReactComponent';
+import styles from '../../../styles/pages/BackOfficeBoardPage.module.css';
+import AgGridReactComponent from '../../../components/AgGridReactComponent.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type Comment } from './backoffice/ui/BackOfficeLayout.tsx';
-import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../../../components/ButtonComponent.tsx';
+import { MenuType, SideMenuType, type Comment } from './BackOfficeLayout.tsx';
+import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
 import type { AgGridReact } from 'ag-grid-react';
-import { useAuth } from '../contexts/AuthContext';
-import { EditReactionModal, InsertReactionModal } from '../components/BackOfficeModal';
-import {useFormattedDate} from "../shared/lib";
+import { useAuth } from '../../../contexts/AuthContext.tsx';
+import { EditReactionModal, InsertReactionModal } from '../../../components/BackOfficeModal.tsx';
+import {useFormattedDate} from "../../../shared/lib";
 
-const BackOfficeReactionPage = () => {
+export const BackOfficeReactionPage = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -223,5 +223,3 @@ const BackOfficeReactionPage = () => {
         </section>
     )
 }
-
-export default BackOfficeReactionPage;

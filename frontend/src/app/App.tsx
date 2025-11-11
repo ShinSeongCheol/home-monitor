@@ -1,19 +1,9 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import ForecastAdministrativeDistrictPage from '../pages/ForecastAdministrativeDistrictPage';
-import MiddleForecastAreaDistrict from '../pages/MiddleForecastAreaDistrict';
 
 import {AllCommunityModule, ModuleRegistry} from 'ag-grid-community';
 import ProtectedRoute from '../components/ProtectedRoute';
 import {DashboardPage} from '../pages/dashboard';
-import BackOfficeBoardRolePage from '../pages/BackOfficeBoardRolePage';
-import BackOfficeBoardRoleCodePage from '../pages/BackOfficeBoardRoleCodePage';
-import BackOfficePostPage from '../pages/BackOfficePostPage';
-import BackOfficeCommentPage from '../pages/BackOfficeCommentPage';
-import BackOfficeReactionPage from '../pages/BackOfficeReactionPage';
-import BackOfficeReactionCodePage from '../pages/BackOfficeReactionCodePage';
-import BackOfficeUserRoleCodePage from '../pages/BackOfficeUserRoleCodePage.';
-import BackOfficeUserRolePage from '../pages/BackOfficeUserRolePage';
-import BackOfficeUserPage from '../pages/BackOfficeUserPage';
+
 import {BoardInfoPage, BoardPage} from "../pages/board";
 import {PostCreatePage, PostDetailPage, PostUpdatePage} from '../pages/post';
 import {PostLayout} from "../pages/post/ui/PostLayout.tsx";
@@ -22,6 +12,14 @@ import {LoginPage} from "../pages/auth/ui/LoginPage.tsx";
 import {SignupPage} from "../pages/auth/ui/SignupPage.tsx";
 import {HeaderWidget} from "../widgets/header";
 import {NavigationWidget} from "../widgets/navigation";
+import {
+    BackOfficeBoardPage,
+    BackOfficeBoardRoleCodePage,
+    BackOfficeBoardRolePage, BackOfficeCommentPage,
+    BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeReactionPage, BackOfficeUserPage,
+    BackOfficeUserRoleCodePage,
+    BackOfficeUserRolePage, ForecastAdministrativeDistrictPage
+} from "../pages/backoffice";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -64,7 +62,6 @@ function App() {
                         <Route path="userRoleCode" element={<BackOfficeUserRoleCodePage/>}></Route>
 
                         <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrictPage/>}></Route>
-                        <Route path="areaDistrict" element={<MiddleForecastAreaDistrict/>}></Route>
                     </Route>
 
                     {/* Auth */}

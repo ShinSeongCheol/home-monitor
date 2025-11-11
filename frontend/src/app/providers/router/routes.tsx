@@ -8,7 +8,13 @@ import {LoginPage} from "../../../pages/auth/ui/LoginPage.tsx";
 import {SignupPage} from "../../../pages/auth/ui/SignupPage.tsx";
 import {MainLayout} from "../layout/MainLayout.tsx";
 import ProfilePage from "../../../pages/auth/ui/ProfilePage.tsx";
-import {BackOfficeBoardPage, BackOfficeLayout} from "../../../pages/backoffice";
+import {
+    BackOfficeBoardPage,
+    BackOfficeBoardRoleCodePage,
+    BackOfficeBoardRolePage, BackOfficeCommentPage,
+    BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeUserPage,
+    BackOfficeUserRoleCodePage, BackOfficeUserRolePage, ForecastAdministrativeDistrictPage
+} from "../../../pages/backoffice";
 
 export const routes: RouteObject[] = [
     {
@@ -36,6 +42,19 @@ export const routes: RouteObject[] = [
             {
                 path: '/backoffice', element: <BackOfficeLayout/>, children: [
                     {path: 'board', element: <BackOfficeBoardPage />},
+                    {path: 'boardRole', element: <BackOfficeBoardRolePage />},
+                    {path: 'boardRoleCode', element: <BackOfficeBoardRoleCodePage />},
+
+                    {path: 'post', element: <BackOfficePostPage />},
+                    {path: 'comment', element: <BackOfficeCommentPage />},
+                    {path: 'reaction', element: <BackOfficeCommentPage />},
+                    {path: 'reactionCode', element: <BackOfficeReactionCodePage />},
+
+                    {path: 'user', element: <BackOfficeUserPage />},
+                    {path: 'userRole', element: <BackOfficeUserRolePage />},
+                    {path: 'userRoleCode', element: <BackOfficeUserRoleCodePage />},
+
+                    {path: 'administrativeDistrict', element: <ForecastAdministrativeDistrictPage />},
                 ]
             },
         ]

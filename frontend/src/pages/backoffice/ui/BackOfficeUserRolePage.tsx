@@ -1,18 +1,18 @@
-import styles from '../styles/pages/BackOfficeBoardPage.module.css';
-import AgGridReactComponent from '../components/AgGridReactComponent';
+import styles from '../../../styles/pages/BackOfficeBoardPage.module.css';
+import AgGridReactComponent from '../../../components/AgGridReactComponent.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type ReactionCode } from './backoffice/ui/BackOfficeLayout.tsx';
-import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../../../components/ButtonComponent.tsx';
+import { MenuType, SideMenuType, type ReactionCode } from './BackOfficeLayout.tsx';
+import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
 import type { AgGridReact } from 'ag-grid-react';
-import { useAuth } from '../contexts/AuthContext';
-import { EditUserRoleModal, InsertUserRoleModal } from '../components/BackOfficeModal';
+import { useAuth } from '../../../contexts/AuthContext.tsx';
+import { EditUserRoleModal, InsertUserRoleModal } from '../../../components/BackOfficeModal.tsx';
 import type { ValueFormatterParams } from 'ag-grid-community';
-import {useFormattedDate} from "../shared/lib";
+import {useFormattedDate} from "../../../shared/lib";
 
-const BackOfficeUserRolePage = () => {
+export const BackOfficeUserRolePage = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -169,5 +169,3 @@ const BackOfficeUserRolePage = () => {
         </section>
     )
 }
-
-export default BackOfficeUserRolePage;

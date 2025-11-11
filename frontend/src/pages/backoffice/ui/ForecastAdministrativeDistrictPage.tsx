@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
 import { type ColDef } from 'ag-grid-community';
 import * as XLSX from "xlsx";
-import { useAuth } from "../contexts/AuthContext";
-import styles from '../styles/pages/ForecastAdministrativeDistrictPage.module.css';
+import { useAuth } from "../../../contexts/AuthContext.tsx";
+import styles from '../../../styles/pages/ForecastAdministrativeDistrictPage.module.css';
 import { ChevronRight, Download, File, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
-import AgGridReactComponent from "../components/AgGridReactComponent";
+import AgGridReactComponent from "../../../components/AgGridReactComponent.tsx";
 import type { AgGridReact } from "ag-grid-react";
-import { MenuType, SideMenuType } from "./backoffice/ui/BackOfficeLayout.tsx";
-import useBackOfficeMenu from "../hooks/useBackOfficeMenu";
-import { CsvButton, FileButton, InsertButton } from "../components/ButtonComponent";
-import {useFormattedDate} from "../shared/lib";
+import { MenuType, SideMenuType } from "./BackOfficeLayout.tsx";
+import useBackOfficeMenu from "../../../hooks/useBackOfficeMenu.tsx";
+import { CsvButton, FileButton, InsertButton } from "../../../components/ButtonComponent.tsx";
+import {useFormattedDate} from "../../../shared/lib";
 
 interface AdministartiveDistrict {
     type: string;
@@ -31,7 +31,7 @@ interface AdministartiveDistrict {
     updatedAt: String
 }
 
-const ForecastAdministrativeDistrict = () => {
+export const ForecastAdministrativeDistrictPage = () => {
     const { setMenu }= useBackOfficeMenu();
     
     // 초기화
@@ -167,5 +167,3 @@ const ForecastAdministrativeDistrict = () => {
         </section>
     )
 }
-
-export default ForecastAdministrativeDistrict;

@@ -1,17 +1,17 @@
-import styles from '../styles/pages/BackOfficeBoardPage.module.css';
-import AgGridReactComponent from '../components/AgGridReactComponent';
+import styles from '../../../styles/pages/BackOfficeBoardPage.module.css';
+import AgGridReactComponent from '../../../components/AgGridReactComponent.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type ReactionCode } from './backoffice/ui/BackOfficeLayout.tsx';
-import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../../../components/ButtonComponent.tsx';
+import { MenuType, SideMenuType, type BoardRole } from './BackOfficeLayout.tsx';
+import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
+import { EditPostModal, InsertPostModal } from '../../../components/BackOfficeModal.tsx';
 import type { AgGridReact } from 'ag-grid-react';
-import { useAuth } from '../contexts/AuthContext';
-import { EditReactionCodeModal, InsertReactionCodeModal } from '../components/BackOfficeModal';
-import {useFormattedDate} from "../shared/lib";
+import { useAuth } from '../../../contexts/AuthContext.tsx';
+import {useFormattedDate} from "../../../shared/lib";
 
-const BackOfficeReactionCodePage = () => {
+export const BackOfficePostPage = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -20,7 +20,7 @@ const BackOfficeReactionCodePage = () => {
     useEffect(() => {
         setMenu({
             menu: MenuType.Board,
-            sideMenu: SideMenuType.ReactionCode
+            sideMenu: SideMenuType.Post
         });
     }, []);
 
@@ -28,25 +28,66 @@ const BackOfficeReactionCodePage = () => {
     const [isEditModalOpen, setIsEditModalOpenOpen] = useState(false);
     const [editModalData, SetEditModalData] = useState();
 
-    
+
     const agGridComponentRef = useRef<AgGridReact>(null);
-    
+
     const {formattedDate} = useFormattedDate();
-    
-    const [rowData, setRowData] = useState<ReactionCode[]>([
+
+    const [rowData, setRowData] = useState<BoardRole[]>([
     ]);
     
     const [colDefs] = useState([
         { field: "id", headerName: "ID", filter: true, flex:1, },
-        { field: "code", headerName: "코드", filter: true, flex:1, },
-        { field: "name", headerName: "이름", filter: true, flex:1, },
+        {
+            headerName: "게시판",
+            children: [
+                {
+                    colId: "board_category_code",
+                    headerName: "코드",
+                    filter: true,
+                    field: "board.categoryCode",
+                    flex:1,
+                },
+                {
+                    colId: "board_category_name",
+                    headerName: "이름",
+                    filter: true,
+                    field: "board.categoryCode",
+                    flex:1,
+                },
+            ]
+        },
+        {
+            headerName: "작성자",
+            children: [
+                {
+                    colId: "member_email",
+                    headerName: "이메일",
+                    filter: true,
+                    field: "member.email",
+                    flex:1,
+                },
+                {
+                    colId: "member_username",
+                    headerName: "이름",
+                    filter: true,
+                    field: "member.username",
+                    flex:1,
+                },
+            ]
+        },
+        { field: "title", headerName: "제목", filter: true, flex:1, },
+        { field: "content", headerName: "내용", filter: true, flex:1, },
+        { field: "createdAt", headerName: "생성일", cellDataType: "dateTime", filter: true, flex:1, },
+        { field: "updatedAt", headerName: "수정일", cellDataType: "dateTime", filter: true, flex:1, },
+        { field: "view", headerName: "조회수", filter: true, flex:1, },
     ]);
 
     const fetchData = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes`)
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            return res.json() as Promise<ReactionCode[]>;
+            return res.json() as Promise<BoardRole[]>;
         })
         .then(res => {
             setRowData(res);
@@ -78,9 +119,9 @@ const BackOfficeReactionCodePage = () => {
         if (rows.length === 0) return ;
         const data = rows[0];
 
-        if(!confirm(`${data.id}번 반응을 삭제하시겠습니까?`)) return;
+        if(!confirm(`${data.id}번 게시판 권한을 삭제하시겠습니까?`)) return;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes/${data.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/posts/${data.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,7 +130,7 @@ const BackOfficeReactionCodePage = () => {
         })
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
-            alert('댓글이 삭제되었습니다.');
+            alert('게시판이 삭제되었습니다.');
             fetchData();
         })
         .catch(err => console.error(err));
@@ -104,21 +145,19 @@ const BackOfficeReactionCodePage = () => {
                         <ChevronRight size={16} color="black" strokeWidth={1} />
                         <li>게시판 관리</li>
                         <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">반응 코드</li>
+                        <li aria-current="page">게시물 목록</li>
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
                     <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
                     <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
                     <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `반응 목록 ${formattedDate}.csv`})}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `게시물 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertReactionCodeModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
-                <EditReactionCodeModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
+                <InsertPostModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditPostModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
             </div>
         </section>
     )
 }
-
-export default BackOfficeReactionCodePage;

@@ -1,17 +1,17 @@
-import styles from '../styles/pages/BackOfficeBoardPage.module.css';
-import AgGridReactComponent from '../components/AgGridReactComponent';
+import styles from '../../../styles/pages/BackOfficeBoardPage.module.css';
+import AgGridReactComponent from '../../../components/AgGridReactComponent.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
-import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../components/ButtonComponent';
-import { MenuType, SideMenuType, type ReactionCode } from './backoffice/ui/BackOfficeLayout.tsx';
-import useBackOfficeMenu from '../hooks/useBackOfficeMenu';
+import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../../../components/ButtonComponent.tsx';
+import { MenuType, SideMenuType, type ReactionCode } from './BackOfficeLayout.tsx';
+import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
 import type { AgGridReact } from 'ag-grid-react';
-import { useAuth } from '../contexts/AuthContext';
-import { EditUserModal, InsertUserModal } from '../components/BackOfficeModal';
-import {useFormattedDate} from "../shared/lib";
+import { useAuth } from '../../../contexts/AuthContext.tsx';
+import { EditReactionCodeModal, InsertReactionCodeModal } from '../../../components/BackOfficeModal.tsx';
+import {useFormattedDate} from "../../../shared/lib";
 
-const BackOfficeUserRolePage = () => {
+export const BackOfficeReactionCodePage = () => {
 
     const {accessToken} = useAuth();
     const { setMenu }= useBackOfficeMenu();
@@ -19,8 +19,8 @@ const BackOfficeUserRolePage = () => {
     // 초기화
     useEffect(() => {
         setMenu({
-            menu: MenuType.User,
-            sideMenu: SideMenuType.User
+            menu: MenuType.Board,
+            sideMenu: SideMenuType.ReactionCode
         });
     }, []);
 
@@ -38,13 +38,12 @@ const BackOfficeUserRolePage = () => {
     
     const [colDefs] = useState([
         { field: "id", headerName: "ID", filter: true, flex:1, },
-        { field: "email", headerName: "이메일", filter: true, flex:1, },
-        { field: "username", headerName: "이름", filter: true, flex:1, },
-        { field: "password", headerName: "비밀번호", filter: true, flex:1, },
+        { field: "code", headerName: "코드", filter: true, flex:1, },
+        { field: "name", headerName: "이름", filter: true, flex:1, },
     ]);
 
     const fetchData = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members`)
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes`)
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
             return res.json() as Promise<ReactionCode[]>;
@@ -79,9 +78,9 @@ const BackOfficeUserRolePage = () => {
         if (rows.length === 0) return ;
         const data = rows[0];
 
-        if(!confirm(`${data.id}번을 삭제하시겠습니까?`)) return;
+        if(!confirm(`${data.id}번 반응을 삭제하시겠습니까?`)) return;
 
-        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/members/${data.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/v1/backoffice/reactionCodes/${data.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,6 +89,7 @@ const BackOfficeUserRolePage = () => {
         })
         .then(res => {
             if(!res.ok) throw new Error(`Http Error ${res.status}`);
+            alert('댓글이 삭제되었습니다.');
             fetchData();
         })
         .catch(err => console.error(err));
@@ -104,21 +104,19 @@ const BackOfficeUserRolePage = () => {
                         <ChevronRight size={16} color="black" strokeWidth={1} />
                         <li>게시판 관리</li>
                         <ChevronRight size={16} color="black" strokeWidth={1} />
-                        <li aria-current="page">사용자 목록</li>
+                        <li aria-current="page">반응 코드</li>
                     </ol>
                 </nav>
                 <div className={`${styles.buttonGroup}`}>
                     <InsertButton svg={<Plus color='white' size={16} strokeWidth={2}/>}  value='추가' type='button' onClick={() => setIsInsertModalOpenOpen(true)}/>
                     <UpdateButton svg={<SquarePen color='white' size={16} strokeWidth={2} />} value='수정' type='button' onClick={() => onClickEdit()} />
                     <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2} />} value='삭제' type='button' onClick={() => onClickDelete()}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `사용자 목록 ${formattedDate}.csv`})}/>
+                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={() => agGridComponentRef.current?.api.exportDataAsCsv({fileName: `반응 목록 ${formattedDate}.csv`})}/>
                 </div>
                 <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
-                <InsertUserModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
-                <EditUserModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
+                <InsertReactionCodeModal isOpen={isInsertModalOpen} setIsOpen={setIsInsertModalOpenOpen} fetchData={fetchData}/>
+                <EditReactionCodeModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpenOpen} fetchData={fetchData} data={editModalData}/>
             </div>
         </section>
     )
 }
-
-export default BackOfficeUserRolePage;
