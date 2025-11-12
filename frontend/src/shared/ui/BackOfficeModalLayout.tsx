@@ -13,7 +13,7 @@ export const BackOfficeModalLayout = ({title, content, cancel, children}: BackOf
     return (
         <ModalPortal>
             <div className={'fixed top-0 left-0 w-full h-full bg-black/30 flex justify-center items-center z-50'}>
-                <div className={'relative bg-white w-xl flex flex-col gap-4 border border-gray-300 rounded-sm p-6 box-border'}>
+                <div className={'relative bg-white w-auto flex flex-col gap-4 border border-gray-300 rounded-sm p-6 box-border'}>
 
                     <X className={'absolute top-3 right-3 cursor-pointer'} color='grey' size={24} strokeWidth={1} onClick={cancel}/>
 
