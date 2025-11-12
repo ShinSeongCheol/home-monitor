@@ -24,10 +24,10 @@ export const InsertBoardRoleForm = ({fetchBoardRoles, handleClickCancel}: Insert
 
     const form = (
 
-        <form className={'flex flex-col gap-4'} onSubmit={(e) => handleClickSubmit(e, fetchBoardRoles, handleClickCancel)}>
+        <form className={'flex flex-col gap-4 w-sm'} onSubmit={(e) => handleClickSubmit(e, fetchBoardRoles, handleClickCancel)}>
             <div className={`flex flex-col gap-2`}>
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='board'>게시판</label>
+                    <label className={'w-28 select-none'} htmlFor='board'>게시판</label>
                     <select className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} name='board' value={selectedBoardId} onChange={handleChangeBoardId}>
                         {boards?.map((value) => {
                             return <option key={value.id} value={value.id}>{value.categoryCode} ({value.categoryName})</option>
@@ -36,7 +36,7 @@ export const InsertBoardRoleForm = ({fetchBoardRoles, handleClickCancel}: Insert
                 </div>
 
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='boardRoleCode'>게시판 권한</label>
+                    <label className={'w-28 select-none'} htmlFor='boardRoleCode'>게시판 권한</label>
                     <select className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} name='boardRoleCode' value={selectedBoardRoleCodeId} onChange={handleChangeBoardRoleCodeId}>
                         {boardRoleCodes?.map((value) => {
                             return <option key={value.id} value={value.id}>{value.code} ({value.name})</option>
@@ -45,7 +45,7 @@ export const InsertBoardRoleForm = ({fetchBoardRoles, handleClickCancel}: Insert
                 </div>
 
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='memberRoleCode'>사용자 권한</label>
+                    <label className={'w-28 select-none'} htmlFor='memberRoleCode'>사용자 권한</label>
                     <select className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} name='memberRoleCode' value={selectedMemberRoleCodeId} onChange={handleChangeMemberRoleCodeId}>
                         <option>전체</option>
                         {memberRoleCodes?.map((value) => {
