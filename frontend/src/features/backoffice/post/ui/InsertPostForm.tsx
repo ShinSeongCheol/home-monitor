@@ -25,10 +25,10 @@ export const InsertPostForm = ({fetchPosts, handleClickCancel}: InsertPostFormPr
 
     const form = (
 
-        <form className={'flex flex-col gap-4'} onSubmit={(e) => handleClickSubmit(e, fetchPosts, handleClickCancel)}>
+        <form className={'flex flex-col gap-4 w-5xl'} onSubmit={(e) => handleClickSubmit(e, fetchPosts, handleClickCancel)}>
             <div className={`flex flex-col gap-2`}>
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='board'>게시판</label>
+                    <label className={'w-28 select-none'} htmlFor='board'>게시판</label>
                     <select className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} name='board' value={selectedBoardId} onChange={handleChangeBoardId}>
                         {boards?.map((value) => {
                             return <option key={value.id} value={value.id}>{value.categoryCode} ({value.categoryName})</option>
@@ -37,7 +37,7 @@ export const InsertPostForm = ({fetchPosts, handleClickCancel}: InsertPostFormPr
                 </div>
 
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='author'>작성자</label>
+                    <label className={'w-28 select-none'} htmlFor='author'>작성자</label>
                     <select className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} name='author' value={selectedMemberId} onChange={handleChangeMemberId}>
                         {members?.map((value) => {
                             return <option key={value.id} value={value.id}>{value.email} ({value.username})</option>
@@ -46,7 +46,7 @@ export const InsertPostForm = ({fetchPosts, handleClickCancel}: InsertPostFormPr
                 </div>
 
                 <div className={'flex items-center'}>
-                    <label className={'w-28 text-center select-none'} htmlFor='title'>제목</label>
+                    <label className={'w-28 select-none'} htmlFor='title'>제목</label>
                     <input className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} type="text" id="title" name="title" value={title} maxLength={16} onChange={handleChangeTitle}/>
                 </div>
 

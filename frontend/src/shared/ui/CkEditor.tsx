@@ -82,6 +82,14 @@ export const CkEditor = ({ data, handleChange }: CkEditorProps) => {
                 onChange={(_event, editor) => {
                     handleChange(editor.getData());
                 }}
+                onReady={(editor) => {
+                    editor.editing.view.change((writer) => {
+                        const root = editor.editing.view.document.getRoot();
+                        if (root) {
+                            writer.setStyle('min-height', '300px', root);
+                        }
+                    });
+                }}
             />
         </div>
     )
