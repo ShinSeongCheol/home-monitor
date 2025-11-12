@@ -13,8 +13,8 @@ type TimeLineChartProps = {
 export const TimeLineChart = ({icon, title, data}: TimeLineChartProps) => {
     const xScale: ScaleTimeSpec = {
         type: 'time',
-        format: '%Y-%m-%d %H:%M:%S',
-        precision: 'day',
+        format: '%Y-%m-%dT%H:%M:%S',
+        precision: 'hour',
         useUTC: false,
     }
 
