@@ -20,6 +20,8 @@ export const useInsertPostForm = () => {
         try {
             const data:BackOfficeBoard[] = await getBackOfficeBoards();
             setBoards(data);
+
+            if (data.length > 0) setSelectedBoardId(data[0].id);
         }catch (err) {
             console.error(err);
         }
@@ -29,6 +31,8 @@ export const useInsertPostForm = () => {
         try {
             const data:BackOfficeMember[] = await getBackOfficeMembers();
             setMembers(data);
+
+            if (data.length > 0) setSelectedMemberId(data[0].id);
         }catch (err) {
             console.error(err);
         }
