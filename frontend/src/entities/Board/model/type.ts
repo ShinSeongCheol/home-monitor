@@ -1,5 +1,4 @@
 export type Board = {
-    id: number;
     categoryCode: string;
     categoryName: string | null;
     comment: string | null;

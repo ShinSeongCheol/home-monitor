@@ -1,17 +1,22 @@
 import {BackOfficeModalLayout} from "../../../../shared";
 import {CancelButton, InsertButton} from "../../../../shared/ui";
-import type {AgGridReact} from "ag-grid-react";
 import {useUpdateBoardForm} from "../model/useUpdateBoardForm.ts";
+import type {BackOfficeBoard} from "../../model/type.ts";
 
 type UpdateBoardFormProps = {
     fetchBoard: () => Promise<void>;
-    agGridReact: AgGridReact | null;
+    data: BackOfficeBoard|undefined;
     handleClickCancel: () => void;
 }
 
-export const UpdateBoardForm = ({fetchBoard, agGridReact, handleClickCancel}: UpdateBoardFormProps) => {
+export const UpdateBoardForm = ({fetchBoard, data, handleClickCancel}: UpdateBoardFormProps) => {
 
-    const {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit} = useUpdateBoardForm(agGridReact);
+    if (!data) {
+        handleClickCancel();
+        return;
+    }
+
+    const {code, name, comment, handleChangeCode, handleChangeName, handleChangeComment, handleClickSubmit} = useUpdateBoardForm(data);
 
     const form = (
         <form className={'flex flex-col gap-4 w-sm'} onSubmit={(e) => handleClickSubmit(e, fetchBoard, handleClickCancel)}>

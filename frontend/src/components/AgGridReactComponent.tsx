@@ -1,14 +1,15 @@
 import { AG_GRID_LOCALE_KR } from "@ag-grid-community/locale";
 import { type DateTimeDataTypeDefinition, type RowSelectionOptions, type SizeColumnsToFitGridStrategy, themeBalham, type ValueFormatterParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 
 type AgGridReactComponentProps = {
-    colDefs: any[]
+    colDefs: any[];
     rowData: any[];
+    setData: React.SetStateAction<any>;
 }
 
-const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(({colDefs, rowData}, ref) => {
+const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(({colDefs, rowData, setData}, ref) => {
     const divRef = useRef<HTMLDivElement>(null);
     const agGridRef = useRef<AgGridReact | null>(null);
         
@@ -79,7 +80,9 @@ const AgGridReactComponent = forwardRef<AgGridReact, AgGridReactComponentProps>(
                 pagination={true} 
                 localeText={AG_GRID_LOCALE_KR} 
                 dataTypeDefinitions={dataTypeDefinitions} 
-                rowSelection={rowSelection} />
+                rowSelection={rowSelection}
+                onCellClicked={(e) => {setData(e.data)}}
+            />
         </div>
     )
 });

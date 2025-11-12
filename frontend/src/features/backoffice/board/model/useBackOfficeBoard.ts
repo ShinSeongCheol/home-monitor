@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from "react";
 import type {AgGridReact} from "ag-grid-react";
-import type {Board} from "../../../../entities/board";
 import {getBackOfficeBoards} from "../../api/getBackOfficeBoards.ts";
 import {deleteBoard} from "../api/deleteBoard.ts";
 import {useAuth} from "../../../../shared";
 import {useFormattedDate} from "../../../../shared/lib";
+import type {BackOfficeBoard} from "../../model/type.ts";
 
 export const useBackOfficeBoard = () => {
 
@@ -12,7 +12,8 @@ export const useBackOfficeBoard = () => {
 
     const [isInsertOpen, setIsInsertOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
-    const [rowData, setRowData] = useState<Board[]>([]);
+    const [rowData, setRowData] = useState<BackOfficeBoard[]>([]);
+    const [data, setData] = useState<BackOfficeBoard>();
 
     const [colDefs] = useState([
         {field: "id", headerName: "ID", filter: true, flex: 1},
@@ -28,7 +29,7 @@ export const useBackOfficeBoard = () => {
 
     const fetchBoard = async () => {
         try {
-            const data: Board[] = await getBackOfficeBoards();
+            const data: BackOfficeBoard[] = await getBackOfficeBoards();
             setRowData(data);
         } catch (err) {
             console.error(err);
@@ -67,6 +68,8 @@ export const useBackOfficeBoard = () => {
         agGridComponentRef,
         colDefs,
         rowData,
+        data,
+        setData,
         setIsInsertOpen,
         setIsEditOpen,
         fetchBoard,

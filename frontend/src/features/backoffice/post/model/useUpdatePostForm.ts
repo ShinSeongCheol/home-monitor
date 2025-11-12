@@ -1,14 +1,11 @@
 import {type ChangeEvent, type FormEvent, useEffect, useState} from "react";
-import type {AgGridReact} from "ag-grid-react";
 import {useAuth} from "../../../../shared";
 import {putPost} from "../api/putPost.ts";
 import type {BackOfficeBoard, BackOfficeMember, BackOfficePost} from "../../model/type.ts";
 import {getBackOfficeBoards} from "../../api/getBackOfficeBoards.ts";
 import {getBackOfficeMembers} from "../../api/getBackOfficeMembers.ts";
 
-export const useUpdatePostForm = (agGridReact: AgGridReact | null) => {
-
-    const selectedRow:BackOfficePost = agGridReact?.api.getSelectedRows()[0];
+export const useUpdatePostForm = (data: BackOfficePost) => {
 
     const [boards, setBoards] = useState<BackOfficeBoard[]>([]);
     const [members, setMembers] = useState<BackOfficeMember[]>([]);
@@ -21,10 +18,10 @@ export const useUpdatePostForm = (agGridReact: AgGridReact | null) => {
 
     const fetchBoards = async () => {
         try {
-            const data:BackOfficeBoard[] = await getBackOfficeBoards();
-            setBoards(data);
+            const boards:BackOfficeBoard[] = await getBackOfficeBoards();
+            setBoards(boards);
 
-            setSelectedBoardId(selectedRow.board.id);
+            setSelectedBoardId(data.board.id);
         }catch (err) {
             console.error(err);
         }
@@ -32,10 +29,10 @@ export const useUpdatePostForm = (agGridReact: AgGridReact | null) => {
 
     const fetchMembers = async () => {
         try {
-            const data:BackOfficeMember[] = await getBackOfficeMembers();
-            setMembers(data);
+            const members:BackOfficeMember[] = await getBackOfficeMembers();
+            setMembers(members);
 
-            setSelectedMemberId(selectedRow.member.id);
+            setSelectedMemberId(data.member.id);
         }catch (err) {
             console.error(err);
         }
@@ -56,7 +53,7 @@ export const useUpdatePostForm = (agGridReact: AgGridReact | null) => {
     const handleClickSubmit = async (e: FormEvent<HTMLFormElement>, fetchBoard: () => Promise<void>, handleClickCancel: () => void ) => {
         e.preventDefault();
 
-        await putPost(selectedRow.id, {boardId: selectedBoardId, memberId: selectedMemberId, title: title, content: content}, auth?.accessToken).catch(console.error);
+        await putPost(data.id, {boardId: selectedBoardId, memberId: selectedMemberId, title: title, content: content}, auth?.accessToken).catch(console.error);
         await fetchBoard();
         handleClickCancel();
     };
@@ -64,8 +61,8 @@ export const useUpdatePostForm = (agGridReact: AgGridReact | null) => {
     useEffect(() => {
         fetchBoards().catch(console.error);
         fetchMembers().catch(console.error);
-        setTitle(selectedRow.title);
-        setContent(selectedRow.content);
+        setTitle(data.title);
+        setContent(data.content);
     }, []);
 
     return  {

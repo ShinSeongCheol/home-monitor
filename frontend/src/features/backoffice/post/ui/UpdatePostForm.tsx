@@ -1,15 +1,21 @@
 import {CancelButton, CkEditor, InsertButton} from "../../../../shared/ui";
 import {BackOfficeModalLayout} from "../../../../shared";
-import type {AgGridReact} from "ag-grid-react";
 import {useUpdatePostForm} from "../model/useUpdatePostForm.ts";
+import type {BackOfficePost} from "../../model/type.ts";
 
 type UpdatePostProps = {
     fetchPosts: () => Promise<void>;
-    agGridReact: AgGridReact | null;
+    data: BackOfficePost | undefined;
     handleClickCancel: () => void;
 }
 
-export const UpdatePostForm = ({fetchPosts, agGridReact, handleClickCancel} : UpdatePostProps) => {
+export const UpdatePostForm = ({fetchPosts, data, handleClickCancel } : UpdatePostProps) => {
+
+    if(!data) {
+        handleClickCancel();
+        return;
+    }
+
     const {
         boards,
         members,
@@ -22,7 +28,7 @@ export const UpdatePostForm = ({fetchPosts, agGridReact, handleClickCancel} : Up
         handleChangeTitle,
         setContent,
         handleClickSubmit
-    } = useUpdatePostForm(agGridReact);
+    } = useUpdatePostForm(data);
 
     const form = (
 

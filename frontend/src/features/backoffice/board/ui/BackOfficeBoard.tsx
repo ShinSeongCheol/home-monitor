@@ -7,7 +7,7 @@ import {UpdateBoardForm} from "./UpdateBoardForm.tsx";
 
 export const BackOfficeBoard = () => {
 
-    const {isInsertOpen, setIsInsertOpen, isEditOpen, setIsEditOpen, agGridComponentRef, colDefs, rowData, fetchBoard, handleClickDelete, handleClickDownload} = useBackOfficeBoard();
+    const {isInsertOpen, setIsInsertOpen, isEditOpen, setIsEditOpen, agGridComponentRef, colDefs, rowData, data, setData, fetchBoard, handleClickDelete, handleClickDownload} = useBackOfficeBoard();
 
     return (
         <>
@@ -16,13 +16,13 @@ export const BackOfficeBoard = () => {
                 {isInsertOpen && <InsertBoardForm fetchBoard={fetchBoard} handleClickCancel={()=> setIsInsertOpen(false)} />}
 
                 <EditButton svg={<SquarePen color='white' size={16} strokeWidth={2}/>} value='수정' type='button' onClick={() => setIsEditOpen(true)}/>
-                {isEditOpen && <UpdateBoardForm fetchBoard={fetchBoard} agGridReact={agGridComponentRef.current} handleClickCancel={() => setIsEditOpen(false)} />}
+                {isEditOpen && <UpdateBoardForm fetchBoard={fetchBoard} data={data} handleClickCancel={() => setIsEditOpen(false)} />}
 
                 <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2}/>} value='삭제' type='button' onClick={handleClickDelete}/>
                 <DownloadButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={handleClickDownload}/>
             </div>
 
-            <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+            <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData} setData={setData}></AgGridReactComponent>
         </>
     )
 }

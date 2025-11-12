@@ -18,6 +18,7 @@ export const useBackOfficeBoardRoleCode = () => {
         { field: "name", headerName: "이름", filter: true, flex:1, },
     ]);
     const [rowData, setRowData] = useState<BackOfficeBoardRoleCode[]>([]);
+    const [data, setData] = useState<BackOfficeBoardRoleCode>();
 
     const {auth} = useAuth();
     const {formattedDate} = useFormattedDate();
@@ -59,5 +60,18 @@ export const useBackOfficeBoardRoleCode = () => {
         fetchBoardRoleCodes().catch(console.error);
     }, [])
 
-    return {isInsertOpen, setIsInsertOpen, isEditOpen, setIsEditOpen, agGridComponentRef, colDefs, rowData, fetchBoardRoleCodes, handleClickDelete, handleClickDownload};
+    return {
+        isInsertOpen,
+        setIsInsertOpen,
+        isEditOpen,
+        setIsEditOpen,
+        agGridComponentRef,
+        colDefs,
+        rowData,
+        data,
+        setData,
+        fetchBoardRoleCodes,
+        handleClickDelete,
+        handleClickDownload
+    };
 }

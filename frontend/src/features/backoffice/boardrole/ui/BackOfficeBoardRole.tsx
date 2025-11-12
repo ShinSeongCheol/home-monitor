@@ -7,7 +7,7 @@ import {UpdateBoardRoleForm} from "./UpdateBoardRoleForm.tsx";
 
 export const BackOfficeBoardRole = () => {
 
-    const {isInsertOpen, isEditOpen, agGridComponentRef, colDefs, rowData, setIsInsertOpen, setIsEditOpen, handleClickDelete, handleClickDownload, fetchBoardRoles} = useBackOfficeBoardRole();
+    const {isInsertOpen, isEditOpen, agGridComponentRef, colDefs, rowData, data, setData, setIsInsertOpen, setIsEditOpen, handleClickDelete, handleClickDownload, fetchBoardRoles} = useBackOfficeBoardRole();
 
     return (
         <>
@@ -16,12 +16,12 @@ export const BackOfficeBoardRole = () => {
                 {isInsertOpen && <InsertBoardRoleForm fetchBoardRoles={fetchBoardRoles} handleClickCancel={()=> setIsInsertOpen(false)} />}
 
                 <EditButton svg={<SquarePen color='white' size={16} strokeWidth={2}/>} value='수정' type='button' onClick={() => setIsEditOpen(true)}/>
-                {isEditOpen && <UpdateBoardRoleForm fetchBoardRoles={fetchBoardRoles} agGridReact={agGridComponentRef.current} handleClickCancel={() => setIsEditOpen(false)} />}
+                {isEditOpen && <UpdateBoardRoleForm fetchBoardRoles={fetchBoardRoles} data={data} handleClickCancel={() => setIsEditOpen(false)} />}
 
                 <DeleteButton svg={<Trash color='white' size={16} strokeWidth={2}/>} value='삭제' type='button' onClick={handleClickDelete}/>
                 <DownloadButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={handleClickDownload}/>
             </div>
-            <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
+            <AgGridReactComponent ref={agGridComponentRef} colDefs={colDefs} rowData={rowData} setData={setData}></AgGridReactComponent>
         </>
     )
 }

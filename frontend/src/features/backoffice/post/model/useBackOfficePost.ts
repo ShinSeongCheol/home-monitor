@@ -60,6 +60,7 @@ export const useBackOfficePost = () => {
         {field: "view", headerName: "조회수", filter: true, flex: 1,},
     ]);
     const [rowData, setRowData] = useState<BackOfficePost[]>([]);
+    const [data, setData] = useState<BackOfficePost>();
 
     const {auth} = useAuth();
     const {formattedDate} = useFormattedDate();
@@ -108,6 +109,8 @@ export const useBackOfficePost = () => {
         agGridComponentRef,
         colDefs,
         rowData,
+        data,
+        setData,
         fetchPosts,
         handleClickDelete,
         handleClickDownload

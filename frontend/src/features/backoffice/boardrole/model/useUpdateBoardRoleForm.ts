@@ -8,10 +8,9 @@ import {getBackOfficeBoards} from "../../api/getBackOfficeBoards.ts";
 import {getBackOfficeBoardRoleCodes} from "../../api/getBackOfficeBoardRoleCodes.ts";
 import {getBackOfficeMemberRoleCodes} from "../../api/getBackOfficeMemberRoleCodes.ts";
 import {useAuth} from "../../../../shared";
-import type {AgGridReact} from "ag-grid-react";
 import {updateBoardRole} from "../api/updateBoardRole.ts";
 
-export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
+export const useUpdateBoardRoleForm = (data: BackOfficeBoardRole) => {
 
     const [boards, setBoards] = useState<BackOfficeBoard[]>([]);
     const [boardRoleCodes, setBoardRoleCodes] = useState<BackOfficeBoardRoleCode[]>([]);
@@ -23,7 +22,6 @@ export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
 
     const {auth} = useAuth();
 
-    const selectedRow: BackOfficeBoardRole = agGridReact?.api.getSelectedRows()[0];
 
     const handleChangeBoardId = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedBoardId(Number(e.target.value));
@@ -40,11 +38,8 @@ export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
     const handleClickSubmit = async (e: FormEvent<HTMLFormElement>, fetchBoardRoles: () => Promise<void>, handleClickCancel: () => void) => {
         e.preventDefault();
 
-        const selectedRow = agGridReact?.api.getSelectedRows()[0]
-        if (!selectedRow) return;
-
         try {
-            await updateBoardRole(selectedRow.id, {
+            await updateBoardRole(data.id, {
                 boardId: selectedBoardId,
                 boardRoleCodeId: selectedBoardRoleCodeId,
                 memberRoleCodeId: selectedMemberRoleCodeId
@@ -58,10 +53,10 @@ export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
 
     const fetchBoards = async () => {
         try {
-            const data: BackOfficeBoard[] = await getBackOfficeBoards();
+            const boards: BackOfficeBoard[] = await getBackOfficeBoards();
 
-            setBoards(data);
-            setSelectedBoardId(selectedRow.board.id);
+            setBoards(boards);
+            setSelectedBoardId(data.board.id);
         } catch (err) {
             console.error(err);
         }
@@ -69,10 +64,10 @@ export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
 
     const fetchBoardRoleCodes = async () => {
         try {
-            const data: BackOfficeBoardRoleCode[] = await getBackOfficeBoardRoleCodes()
+            const boardRoleCodes: BackOfficeBoardRoleCode[] = await getBackOfficeBoardRoleCodes()
 
-            setBoardRoleCodes(data)
-            setSelectedBoardRoleCodeId(selectedRow.boardRoleCode.id);
+            setBoardRoleCodes(boardRoleCodes)
+            setSelectedBoardRoleCodeId(data.boardRoleCode.id);
         } catch (err) {
             console.error(err);
         }
@@ -80,10 +75,10 @@ export const useUpdateBoardRoleForm = (agGridReact: AgGridReact | null) => {
 
     const fetchMemberRoleCodes = async () => {
         try {
-            const data: BackOfficeMemberRoleCode[] = await getBackOfficeMemberRoleCodes();
+            const memberRoleCodes: BackOfficeMemberRoleCode[] = await getBackOfficeMemberRoleCodes();
 
-            setMemberRoleCodes(data);
-            setSelectedMemberRoleCodeId(selectedRow.memberRoleCode.id);
+            setMemberRoleCodes(memberRoleCodes);
+            setSelectedMemberRoleCodeId(data.memberRoleCode.id);
         } catch (err) {
             console.error(err);
         }

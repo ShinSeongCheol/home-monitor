@@ -1,6 +1,6 @@
 import {backendUrl} from "../../../../shared";
 
-export const updateBoard = async (id: string, code: string, name:string, comment:string, accessToken:string|undefined) => {
+export const updateBoard = async (id: number, code: string, name:string, comment:string, accessToken:string|undefined) => {
     const res = await fetch(`${backendUrl}/api/v1/backoffice/board/${id}`, {
         method: 'PUT',
         headers: {

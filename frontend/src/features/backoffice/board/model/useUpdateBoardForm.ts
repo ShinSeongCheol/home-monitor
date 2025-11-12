@@ -1,15 +1,13 @@
 import {type ChangeEvent, type FormEvent, useState} from "react";
-import type {AgGridReact} from "ag-grid-react";
 import {updateBoard} from "../api/updateBoard.ts";
 import {useAuth} from "../../../../shared";
+import type {BackOfficeBoard} from "../../model/type.ts";
 
-export const useUpdateBoardForm = (agGridReact: AgGridReact | null) => {
+export const useUpdateBoardForm = (data: BackOfficeBoard) => {
 
-    const selectedRow = agGridReact?.api.getSelectedRows()[0];
-
-    const [code, setCode] = useState(selectedRow.categoryCode);
-    const [name, setName] = useState(selectedRow.categoryName);
-    const [comment, setComment] = useState(selectedRow.comment);
+    const [code, setCode] = useState(data.categoryCode);
+    const [name, setName] = useState(data.categoryName);
+    const [comment, setComment] = useState(data.comment);
 
     const {auth} = useAuth();
 
@@ -28,7 +26,7 @@ export const useUpdateBoardForm = (agGridReact: AgGridReact | null) => {
     const handleClickSubmit = async (e: FormEvent<HTMLFormElement>, fetchBoard: () => Promise<void>, handleClickCancel: () => void ) => {
         e.preventDefault();
 
-        await updateBoard(selectedRow.id, code, name, comment, auth?.accessToken).catch(console.error);
+        await updateBoard(data.id, code, name, comment, auth?.accessToken).catch(console.error);
         await fetchBoard();
         handleClickCancel();
     };

@@ -88,6 +88,7 @@ export const useBackOfficeBoardRole = () => {
     ]);
 
     const [rowData, setRowData] = useState<BackOfficeBoardRole[]>([]);
+    const [data, setData] = useState<BackOfficeBoardRole>();
 
     const {auth} = useAuth();
 
@@ -132,5 +133,18 @@ export const useBackOfficeBoardRole = () => {
         fetchBoardRoles().catch(console.error);
     }, [])
 
-    return {isInsertOpen, isEditOpen, agGridComponentRef, colDefs, rowData, setIsInsertOpen, setIsEditOpen, handleClickDelete, handleClickDownload, fetchBoardRoles};
+    return {
+        isInsertOpen,
+        isEditOpen,
+        agGridComponentRef,
+        colDefs,
+        rowData,
+        data,
+        setData,
+        setIsInsertOpen,
+        setIsEditOpen,
+        handleClickDelete,
+        handleClickDownload,
+        fetchBoardRoles
+    };
 }

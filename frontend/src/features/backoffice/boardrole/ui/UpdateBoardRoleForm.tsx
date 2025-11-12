@@ -1,15 +1,21 @@
 import {CancelButton, InsertButton} from "../../../../shared/ui";
 import {BackOfficeModalLayout} from "../../../../shared";
-import type {AgGridReact} from "ag-grid-react";
 import {useUpdateBoardRoleForm} from "../model/useUpdateBoardRoleForm.ts";
+import type {BackOfficeBoardRole} from "../../model/type.ts";
 
 type UpdateBoardRoleFormProps = {
     fetchBoardRoles: () => Promise<void>;
-    agGridReact: AgGridReact | null;
+    data: BackOfficeBoardRole | undefined;
     handleClickCancel: () => void;
 }
 
-export const UpdateBoardRoleForm = ({fetchBoardRoles, agGridReact, handleClickCancel} : UpdateBoardRoleFormProps) => {
+export const UpdateBoardRoleForm = ({fetchBoardRoles, data, handleClickCancel} : UpdateBoardRoleFormProps) => {
+
+    if(!data) {
+        handleClickCancel();
+        return;
+    }
+
     const {
         boards,
         boardRoleCodes,
@@ -21,7 +27,7 @@ export const UpdateBoardRoleForm = ({fetchBoardRoles, agGridReact, handleClickCa
         selectedMemberRoleCodeId,
         handleChangeMemberRoleCodeId,
         handleClickSubmit
-    } = useUpdateBoardRoleForm(agGridReact);
+    } = useUpdateBoardRoleForm(data);
 
     const form = (
 
