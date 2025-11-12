@@ -47,14 +47,22 @@ export const useInsertBoardRoleForm = () => {
     }
 
     const fetchBoards = async () => {
-        const data:BackOfficeBoard[] = await getBackOfficeBoards();
-        setBoards(data);
+        try {
+            const data:BackOfficeBoard[] = await getBackOfficeBoards();
+            setBoards(data);
+
+            if (data.length > 0) setSelectedBoardId(data[0].id);
+        }catch (err) {
+            console.error(err);
+        }
     };
 
     const fetchBoardRoleCodes = async () => {
         try {
             const data:BackOfficeBoardRoleCode[] = await getBackOfficeBoardRoleCodes()
             setBoardRoleCodes(data)
+
+            if (data.length > 0) setSelectedBoardRoleCodeId(data[0].id);
         }catch (err) {
             console.error(err);
         }
@@ -64,6 +72,8 @@ export const useInsertBoardRoleForm = () => {
         try {
             const data:BackOfficeMemberRoleCode[] = await getBackOfficeMemberRoleCodes();
             setMemberRoleCodes(data);
+
+            if (data.length > 0) setSelectedMemberRoleCodeId(data[0].id);
         }catch (err) {
             console.error(err);
         }
