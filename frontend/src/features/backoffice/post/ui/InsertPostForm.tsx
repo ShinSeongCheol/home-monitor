@@ -50,7 +50,9 @@ export const InsertPostForm = ({fetchPosts, handleClickCancel}: InsertPostFormPr
                     <input className={'flex-1 h-8 bg-gray-300 border-none rounded-sm'} type="text" id="title" name="title" value={title} maxLength={16} onChange={handleChangeTitle}/>
                 </div>
 
-                <CkEditor data={content} handleChange={setContent}/>
+                <div className={'max-h-[600px] overflow-auto'}>
+                    <CkEditor data={content} handleChange={setContent}/>
+                </div>
             </div>
 
             <div className={`flex justify-end gap-1`}>
