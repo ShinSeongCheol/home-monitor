@@ -1,7 +1,7 @@
-import { useAuth } from "../../../contexts/AuthContext";
 import { InsertButton, EditButton, DeleteButton, CancelButton } from "../../../shared/ui";
 import type { Comment } from "../model/type"
 import { useCommentItem } from "../model/useCommentItem";
+import {useAuth} from "../../../shared";
 
 type CommentItemProps = {
     comment: Comment;
@@ -13,7 +13,7 @@ type CommentItemProps = {
 
 export const CommentItem = ({ comment, ReactionButton, handleUpdate, handleDelete, handleReply }: CommentItemProps) => {
 
-    const {user} = useAuth();
+    const {auth} = useAuth();
     const {editCommentId, setEditCommentId, editComment, setEditComment, replyId, setReplyId, replyComment, setReplyComment} = useCommentItem();
 
     return (
@@ -37,11 +37,11 @@ export const CommentItem = ({ comment, ReactionButton, handleUpdate, handleDelet
                     {ReactionButton}
 
                     <div className="flex justify-end gap-1">
-                        {user?.email &&
+                        {auth?.email &&
                             <InsertButton value={"답글"} type={"button"} onClick={() => setReplyId(comment.id)}/>
                         }
                         {
-                            comment.member.email === user?.email &&
+                            comment.member.email === auth?.email &&
                             <>
                                 <EditButton value={"수정"} type={"button"} onClick={() => {
                                     if (comment.id === editCommentId) {

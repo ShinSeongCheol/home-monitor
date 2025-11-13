@@ -1,4 +1,5 @@
 import type { ButtonProps } from "../model"
+import type {FileButtonProps} from "../model/ButtonProps.ts";
 
 export const CancelButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (
@@ -27,5 +28,11 @@ export const InsertButton = ({svg, value, type, onClick}: ButtonProps) => {
 export const DownloadButton = ({svg, value, type, onClick}: ButtonProps) => {
     return (
         <button className={`cursor-pointer border-none min-w-[80px] h-[30px] flex justify-center items-center gap-2 bg-green-500 hover:bg-green-600 text-white`} type={type} onClick={onClick}>{svg}{value}</button>
+    )
+}
+
+export const FileDownloadButton = ({svg, value, type, onChange}: FileButtonProps) => {
+    return (
+        <input className={`cursor-pointer border-none min-w-[80px] h-[30px] flex justify-center items-center gap-2 bg-green-500 hover:bg-green-600 text-white`} type={type} onChange={onChange}>{svg}{value}</input>
     )
 }

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEventHandler, type FormEventHandler } from "react";
 import { type ColDef } from 'ag-grid-community';
 import * as XLSX from "xlsx";
-import { useAuth } from "../../../contexts/AuthContext.tsx";
 import styles from '../../../styles/pages/ForecastAdministrativeDistrictPage.module.css';
 import { ChevronRight, Download, File, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -9,8 +8,10 @@ import AgGridReactComponent from "../../../components/AgGridReactComponent.tsx";
 import type { AgGridReact } from "ag-grid-react";
 import { MenuType, SideMenuType } from "./BackOfficeLayout.tsx";
 import useBackOfficeMenu from "../../../features/backoffice/lib/useBackOfficeMenu.tsx";
-import { CsvButton, FileButton, InsertButton } from "../../../components/ButtonComponent.tsx";
 import {useFormattedDate} from "../../../shared/lib";
+import {DownloadButton, InsertButton} from "../../../shared/ui";
+import {useAuth} from "../../../shared";
+import {FileDownloadButton} from "../../../shared/ui/Button.tsx";
 
 interface AdministartiveDistrict {
     type: string;
@@ -44,7 +45,7 @@ export const ForecastAdministrativeDistrictPage = () => {
     
     const agGridRef = useRef<AgGridReact | null>(null);
 
-    const { accessToken } = useAuth();
+    const { auth } = useAuth();
     const {formattedDate} = useFormattedDate();
 
     const [rowData, setRowData] = useState<AdministartiveDistrict[]>([
@@ -76,7 +77,7 @@ export const ForecastAdministrativeDistrictPage = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`,
+                "Authorization": `Bearer ${auth?.accessToken}`,
             },
             body: JSON.stringify(rowData)
         });
@@ -127,7 +128,7 @@ export const ForecastAdministrativeDistrictPage = () => {
         fetch(`${import.meta.env.VITE_API_URL}/api/v1/forecast/administrativeDistrict`, {
             headers: {
                 "Content-type": "application/json",
-                "Authorization": `Bearer ${accessToken}`,
+                "Authorization": `Bearer ${auth?.accessToken}`,
             }
         })
         .then(res => res.json())
@@ -156,9 +157,9 @@ export const ForecastAdministrativeDistrictPage = () => {
                 </nav>
 
                 <div className={styles.buttonContainer}>
-                    <FileButton svg={<File color='white' size={16} strokeWidth={2}/>} value='불러오기' type='file' onChange={onChangeExcel}/>
+                    <FileDownloadButton svg={<File color='white' size={16} strokeWidth={2}/>} value='불러오기' type='file' onChange={onChangeExcel}/>
                     <InsertButton svg={<Upload size={16} color="white" fill="white" strokeWidth={1} />}  value='업로드' type='submit' onClick={() => {}}/>
-                    <CsvButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={handleCsvDownload}/>
+                    <DownloadButton svg={<Download color='white' size={16} strokeWidth={2}/>} value='CSV' type='button' onClick={handleCsvDownload}/>
                 </div>
 
                 <AgGridReactComponent ref={agGridRef} colDefs={colDefs} rowData={rowData}></AgGridReactComponent>
