@@ -1,5 +1,5 @@
 import {BackOfficeBoardRoleWidget} from "../../../widgets/backoffice";
-import useBackOfficeMenu from "../../../hooks/useBackOfficeMenu.tsx";
+import useBackOfficeMenu from "../../../features/backoffice/lib/useBackOfficeMenu.tsx";
 import {useEffect} from "react";
 import {MenuType, SideMenuType} from "./BackOfficeLayout.tsx";
 

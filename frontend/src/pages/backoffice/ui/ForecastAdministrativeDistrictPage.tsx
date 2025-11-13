@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import AgGridReactComponent from "../../../components/AgGridReactComponent.tsx";
 import type { AgGridReact } from "ag-grid-react";
 import { MenuType, SideMenuType } from "./BackOfficeLayout.tsx";
-import useBackOfficeMenu from "../../../hooks/useBackOfficeMenu.tsx";
+import useBackOfficeMenu from "../../../features/backoffice/lib/useBackOfficeMenu.tsx";
 import { CsvButton, FileButton, InsertButton } from "../../../components/ButtonComponent.tsx";
 import {useFormattedDate} from "../../../shared/lib";
 

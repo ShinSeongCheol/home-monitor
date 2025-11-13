@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { CsvButton, DeleteButton, InsertButton, UpdateButton, } from '../../../components/ButtonComponent.tsx';
 import { MenuType, SideMenuType, type ReactionCode } from './BackOfficeLayout.tsx';
-import useBackOfficeMenu from '../../../hooks/useBackOfficeMenu.tsx';
+import useBackOfficeMenu from '../../../features/backoffice/lib/useBackOfficeMenu.tsx';
 import type { AgGridReact } from 'ag-grid-react';
 import { useAuth } from '../../../contexts/AuthContext.tsx';
 import { EditUserRoleCodeModal, InsertUserRoleCodeModal } from '../../../components/BackOfficeModal.tsx';
