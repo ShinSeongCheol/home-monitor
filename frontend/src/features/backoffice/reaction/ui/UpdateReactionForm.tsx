@@ -1,13 +1,20 @@
 import {BackOfficeModalLayout} from "../../../../shared";
 import {CancelButton, InsertButton} from "../../../../shared/ui";
-import {useInsertReactionForm} from "../model/useInsertReactionForm.ts";
+import type {BackOfficeReaction} from "../../model/type.ts";
+import {useUpdateReactionForm} from "../model/useUpdateReactionForm.ts";
 
-type InsertReactionFormProps = {
+type UpdateReactionFormProps = {
     fetchReactions: () => Promise<void>;
+    data: BackOfficeReaction | undefined;
     handleClickCancel: () => void;
 }
 
-export const InsertReactionForm = ({fetchReactions, handleClickCancel}: InsertReactionFormProps) => {
+export const UpdateReactionForm = ({fetchReactions, data, handleClickCancel}: UpdateReactionFormProps) => {
+
+    if (!data) {
+        handleClickCancel();
+        return;
+    }
 
     const {
         posts,
@@ -23,7 +30,7 @@ export const InsertReactionForm = ({fetchReactions, handleClickCancel}: InsertRe
         selectedReactionCodeId,
         handleChangeReactionCodeId,
         handleClickSubmit
-    } = useInsertReactionForm();
+    } = useUpdateReactionForm(data);
 
     const form = (
         <form className={'flex flex-col gap-4 w-sm'} onSubmit={(e) => handleClickSubmit(e, fetchReactions, handleClickCancel)}>
@@ -71,12 +78,12 @@ export const InsertReactionForm = ({fetchReactions, handleClickCancel}: InsertRe
 
             <div className={`flex justify-end gap-1`}>
                 <CancelButton svg={null} value='취소' type='button' onClick={handleClickCancel}></CancelButton>
-                <InsertButton svg={null} value='추가' type='submit' onClick={() => {}}></InsertButton>
+                <InsertButton svg={null} value='저장' type='submit' onClick={() => {}}></InsertButton>
             </div>
         </form>
     )
 
     return (
-        <BackOfficeModalLayout title={'반응 추가'} content={'새로운 반응을 추가합니다.'} cancel={handleClickCancel} children={form} />
+        <BackOfficeModalLayout title={'반응 수정'} content={'반응을 수정합니다.'} cancel={handleClickCancel} children={form} />
     )
 }
