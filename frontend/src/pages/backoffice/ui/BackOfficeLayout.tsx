@@ -164,8 +164,10 @@ export const BackOfficeLayout = () => {
                 </nav>
             </aside>
 
-            <main className={'w-full h-full'}>
-                <Outlet context={{setOpenMenu, setOpenSideMenu}} />
+            <main className={'w-full h-full p-3'}>
+                <div className={'w-full h-full bg-white border border-gray-300 rounded-sm'}>
+                    <Outlet context={{setOpenMenu, setOpenSideMenu}} />
+                </div>
             </main>
         </div>
     )
