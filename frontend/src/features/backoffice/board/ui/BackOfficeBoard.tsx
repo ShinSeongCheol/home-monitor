@@ -1,7 +1,7 @@
 import {DeleteButton, EditButton, InsertButton, DownloadButton} from "../../../../shared/ui";
 import {Download, Plus, SquarePen, Trash} from "lucide-react";
 import {useBackOfficeBoard} from "../model/useBackOfficeBoard.ts";
-import AgGridReactComponent from "../../../../components/AgGridReactComponent.tsx";
+import AgGridReactComponent from "../../../../shared/ui/AgGridReactComponent.tsx";
 import {InsertBoardForm} from "./InsertBoardForm.tsx";
 import {UpdateBoardForm} from "./UpdateBoardForm.tsx";
 

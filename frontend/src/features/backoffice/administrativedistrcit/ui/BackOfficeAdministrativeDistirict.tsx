@@ -1,6 +1,6 @@
 import {DownloadButton, InsertButton} from "../../../../shared/ui";
 import {Download, Upload, File} from "lucide-react";
-import AgGridReactComponent from "../../../../components/AgGridReactComponent.tsx";
+import AgGridReactComponent from "../../../../shared/ui/AgGridReactComponent.tsx";
 import {FileDownloadButton} from "../../../../shared/ui/Button.tsx";
 import {useBackOfficeAdministrativeDistrict} from "../model/useBackOfficeAdministrativeDistrict.ts";
 

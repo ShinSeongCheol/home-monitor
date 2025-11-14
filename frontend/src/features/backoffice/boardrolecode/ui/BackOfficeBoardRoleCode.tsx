@@ -1,6 +1,6 @@
 import {DeleteButton, EditButton, InsertButton, DownloadButton} from "../../../../shared/ui";
 import {Download, Plus, SquarePen, Trash} from "lucide-react";
-import AgGridReactComponent from "../../../../components/AgGridReactComponent.tsx";
+import AgGridReactComponent from "../../../../shared/ui/AgGridReactComponent.tsx";
 import {useBackOfficeBoardRoleCode} from "../model/useBackOfficeBoardRoleCode.ts";
 import {InsertBoardRoleCodeForm} from "./InsertBoardRoleCodeForm.tsx";
 import {UpdateBoardRoleCodeForm} from "./UpdateBoardRoleCodeForm.tsx";
