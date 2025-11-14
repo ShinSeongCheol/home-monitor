@@ -11,4 +11,4 @@ export {BackOfficeUserWidget} from './ui/BackOfficeUserWidget.tsx'
 export {BackOfficeUserRoleWidget} from './ui/BackOfficeUserRoleWidget.tsx'
 export {BackOfficeUserRoleCodeWidget} from './ui/BackOfficeUserRoleCodeWidget.tsx'
 
-export {ForecastAdministrativeDistrictWidget} from './ui/ForecastAdministrativeDistrictWidget.tsx'
+export {BackofficeAdministrativeDistrictWidget} from './ui/BackofficeAdministrativeDistrictWidget.tsx'

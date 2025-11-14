@@ -18,7 +18,7 @@ import {
     BackOfficeBoardRolePage, BackOfficeCommentPage,
     BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeReactionPage, BackOfficeUserPage,
     BackOfficeUserRoleCodePage,
-    BackOfficeUserRolePage, ForecastAdministrativeDistrictPage
+    BackOfficeUserRolePage, BackOfficeAdministrativeDistrictPage
 } from "../pages/backoffice";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -61,7 +61,7 @@ function App() {
                         <Route path="userRole" element={<BackOfficeUserRolePage/>}></Route>
                         <Route path="userRoleCode" element={<BackOfficeUserRoleCodePage/>}></Route>
 
-                        <Route path="administrativeDistrict" element={<ForecastAdministrativeDistrictPage/>}></Route>
+                        <Route path="administrativeDistrict" element={<BackOfficeAdministrativeDistrictPage/>}></Route>
                     </Route>
 
                     {/* Auth */}

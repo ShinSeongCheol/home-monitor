@@ -12,4 +12,4 @@ export {BackOfficeUserPage} from './ui/BackOfficeUserPage.tsx'
 export {BackOfficeUserRolePage} from './ui/BackOfficeUserRolePage.tsx'
 export {BackOfficeUserRoleCodePage} from './ui/BackOfficeUserRoleCodePage.tsx'
 
-export {ForecastAdministrativeDistrictPage} from './ui/ForecastAdministrativeDistrictPage.tsx'
+export {BackOfficeAdministrativeDistrictPage} from './ui/BackOfficeAdministrativeDistrictPage.tsx'

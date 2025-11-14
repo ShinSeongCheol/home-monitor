@@ -13,7 +13,7 @@ import {
     BackOfficeBoardRoleCodePage,
     BackOfficeBoardRolePage, BackOfficeCommentPage,
     BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeReactionPage, BackOfficeUserPage,
-    BackOfficeUserRoleCodePage, BackOfficeUserRolePage, ForecastAdministrativeDistrictPage
+    BackOfficeUserRoleCodePage, BackOfficeUserRolePage, BackOfficeAdministrativeDistrictPage
 } from "../../../pages/backoffice";
 
 export const routes: RouteObject[] = [
@@ -54,7 +54,7 @@ export const routes: RouteObject[] = [
                     {path: 'userRole', element: <BackOfficeUserRolePage />},
                     {path: 'userRoleCode', element: <BackOfficeUserRoleCodePage />},
 
-                    {path: 'administrativeDistrict', element: <ForecastAdministrativeDistrictPage />},
+                    {path: 'administrativeDistrict', element: <BackOfficeAdministrativeDistrictPage />},
                 ]
             },
         ]
