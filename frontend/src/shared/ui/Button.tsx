@@ -33,6 +33,9 @@ export const DownloadButton = ({svg, value, type, onClick}: ButtonProps) => {
 
 export const FileDownloadButton = ({svg, value, type, onChange}: FileButtonProps) => {
     return (
-        <input className={`cursor-pointer border-none min-w-[80px] h-[30px] flex justify-center items-center gap-2 bg-green-500 hover:bg-green-600 text-white`} type={type} onChange={onChange}>{svg}{value}</input>
+        <div className={'min-w-[80px] h-[30px] flex items-center bg-green-500 hover:bg-green-600 text-white px-2'}>
+            <label className={`flex justify-center items-center gap-2 cursor-pointer `} htmlFor="file">{svg} {value}</label>
+            <input className={'hidden'} id={'file'} type={type} onChange={onChange}/>
+        </div>
     )
 }
