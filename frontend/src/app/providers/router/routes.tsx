@@ -15,6 +15,7 @@ import {
     BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeReactionPage, BackOfficeUserPage,
     BackOfficeUserRoleCodePage, BackOfficeUserRolePage, BackOfficeAdministrativeDistrictPage
 } from "../../../pages/backoffice";
+import {RequireRole} from "../../../features/auth/ui/RequireRole.tsx";
 
 export const routes: RouteObject[] = [
     {
@@ -40,7 +41,7 @@ export const routes: RouteObject[] = [
             {path: '/auth/profile', element: <ProfilePage/>},
 
             {
-                path: '/backoffice', element: <BackOfficeLayout/>, children: [
+                path: '/backoffice', element: <RequireRole roles={['ROLE_ADMIN']} children={<BackOfficeLayout/>} /> , children: [
                     {path: 'board', element: <BackOfficeBoardPage />},
                     {path: 'boardRole', element: <BackOfficeBoardRolePage />},
                     {path: 'boardRoleCode', element: <BackOfficeBoardRoleCodePage />},
