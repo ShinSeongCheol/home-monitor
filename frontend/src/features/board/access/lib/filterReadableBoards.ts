@@ -4,5 +4,14 @@ import type {Auth} from "../../../../shared";
 export const filterReadableBoards = (auth: Auth|null, boards: Board[]) => {
     if (!auth) return [];
 
-    return boards.filter(board => board.boardRoles.some(role => role.boardRoleCode.code === "READ" && (!role.memberRoleCode?.code || auth?.authorities.includes({authority: role.memberRoleCode?.code}))));
+    const userAuthority = auth.authorities.map(authority => authority.authority);
+
+    const filteredBoard = boards.filter(board => board.boardRoles.some(boardRole => {
+        if (!userAuthority.includes(boardRole.memberRoleCode?.code ?? "")) return false;
+        if (boardRole.boardRoleCode.code !== "READ") return false;
+
+        return true;
+    }));
+
+    return filteredBoard;
 }
