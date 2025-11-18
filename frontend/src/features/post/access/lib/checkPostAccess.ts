@@ -1,24 +1,22 @@
 import type {Board} from "../../../../entities/board";
 import type {Auth} from "../../../../shared";
+import type {Post} from "../../../../entities/post";
 
 export type BoardPermission = "READ" | "WRITE" | "MODIFY" | "DELETE";
 
-export const checkPostAccess = (auth: Auth | null, board: Board, permission: BoardPermission): boolean => {
-    if (!auth) return false;
+export const checkPostAccess = (auth: Auth | null, board: Board, permission: BoardPermission, post?: Post): boolean => {
     if (!board) return false;
 
-    const userAuthorities = auth.authorities.map(value => value.authority);
+    const userAuthorities = auth?.authorities.map(value => value.authority);
 
-    const roles= userAuthorities.map(userAuthority => {
-        const boardRoles = board.boardRoles.map(boardRole => {
-            return {
-                boardRoleCode: boardRole.boardRoleCode.code,
-                memberRoleCode: boardRole.memberRoleCode?.code,
-            }
-        });
+    const hasAccess = board.boardRoles.some(boardRole => {
+        if (boardRole.memberRoleCode === null && boardRole.boardRoleCode.code === permission) return true;
+        if (userAuthorities?.includes(boardRole.memberRoleCode?.code ?? "") && boardRole.boardRoleCode.code === permission) return true;
+    });
 
-        return boardRoles.filter(boardRole => boardRole.memberRoleCode === userAuthority);
-    }).flat();
-
-    return roles.some(value => value.boardRoleCode === permission);
+    if (post) {
+        return hasAccess && (post.member.email === auth?.email);
+    }else {
+        return hasAccess;
+    }
 }
