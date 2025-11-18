@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import type {LineSeries} from "@nivo/line";
 import {getForecastRegionToday} from "../api/getForecastRegionToday.ts";
 import type {Forecast} from "./type.ts";
+import type {TimeLineSeries} from "../../../../shared/model";
 
 export const useForecastLineChart = () => {
-    const [data, setData] = useState<LineSeries[] | null>(null);
+    const [data, setData] = useState<TimeLineSeries[] | null>(null);
 
     const fetchForecastTodayLog = async () => {
         try {
@@ -12,9 +12,17 @@ export const useForecastLineChart = () => {
             const temperatureData = response.map(value => ({x:new Date(`${value.baseDate} ${value.baseTime}`), y:value.t1h}));
             const humidityData = response.map(value => ({x: new Date(`${value.baseDate} ${value.baseTime}`), y:value.reh}));
 
-            const lineSeries: LineSeries[] = [
-                {id: 'temperature', data: temperatureData},
-                {id: 'humidity', data: humidityData},
+            const lineSeries: TimeLineSeries[] = [
+                {
+                    id: 'temperature',
+                    color: '#E74C3C',
+                    data: temperatureData
+                },
+                {
+                    id: 'humidity',
+                    color: '#3498DB',
+                    data: humidityData
+                },
             ]
 
             setData(lineSeries);

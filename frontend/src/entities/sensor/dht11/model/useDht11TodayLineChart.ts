@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import type {LineSeries} from "@nivo/line";
 import {getDht11TodayLog} from "../api/getDht11TodayLog.ts";
 import type {Dht11} from "./type.ts";
+import type {TimeLineSeries} from "../../../../shared/model";
 
 export const useDht11TodayLineChart = () => {
-    const [data, setData] = useState<LineSeries[] | null>(null);
+    const [data, setData] = useState<TimeLineSeries[] | null>(null);
 
     const fetchDht11TodayLog = async () => {
         try {
@@ -12,9 +12,17 @@ export const useDht11TodayLineChart = () => {
             const temperatureData = response.map(value => ({x:value.measurementTime, y:value.temperature}));
             const humidityData = response.map(value => ({x: value.measurementTime, y:value.humidity}));
 
-            const lineSeries: LineSeries[] = [
-                {id: 'temperature', data: temperatureData},
-                {id: 'humidity', data: humidityData},
+            const lineSeries: TimeLineSeries[] = [
+                {
+                    id: 'temperature',
+                    color: '#FFB266',
+                    data: temperatureData
+                },
+                {
+                    id: 'humidity',
+                    color: '#85C1E9',
+                    data: humidityData
+                },
             ]
 
             setData(lineSeries);

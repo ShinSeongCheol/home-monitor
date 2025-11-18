@@ -45,6 +45,7 @@ export const TimeLineChart = ({icon, title, data}: TimeLineChartProps) => {
                 <ResponsiveLine
                     animate={true}
                     data={data}
+                    colors={{datum: 'color'}}
                     xFormat={"time:%H:%M"}
                     xScale={xScale}
                     yScale={yScale}
