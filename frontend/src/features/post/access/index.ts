@@ -1,0 +1,1 @@
+export {usePostAccess} from './model/usePostAccess.ts'

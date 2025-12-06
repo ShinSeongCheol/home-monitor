@@ -1,0 +1,1 @@
+export const kakaoUrl = import.meta.env.VITE_KAKAO_REST_API_KEY;

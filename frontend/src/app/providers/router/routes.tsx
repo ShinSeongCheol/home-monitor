@@ -1,0 +1,63 @@
+import type {RouteObject} from "react-router-dom";
+import {DashboardPage} from "../../../pages/dashboard";
+import {PostLayout} from "../../../pages/post/ui/PostLayout.tsx";
+import {BoardInfoPage, BoardPage} from "../../../pages/board";
+import {PostCreatePage, PostDetailPage, PostUpdatePage} from "../../../pages/post";
+import {AuthLayout} from "../../../pages/auth";
+import {LoginPage} from "../../../pages/auth/ui/LoginPage.tsx";
+import {SignupPage} from "../../../pages/auth/ui/SignupPage.tsx";
+import {MainLayout} from "../layout/MainLayout.tsx";
+import ProfilePage from "../../../pages/auth/ui/ProfilePage.tsx";
+import {
+    BackOfficeBoardPage,
+    BackOfficeBoardRoleCodePage,
+    BackOfficeBoardRolePage, BackOfficeCommentPage,
+    BackOfficeLayout, BackOfficePostPage, BackOfficeReactionCodePage, BackOfficeReactionPage, BackOfficeUserPage,
+    BackOfficeUserRoleCodePage, BackOfficeUserRolePage, BackOfficeAdministrativeDistrictPage
+} from "../../../pages/backoffice";
+import {RequireRole} from "../../../features/auth/ui/RequireRole.tsx";
+
+export const routes: RouteObject[] = [
+    {
+        path: '/', element: <MainLayout/>, children: [
+            {path: '', element: <DashboardPage/>},
+            {
+                path: '/boards', element: <PostLayout/>, children: [
+                    {path: '', element: <BoardPage/>},
+                    {path: ':categoryCode', element: <BoardInfoPage/>},
+
+                    {path: ':categoryCode/post', element: <PostCreatePage/>},
+                    {path: ':categoryCode/:postId', element: <PostDetailPage/>},
+                    {path: ':categoryCode/:postId/edit', element: <PostUpdatePage/>},
+                ]
+            },
+
+            {
+                path: '/auth', element: <AuthLayout/>, children: [
+                    {path: 'login', element: <LoginPage/>},
+                    {path: 'signup', element: <SignupPage/>},
+                ],
+            },
+            {path: '/auth/profile', element: <ProfilePage/>},
+
+            {
+                path: '/backoffice', element: <RequireRole roles={['ROLE_ADMIN']} children={<BackOfficeLayout/>} /> , children: [
+                    {path: 'board', element: <BackOfficeBoardPage />},
+                    {path: 'boardRole', element: <BackOfficeBoardRolePage />},
+                    {path: 'boardRoleCode', element: <BackOfficeBoardRoleCodePage />},
+
+                    {path: 'post', element: <BackOfficePostPage />},
+                    {path: 'comment', element: <BackOfficeCommentPage />},
+                    {path: 'reaction', element: <BackOfficeReactionPage />},
+                    {path: 'reactionCode', element: <BackOfficeReactionCodePage />},
+
+                    {path: 'user', element: <BackOfficeUserPage />},
+                    {path: 'userRole', element: <BackOfficeUserRolePage />},
+                    {path: 'userRoleCode', element: <BackOfficeUserRoleCodePage />},
+
+                    {path: 'administrativeDistrict', element: <BackOfficeAdministrativeDistrictPage />},
+                ]
+            },
+        ]
+    }
+]
