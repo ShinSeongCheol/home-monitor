@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.domain;
+package com.seongcheol.homemonitor.sensor.infrastructure.entity;
 
 
 import java.time.LocalDateTime;
@@ -8,15 +8,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "dht11_log")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dht11LogEntity {
+public class SensorEntity {
 	@Id
 	private LocalDateTime measurementTime;
 	
