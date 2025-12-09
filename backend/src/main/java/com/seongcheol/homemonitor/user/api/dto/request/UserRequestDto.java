@@ -1,6 +1,6 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.user.api.dto.request;
 
-import com.seongcheol.homemonitor.domain.MemberEntity;
+import MemberEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +13,13 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDto {
+public class UserRequestDto {
     private String email;
     private String nickname;
+    private String password;
 
-    public static MemberDto fromEntity(MemberEntity memberEntity) {
-        MemberDto memberDto = MemberDto.builder()
+    public static UserRequestDto fromEntity(MemberEntity memberEntity) {
+        UserRequestDto memberDto = UserRequestDto.builder()
             .email(memberEntity.getEmail())
             .nickname(memberEntity.getUsername())
             .build();

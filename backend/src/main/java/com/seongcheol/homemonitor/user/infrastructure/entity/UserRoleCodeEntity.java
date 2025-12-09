@@ -1,8 +1,9 @@
-package com.seongcheol.homemonitor.domain;
+package com.seongcheol.homemonitor.user.infrastructure.entity;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import com.seongcheol.homemonitor.domain.BoardRoleEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberRoleCodeEntity {
+public class UserRoleCodeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -36,5 +37,5 @@ public class MemberRoleCodeEntity {
 
     @OneToMany(mappedBy = "memberRoleCode",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<BoardRoleEntity> boardRole = new HashSet<>();
+    private Set<BoardRoleEntity> boardRoles = new HashSet<>();
 }

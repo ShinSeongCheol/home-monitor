@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.domain;
+package com.seongcheol.homemonitor.user.infrastructure.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class MemberEntity {
+public class UserEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class MemberEntity {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<MemberRoleEntity> role = new HashSet<MemberRoleEntity>();
+    private Set<UserRoleEntity> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
