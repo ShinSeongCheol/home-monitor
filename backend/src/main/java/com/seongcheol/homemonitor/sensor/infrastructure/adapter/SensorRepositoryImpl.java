@@ -1,7 +1,7 @@
 package com.seongcheol.homemonitor.sensor.infrastructure.adapter;
 
 import com.seongcheol.homemonitor.sensor.domain.model.Sensor;
-import com.seongcheol.homemonitor.sensor.domain.port.out.SensorRepository;
+import com.seongcheol.homemonitor.sensor.application.port.out.SensorRepository;
 import com.seongcheol.homemonitor.sensor.infrastructure.mapper.SensorMapper;
 import com.seongcheol.homemonitor.sensor.infrastructure.repository.SensorJpaRepository;
 import org.springframework.stereotype.Component;

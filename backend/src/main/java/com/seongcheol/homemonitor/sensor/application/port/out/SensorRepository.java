@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.sensor.domain.port.out;
+package com.seongcheol.homemonitor.sensor.application.port.out;
 
 import com.seongcheol.homemonitor.sensor.domain.model.Sensor;
 

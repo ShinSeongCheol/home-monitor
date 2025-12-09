@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.seongcheol.homemonitor.sensor.domain.port.out.SensorRepository;
+import com.seongcheol.homemonitor.sensor.application.port.out.SensorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
