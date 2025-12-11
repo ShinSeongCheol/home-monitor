@@ -1,7 +1,7 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
 import com.seongcheol.homemonitor.user.domain.model.User;
-import com.seongcheol.homemonitor.user.application.port.out.UserRepository;
+import com.seongcheol.homemonitor.user.domain.port.out.UserRepository;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserMapper;
 import com.seongcheol.homemonitor.user.infrastructure.repository.UserJpaRepository;

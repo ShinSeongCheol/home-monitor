@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
-import com.seongcheol.homemonitor.user.application.port.out.SocialAccountRepository;
+import com.seongcheol.homemonitor.user.domain.port.out.SocialAccountRepository;
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.infrastructure.entity.SocialAccountEntity;

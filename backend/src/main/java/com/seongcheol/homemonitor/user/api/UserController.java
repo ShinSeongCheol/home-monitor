@@ -1,5 +1,8 @@
 package com.seongcheol.homemonitor.user.api;
 
+import com.seongcheol.homemonitor.user.api.dto.response.UserResponseDto;
+import com.seongcheol.homemonitor.user.application.command.CreateUserCommand;
+import com.seongcheol.homemonitor.user.application.result.CreateUserResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seongcheol.homemonitor.user.api.dto.request.UserRequestDto;
-import com.seongcheol.homemonitor.dto.request.MemberRequestDto;
-import com.seongcheol.homemonitor.user.application.service.UserService;
+import com.seongcheol.homemonitor.user.application.service.UserUseCase;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -20,23 +22,42 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class UserController {
     
-    private final UserService userService;
+    private final UserUseCase userUseCase;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserRequestDto> signUp(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto userRequestDto) {
         log.debug("유저 회원가입 컨트롤러 요청");
 
-        UserRequestDto memberDto = userService.createUser(userRequestDto);
-        return ResponseEntity.ok(memberDto);
+
+        CreateUserCommand createUserCommand = new CreateUserCommand(userRequestDto.getEmail(), userRequestDto.getNickname(), userRequestDto.getPassword());
+        CreateUserResult createUserResult = userUseCase.createUser(createUserCommand);
+
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                .email(createUserResult.email())
+                .nickname(createUserResult.nickname())
+                .build();
+
+        return ResponseEntity.ok(userResponseDto);
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<UserRequestDto> putMember(@PathVariable("username") String username, @RequestBody MemberRequestDto memberRequestDto) {
+    public ResponseEntity<UserResponseDto> putMember(@PathVariable("username") String username, @RequestBody UserRequestDto userRequestDto) {
         log.debug("유저 정보 수정 컨트롤러 요청");
 
-        UserRequestDto memberDto = userService.updateUser(memberRequestDto);
+        CreateUserCommand createUserCommand = new CreateUserCommand(
+                userRequestDto.getEmail(),
+                userRequestDto.getNickname(),
+                userRequestDto.getPassword()
+        );
 
-        return ResponseEntity.ok(memberDto);
+        CreateUserResult createUserResult = userUseCase.updateUser(createUserCommand);
+
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                .email(createUserResult.email())
+                .nickname(createUserResult.nickname())
+                .build();
+
+        return ResponseEntity.ok(userResponseDto);
     }
 
 }
