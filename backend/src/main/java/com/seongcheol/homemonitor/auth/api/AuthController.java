@@ -3,8 +3,8 @@ package com.seongcheol.homemonitor.auth.api;
 import com.seongcheol.homemonitor.dto.request.KaKaoAuthorizeRequestDto;
 import com.seongcheol.homemonitor.dto.request.LoginRequestDto;
 import com.seongcheol.homemonitor.dto.response.LoginResponseDto;
-import com.seongcheol.homemonitor.auth.application.service.AuthService;
-import com.seongcheol.homemonitor.auth.infrastructure.client.KakaoService;
+import com.seongcheol.homemonitor.auth.application.service.AuthUseCase;
+//import com.seongcheol.homemonitor.auth.infrastructure.client.KakaoClientImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +17,33 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private AuthUseCase authService;
 
-    @Autowired
-    private KakaoService kakaoService;
+//    @Autowired
+//    private KakaoClientImpl kakaoService;
 
     @GetMapping
     public ResponseEntity<LoginResponseDto> getAuth() {
-        LoginResponseDto loginResponseDto = authService.getAuth();
-        return ResponseEntity.ok(loginResponseDto);
+//        LoginResponseDto loginResponseDto = authService.getAuth();
+//        return ResponseEntity.ok(loginResponseDto);
+        return null;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         log.debug("유저 로그인 컨트롤러 요청");
-        LoginResponseDto loginResponseDto = authService.login(loginRequestDto);
-        return ResponseEntity.ok(loginResponseDto);
+//        LoginResponseDto loginResponseDto = authService.login(loginRequestDto);
+//        return ResponseEntity.ok(loginResponseDto);
+        return null;
     }
+
 
     @PostMapping("/kakao")
     public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestBody KaKaoAuthorizeRequestDto kaKaoAuthorizeRequestDto) {
         log.debug("카카오 로그인 컨트롤러 요청");
-        LoginResponseDto loginResponseDto = kakaoService.login(kaKaoAuthorizeRequestDto);
-        return ResponseEntity.ok(loginResponseDto);
+//        LoginResponseDto loginResponseDto = kakaoService.login(kaKaoAuthorizeRequestDto);
+//        return ResponseEntity.ok(loginResponseDto);
+        return null;
     }
 
 }

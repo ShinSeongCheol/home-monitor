@@ -1,18 +1,13 @@
-package com.seongcheol.homemonitor.configuration.filters;
+package com.seongcheol.homemonitor.auth.infrastructure.security;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.seongcheol.homemonitor.components.JwtUtilComponent;
-import com.seongcheol.homemonitor.dto.UserDetailsImpl;
-import com.seongcheol.homemonitor.service.UserDetailServiceImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,21 +15,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
+@Slf4j
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private UserDetailServiceImpl userDetailServiceImpl;
-
-    @Autowired
-    private JwtUtilComponent jwtUtilComponent;
+    private final UserDetailsServiceImpl userDetailServiceImpl;
+    private final JwtProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         
-        logger.debug("JWT 인증 필터");
+        log.debug("JWT 인증 필터");
 
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -42,10 +34,10 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
 
             
-            if(jwtUtilComponent.isValidToken(token)) {
-                String email = jwtUtilComponent.getMemberEmail(token);
+            if(jwtProvider.isValidToken(token)) {
+                String email = jwtProvider.getUserEmail(token);
                 
-                UserDetailsImpl userDetailsImpl  = (UserDetailsImpl) userDetailServiceImpl.loadUserByUsername(email.toString());
+                UserDetailsImpl userDetailsImpl  = (UserDetailsImpl) userDetailServiceImpl.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetailsImpl, null, userDetailsImpl.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 

@@ -1,7 +1,8 @@
-package com.seongcheol.homemonitor.configuration.components;
+package com.seongcheol.homemonitor.auth.infrastructure.security;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,14 +13,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Slf4j
 @Component
 public class AccessDeniedHandlerComponent implements AccessDeniedHandler {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        logger.error("Access Denied", accessDeniedException);
+        log.error("Access Denied", accessDeniedException);
     }
 
 }

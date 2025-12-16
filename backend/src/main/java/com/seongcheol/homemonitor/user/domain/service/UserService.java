@@ -76,4 +76,13 @@ public class UserService {
         User updateUser = user.update(username, passwordEncoderPort.encode(password));
         return userRepository.save(updateUser);
     }
+
+    /**
+     * 유저 정보 조회
+     * @param email 사용자 email
+     * @return User
+     */
+    public User readUser(String email) {
+        return userRepository.findByEmail(email);
+    }
 }

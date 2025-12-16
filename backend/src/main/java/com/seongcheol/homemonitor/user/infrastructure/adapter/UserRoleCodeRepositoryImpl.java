@@ -8,11 +8,19 @@ import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeJpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Component
 @RequiredArgsConstructor
 public class UserRoleCodeRepositoryImpl implements UserRoleCodeRepository {
 
     private final UserRoleCodeJpaRepository userRoleCodeJpaRepository;
+
+    @Override
+    public List<UserRoleCode> findAllById(List<Long> id) {
+        return userRoleCodeJpaRepository.findAllById(id).stream().map(UserRoleCodeMapper::toDomain).toList();
+    }
 
     @Override
     public UserRoleCode findByCode(String code) {

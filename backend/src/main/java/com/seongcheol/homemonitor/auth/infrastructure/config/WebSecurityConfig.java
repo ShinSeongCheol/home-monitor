@@ -1,6 +1,6 @@
-package com.seongcheol.homemonitor.configuration;
+package com.seongcheol.homemonitor.auth.infrastructure.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,12 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.seongcheol.homemonitor.configuration.components.AccessDeniedHandlerComponent;
-import com.seongcheol.homemonitor.configuration.components.AuthenticationEntryPointComponent;
-import com.seongcheol.homemonitor.configuration.filters.JwtFilter;
+import com.seongcheol.homemonitor.auth.infrastructure.security.AccessDeniedHandlerComponent;
+import com.seongcheol.homemonitor.auth.infrastructure.security.AuthenticationEntryPointComponent;
+import com.seongcheol.homemonitor.auth.infrastructure.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
 	@Bean
@@ -27,14 +28,11 @@ public class WebSecurityConfig {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
-	@Autowired
-	private JwtFilter jwtFilter;
+	private final JwtAuthenticationFilter jwtFilter;
 
-	@Autowired
-	private AuthenticationEntryPointComponent AuthenticationEntryPointComponent;
+	private final AuthenticationEntryPointComponent AuthenticationEntryPointComponent;
 	
-	@Autowired
-	private AccessDeniedHandlerComponent accessDeniedHandlerComponent;
+	private final AccessDeniedHandlerComponent accessDeniedHandlerComponent;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

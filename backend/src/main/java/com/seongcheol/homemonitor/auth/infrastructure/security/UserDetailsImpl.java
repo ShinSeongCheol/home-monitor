@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.dto;
+package com.seongcheol.homemonitor.auth.infrastructure.security;
 
 import java.util.Collection;
 
@@ -17,8 +17,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-    private String email;
     private String username;
     private String password;
-    private Collection<GrantedAuthority> authorities;
+    private String email;
+    private Collection<? extends GrantedAuthority> authorities;
 }
