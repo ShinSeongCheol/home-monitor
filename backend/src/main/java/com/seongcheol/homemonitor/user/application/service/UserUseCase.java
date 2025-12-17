@@ -1,9 +1,7 @@
 package com.seongcheol.homemonitor.user.application.service;
 
 import com.seongcheol.homemonitor.user.application.command.CreateUserCommand;
-import com.seongcheol.homemonitor.user.application.command.ReadUserCommand;
 import com.seongcheol.homemonitor.user.application.port.in.UserPort;
-import com.seongcheol.homemonitor.user.application.result.ReadUserResult;
 import com.seongcheol.homemonitor.user.domain.port.out.*;
 import com.seongcheol.homemonitor.user.application.result.CreateUserResult;
 import com.seongcheol.homemonitor.user.domain.model.User;
@@ -48,12 +46,6 @@ public class UserUseCase implements UserPort {
     public CreateUserResult updateUser(CreateUserCommand createUserCommand) {
         User updatedUser = userService.updateUser(createUserCommand.email(), createUserCommand.nickname(), createUserCommand.password());
         return new CreateUserResult(updatedUser.getEmail(), updatedUser.getUsername());
-    }
-
-    @Override
-    public ReadUserResult readUser(ReadUserCommand readUserCommand) {
-        User user = userService.readUser(readUserCommand.email());
-        return new ReadUserResult();
     }
 
 }
