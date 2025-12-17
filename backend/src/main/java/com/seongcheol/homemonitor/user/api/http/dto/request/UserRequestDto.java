@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.user.api.dto.request;
+package com.seongcheol.homemonitor.user.api.http.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

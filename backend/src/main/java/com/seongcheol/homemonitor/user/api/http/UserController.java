@@ -1,6 +1,6 @@
-package com.seongcheol.homemonitor.user.api;
+package com.seongcheol.homemonitor.user.api.http;
 
-import com.seongcheol.homemonitor.user.api.dto.response.UserResponseDto;
+import com.seongcheol.homemonitor.user.api.http.dto.response.UserResponseDto;
 import com.seongcheol.homemonitor.user.application.command.CreateUserCommand;
 import com.seongcheol.homemonitor.user.application.result.CreateUserResult;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seongcheol.homemonitor.user.api.dto.request.UserRequestDto;
+import com.seongcheol.homemonitor.user.api.http.dto.request.UserRequestDto;
 import com.seongcheol.homemonitor.user.application.service.UserUseCase;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;

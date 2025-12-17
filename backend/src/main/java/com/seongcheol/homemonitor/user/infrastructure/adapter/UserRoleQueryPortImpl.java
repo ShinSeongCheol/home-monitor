@@ -6,15 +6,15 @@ import com.seongcheol.homemonitor.user.domain.model.UserRole;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserRoleMapper;
-import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserRoleRepositoryImpl implements UserRoleQueryPort {
+public class UserRoleQueryPortImpl implements UserRoleQueryPort {
 
-    private final UserRoleJpaRepository userRoleJpaRepository;
+    private final UserRoleRepository userRoleJpaRepository;
 
     @Override
     public UserRole save(User user, UserRoleCode userRoleCode) {

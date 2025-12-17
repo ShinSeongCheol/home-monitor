@@ -4,7 +4,7 @@ import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.application.port.out.UserQueryPort;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserMapper;
-import com.seongcheol.homemonitor.user.infrastructure.repository.UserJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +12,9 @@ import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserQueryPort {
+public class UserQueryPortImpl implements UserQueryPort {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userJpaRepository;
 
     @Override
     public User save(User user) {

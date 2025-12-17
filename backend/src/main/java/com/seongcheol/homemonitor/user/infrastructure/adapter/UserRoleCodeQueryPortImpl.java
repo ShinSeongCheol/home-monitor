@@ -4,7 +4,7 @@ import com.seongcheol.homemonitor.user.application.port.out.UserRoleCodeQueryPor
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserRoleCodeMapper;
-import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +12,9 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class UserRoleCodeRepositoryImpl implements UserRoleCodeQueryPort {
+public class UserRoleCodeQueryPortImpl implements UserRoleCodeQueryPort {
 
-    private final UserRoleCodeJpaRepository userRoleCodeJpaRepository;
+    private final UserRoleCodeRepository userRoleCodeJpaRepository;
 
     @Override
     public List<UserRoleCode> findAllById(List<Long> id) {

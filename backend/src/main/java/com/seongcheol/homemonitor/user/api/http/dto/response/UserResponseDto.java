@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.user.api.dto.response;
+package com.seongcheol.homemonitor.user.api.http.dto.response;
 
 import lombok.*;
 

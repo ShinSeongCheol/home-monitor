@@ -1,7 +1,7 @@
 package com.seongcheol.homemonitor.user.infrastructure.init;
 
-import com.seongcheol.homemonitor.user.domain.service.UserRoleCodeService;
-import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
+import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,21 +14,43 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserRoleCodeInitializer implements ApplicationRunner {
 
-    private final UserRoleCodeJpaRepository userRoleCodeJpaRepository;
-    private final UserRoleCodeService userRoleCodeService;
+    private final UserRoleCodeRepository userRoleCodeRepository;
+
+    //TODO
+    // 초기 권한 코드 생성 UseCase 필요
 
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        boolean isRoleUserExist = userRoleCodeJpaRepository.existsByCode("ROLE_USER");
-        boolean isRoleAdminExist = userRoleCodeJpaRepository.existsByCode("ROLE_ADMIN");
+        boolean isRoleUserExist = userRoleCodeRepository.existsByCode("ROLE_USER");
+        boolean isRoleAdminExist = userRoleCodeRepository.existsByCode("ROLE_ADMIN");
 
         if (!isRoleUserExist) {
-            userRoleCodeService.createUserRoleCode("ROLE_USER", "사용자");
+            boolean ixExist = userRoleCodeRepository.existsByCode("ROLE_USER");
+
+            if (ixExist) {
+                throw new IllegalArgumentException("사용자 권한 코드가 존재합니다.");
+            }
+
+            UserRoleCodeEntity userRoleCodeEntity = UserRoleCodeEntity.builder()
+                    .code("ROLE_USER")
+                    .name("사용자")
+                    .build();
+            userRoleCodeRepository.save(userRoleCodeEntity);
         }
 
         if (!isRoleAdminExist) {
-            userRoleCodeService.createUserRoleCode("ROLE_ADMIN", "관리자");
+            boolean ixExist = userRoleCodeRepository.existsByCode("ROLE_USER");
+
+            if (ixExist) {
+                throw new IllegalArgumentException("관리자 권한 코드가 존재합니다.");
+            }
+
+            UserRoleCodeEntity userRoleCodeEntity = UserRoleCodeEntity.builder()
+                    .code("ROLE_ADMIN")
+                    .name("관리자")
+                    .build();
+            userRoleCodeRepository.save(userRoleCodeEntity);
         }
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRoleCodeJpaRepository extends JpaRepository<UserRoleCodeEntity, Long> {
+public interface UserRoleCodeRepository extends JpaRepository<UserRoleCodeEntity, Long> {
     Optional<UserRoleCodeEntity> findByCode(String code);
     boolean existsByCode(String code);
 }

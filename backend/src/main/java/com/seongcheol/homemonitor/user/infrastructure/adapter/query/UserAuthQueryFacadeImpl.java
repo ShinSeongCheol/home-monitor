@@ -5,7 +5,7 @@ import com.seongcheol.homemonitor.user.facade.query.dto.UserAuthDto;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserEntity;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleEntity;
-import com.seongcheol.homemonitor.user.infrastructure.repository.UserJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class UserAuthQueryFacadeImpl implements UserAuthQueryFacade {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userJpaRepository;
 
     @Override
     public UserAuthDto findForAuthByEmail(String email) {

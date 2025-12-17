@@ -5,15 +5,15 @@ import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.infrastructure.entity.SocialAccountEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.SocialAccountMapper;
-import com.seongcheol.homemonitor.user.infrastructure.repository.SocialAccountJpaRepository;
+import com.seongcheol.homemonitor.user.infrastructure.repository.SocialAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SocialAccountImpl implements SocialAccountQueryPort {
+public class SocialAccountQueryPortImpl implements SocialAccountQueryPort {
 
-    private final SocialAccountJpaRepository socialAccountJpaRepository;
+    private final SocialAccountRepository socialAccountJpaRepository;
 
     @Override
     public SocialAccount save(User user, SocialAccount socialAccount) {
