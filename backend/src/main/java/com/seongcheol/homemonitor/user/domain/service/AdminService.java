@@ -1,9 +1,9 @@
 package com.seongcheol.homemonitor.user.domain.service;
 
+import com.seongcheol.homemonitor.user.application.port.out.*;
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
-import com.seongcheol.homemonitor.user.domain.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
-    private final UserRoleCodeRepository userRoleCodeRepository;
-    private final SocialAccountRepository socialAccountRepository;
+    private final UserQueryPort userRepository;
+    private final UserRoleQueryPort userRoleRepository;
+    private final UserRoleCodeQueryPort userRoleCodeRepository;
+    private final SocialAccountQueryPort socialAccountRepository;
 
     private final PasswordEncoderPort passwordEncoderPort;
 

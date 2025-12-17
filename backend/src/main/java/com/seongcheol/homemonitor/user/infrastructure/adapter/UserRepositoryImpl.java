@@ -1,7 +1,7 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
 import com.seongcheol.homemonitor.user.domain.model.User;
-import com.seongcheol.homemonitor.user.domain.port.out.UserRepository;
+import com.seongcheol.homemonitor.user.application.port.out.UserQueryPort;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserMapper;
 import com.seongcheol.homemonitor.user.infrastructure.repository.UserJpaRepository;
@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl implements UserQueryPort {
 
     private final UserJpaRepository userJpaRepository;
 

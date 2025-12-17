@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
-import com.seongcheol.homemonitor.user.domain.port.out.UserRoleCodeRepository;
+import com.seongcheol.homemonitor.user.application.port.out.UserRoleCodeQueryPort;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserRoleCodeMapper;
@@ -9,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
-public class UserRoleCodeRepositoryImpl implements UserRoleCodeRepository {
+public class UserRoleCodeRepositoryImpl implements UserRoleCodeQueryPort {
 
     private final UserRoleCodeJpaRepository userRoleCodeJpaRepository;
 

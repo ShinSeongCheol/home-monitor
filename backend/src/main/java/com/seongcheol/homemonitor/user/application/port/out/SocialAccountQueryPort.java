@@ -1,9 +1,9 @@
-package com.seongcheol.homemonitor.user.domain.port.out;
+package com.seongcheol.homemonitor.user.application.port.out;
 
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 
-public interface SocialAccountRepository {
+public interface SocialAccountQueryPort {
     SocialAccount save(User user, SocialAccount socialAccount);
     boolean existsByProviderIdAndProvider(Long providerId, String provider);
 }

@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
-import com.seongcheol.homemonitor.user.domain.port.out.UserRoleRepository;
+import com.seongcheol.homemonitor.user.application.port.out.UserRoleQueryPort;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.domain.model.UserRole;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserRoleRepositoryImpl implements UserRoleRepository {
+public class UserRoleRepositoryImpl implements UserRoleQueryPort {
 
     private final UserRoleJpaRepository userRoleJpaRepository;
 

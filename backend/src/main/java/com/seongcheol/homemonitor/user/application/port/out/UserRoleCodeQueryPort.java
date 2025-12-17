@@ -1,10 +1,10 @@
-package com.seongcheol.homemonitor.user.domain.port.out;
+package com.seongcheol.homemonitor.user.application.port.out;
 
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
 
 import java.util.List;
 
-public interface UserRoleCodeRepository {
+public interface UserRoleCodeQueryPort {
 
     List<UserRoleCode> findAllById(List<Long> id);
 

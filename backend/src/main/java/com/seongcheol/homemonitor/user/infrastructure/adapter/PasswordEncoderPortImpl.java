@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
-import com.seongcheol.homemonitor.user.domain.port.out.PasswordEncoderPort;
+import com.seongcheol.homemonitor.user.application.port.out.PasswordEncoderPort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

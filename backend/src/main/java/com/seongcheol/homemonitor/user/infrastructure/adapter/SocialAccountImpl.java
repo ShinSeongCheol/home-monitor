@@ -1,6 +1,6 @@
 package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
-import com.seongcheol.homemonitor.user.domain.port.out.SocialAccountRepository;
+import com.seongcheol.homemonitor.user.application.port.out.SocialAccountQueryPort;
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.infrastructure.entity.SocialAccountEntity;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SocialAccountImpl implements SocialAccountRepository {
+public class SocialAccountImpl implements SocialAccountQueryPort {
 
     private final SocialAccountJpaRepository socialAccountJpaRepository;
 

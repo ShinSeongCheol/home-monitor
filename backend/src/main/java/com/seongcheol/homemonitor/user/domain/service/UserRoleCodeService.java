@@ -1,7 +1,7 @@
 package com.seongcheol.homemonitor.user.domain.service;
 
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
-import com.seongcheol.homemonitor.user.domain.port.out.UserRoleCodeRepository;
+import com.seongcheol.homemonitor.user.application.port.out.UserRoleCodeQueryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserRoleCodeService {
 
-    private final UserRoleCodeRepository userRoleCodeRepository;
+    private final UserRoleCodeQueryPort userRoleCodeRepository;
 
     @Transactional
     public UserRoleCode createUserRoleCode(String code, String name) {

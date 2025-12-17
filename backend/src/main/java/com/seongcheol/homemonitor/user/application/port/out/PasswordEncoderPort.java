@@ -1,4 +1,4 @@
-package com.seongcheol.homemonitor.user.domain.port.out;
+package com.seongcheol.homemonitor.user.application.port.out;
 
 public interface PasswordEncoderPort {
 

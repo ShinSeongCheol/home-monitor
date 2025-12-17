@@ -1,9 +1,9 @@
-package com.seongcheol.homemonitor.user.domain.port.out;
+package com.seongcheol.homemonitor.user.application.port.out;
 
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.domain.model.UserRole;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
 
-public interface UserRoleRepository {
+public interface UserRoleQueryPort {
     UserRole save(User user, UserRoleCode userRoleCode);
 }
