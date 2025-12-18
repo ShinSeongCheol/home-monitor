@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class UserRoleCodeQueryPortImpl implements UserRoleCodeQueryPort {
     }
 
     @Override
-    public UserRoleCode findByCode(String code) {
-        return userRoleCodeJpaRepository.findByCode(code).map(UserRoleCodeMapper::toDomain).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 권한 코드입니다."));
+    public Optional<UserRoleCode> findByCode(String code) {
+        return userRoleCodeJpaRepository.findByCode(code).map(UserRoleCodeMapper::toDomain);
     }
 
     @Override
