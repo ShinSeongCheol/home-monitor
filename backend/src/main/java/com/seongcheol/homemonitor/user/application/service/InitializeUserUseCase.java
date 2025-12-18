@@ -1,9 +1,12 @@
 package com.seongcheol.homemonitor.user.application.service;
 
+import com.seongcheol.homemonitor.user.application.port.in.InitializeAdminUserUseCase;
+import com.seongcheol.homemonitor.user.application.port.in.InitializeUserRoleCodeUseCase;
 import com.seongcheol.homemonitor.user.application.port.out.*;
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
 import com.seongcheol.homemonitor.user.domain.model.User;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
+import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InitializeUserUseCase implements com.seongcheol.homemonitor.user.application.port.in.InitializeAdminUserUseCase {
+public class InitializeUserUseCase implements InitializeAdminUserUseCase, InitializeUserRoleCodeUseCase {
 
     private final UserQueryPort userQueryPort;
     private final UserRoleQueryPort userRoleQueryPort;
@@ -56,5 +59,23 @@ public class InitializeUserUseCase implements com.seongcheol.homemonitor.user.ap
                 .build();
 
         socialAccountQueryPort.save(savedUser, socialAccount);
+    }
+
+    @Override
+    public void initializeUserRoleCode() {
+        boolean isExistRoleUser = userRoleCodeQueryPort.existsByCode("ROLE_USER");
+        boolean isExistRoleAdmin = userRoleCodeQueryPort.existsByCode("ROLE_ADMIN");
+
+        if (isExistRoleUser) {
+            throw new IllegalArgumentException("사용자 권한 코드가 존재합니다.");
+        }
+
+        if (isExistRoleAdmin) {
+            throw new IllegalArgumentException("관리자 권한 코드가 존재합니다.");
+        }
+
+        // 사용자, 관리자 권한 코드 생성
+        userRoleCodeQueryPort.save("ROLE_USER", "사용자");
+        userRoleCodeQueryPort.save("ROLE_ADMIN", "관리자");
     }
 }

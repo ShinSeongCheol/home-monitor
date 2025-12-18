@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -59,7 +61,7 @@ public class UserUseCase implements CreateUserUseCase, UpdateUserUseCase {
             User savedUser = userQueryPort.save(user);
 
             // 사용자 권한 부여
-            UserRoleCode userRoleCode = userRoleCodeQueryPort.findByCode("ROLE_USER");
+            UserRoleCode userRoleCode = userRoleCodeQueryPort.findByCode("ROLE_USER").orElseThrow(() -> new NoSuchElementException("사용자 권한이 없습니다."));
             userRoleQueryPort.save(savedUser, userRoleCode);
 
             // 소셜 계정 생성
