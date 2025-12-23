@@ -3,7 +3,7 @@ package com.seongcheol.homemonitor.user.infrastructure.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.seongcheol.homemonitor.domain.BoardRoleEntity;
+import com.seongcheol.homemonitor.board.infrastructure.entity.BoardRoleEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +35,4 @@ public class UserRoleCodeEntity {
     @Column(length = 16)
     private String name;
 
-    @OneToMany(mappedBy = "memberRoleCode",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<BoardRoleEntity> boardRoles = new HashSet<>();
 }

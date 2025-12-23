@@ -31,13 +31,13 @@ public class SocialAccountEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private UserEntity user;
-
     @Column(nullable = false, length = 16)
     private String provider;
 
     @Column(nullable = false)
     private Long providerId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private UserEntity user;
 }

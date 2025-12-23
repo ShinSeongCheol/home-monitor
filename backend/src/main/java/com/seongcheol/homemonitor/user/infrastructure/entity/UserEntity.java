@@ -41,11 +41,4 @@ public class UserEntity {
     @Column(length = 128)
     private String password;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<UserRoleEntity> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<SocialAccountEntity> socialAccounts = new HashSet<>();
 }

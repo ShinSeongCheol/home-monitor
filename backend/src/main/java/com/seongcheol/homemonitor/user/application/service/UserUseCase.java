@@ -1,8 +1,7 @@
 package com.seongcheol.homemonitor.user.application.service;
 
 import com.seongcheol.homemonitor.user.application.command.CreateUserCommand;
-import com.seongcheol.homemonitor.user.application.port.in.CreateUserUseCase;
-import com.seongcheol.homemonitor.user.application.port.in.UpdateUserUseCase;
+import com.seongcheol.homemonitor.user.application.port.in.UserCommandPort;
 import com.seongcheol.homemonitor.user.application.port.out.*;
 import com.seongcheol.homemonitor.user.application.result.CreateUserResult;
 import com.seongcheol.homemonitor.user.domain.model.SocialAccount;
@@ -19,7 +18,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserUseCase implements CreateUserUseCase, UpdateUserUseCase {
+public class UserUseCase implements UserCommandPort {
 
     private final PasswordEncoderPort passwordEncoderPort;
 

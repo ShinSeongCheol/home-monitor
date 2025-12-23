@@ -33,12 +33,7 @@ public class InitializeUserUseCase implements InitializeAdminUserUseCase, Initia
         if (isAdminExist) return;
 
         // 사용자 생성
-        User user = User.builder()
-                .email("admin@admin.com")
-                .username("admin")
-                .password(passwordEncoderPort.encode("admin"))
-                .build();
-
+        User user = User.create("admin@admin.com", "admin", passwordEncoderPort.encode("admin"));
         User savedUser = userQueryPort.save(user);
 
         // 사용자 권한 코드 조회

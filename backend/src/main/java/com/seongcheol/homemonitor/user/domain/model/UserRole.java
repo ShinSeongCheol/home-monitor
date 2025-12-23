@@ -15,11 +15,15 @@ public class UserRole {
     private Long userId;
     private Long userRoleCodeId;
 
-    public static UserRole assign(Long userId, Long userRoleCodeId) {
-        return UserRole.builder()
-                .userId(userId)
-                .userRoleCodeId(userRoleCodeId)
-                .build();
+    public Long getId() {
+        return id;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getUserRoleCodeId() {
+        return userRoleCodeId;
+    }
 }

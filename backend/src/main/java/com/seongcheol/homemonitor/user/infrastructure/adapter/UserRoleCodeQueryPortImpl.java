@@ -2,6 +2,7 @@ package com.seongcheol.homemonitor.user.infrastructure.adapter;
 
 import com.seongcheol.homemonitor.user.application.port.out.UserRoleCodeQueryPort;
 import com.seongcheol.homemonitor.user.domain.model.UserRoleCode;
+import com.seongcheol.homemonitor.user.infrastructure.entity.UserEntity;
 import com.seongcheol.homemonitor.user.infrastructure.entity.UserRoleCodeEntity;
 import com.seongcheol.homemonitor.user.infrastructure.mapper.UserRoleCodeMapper;
 import com.seongcheol.homemonitor.user.infrastructure.repository.UserRoleCodeRepository;
@@ -9,27 +10,34 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class UserRoleCodeQueryPortImpl implements UserRoleCodeQueryPort {
 
-    private final UserRoleCodeRepository userRoleCodeJpaRepository;
+    private final UserRoleCodeRepository userRoleCodeRepository;
 
     @Override
     public List<UserRoleCode> findAllById(List<Long> id) {
-        return userRoleCodeJpaRepository.findAllById(id).stream().map(UserRoleCodeMapper::toDomain).toList();
+        return userRoleCodeRepository.findAllById(id).stream().map(UserRoleCodeMapper::toDomain).toList();
+    }
+
+    @Override
+    public UserRoleCode findById(Long id) {
+        UserRoleCodeEntity userRoleCodeEntity = userRoleCodeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("해당 이메일을 가진 사용자는 없습니다."));
+        return  UserRoleCodeMapper.toDomain(userRoleCodeEntity);
     }
 
     @Override
     public Optional<UserRoleCode> findByCode(String code) {
-        return userRoleCodeJpaRepository.findByCode(code).map(UserRoleCodeMapper::toDomain);
+        return userRoleCodeRepository.findByCode(code).map(UserRoleCodeMapper::toDomain);
     }
 
     @Override
     public boolean existsByCode(String code) {
-        return userRoleCodeJpaRepository.existsByCode(code);
+        return userRoleCodeRepository.existsByCode(code);
     }
 
     @Override
@@ -39,7 +47,7 @@ public class UserRoleCodeQueryPortImpl implements UserRoleCodeQueryPort {
                 .name(name)
                 .build();
 
-        UserRoleCodeEntity savedUserRoleCodeEntity = userRoleCodeJpaRepository.save(userRoleCodeEntity);
+        UserRoleCodeEntity savedUserRoleCodeEntity = userRoleCodeRepository.save(userRoleCodeEntity);
         return UserRoleCodeMapper.toDomain(savedUserRoleCodeEntity);
     }
 }

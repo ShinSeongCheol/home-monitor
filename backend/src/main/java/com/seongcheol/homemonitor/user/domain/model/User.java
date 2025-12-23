@@ -1,36 +1,52 @@
 package com.seongcheol.homemonitor.user.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
-
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
     private Long id;
     private String email;
     private String username;
     private String password;
-    private Set<UserRole> roles = new HashSet<>();
-    private Set<SocialAccount> socialAccounts = new HashSet<>();
+    private Long socialAccountId;
+
+    public User(Long id, String email, String username, String password) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    private User(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 
     public static User create(String email, String username, String encodedPassword) {
-        return User.builder()
-                .email(email)
-                .username(username)
-                .password(encodedPassword)
-                .build();
+        return new User(email, username, encodedPassword);
     }
 
     public User update(String username, String password) {
         this.username = username;
         this.password = password;
         return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getSocialAccountId() {
+        return socialAccountId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

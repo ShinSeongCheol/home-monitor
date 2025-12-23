@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface UserRoleCodeQueryPort {
 
     List<UserRoleCode> findAllById(List<Long> id);
+    UserRoleCode findById(Long id);
 
     Optional<UserRoleCode> findByCode(String code);
 

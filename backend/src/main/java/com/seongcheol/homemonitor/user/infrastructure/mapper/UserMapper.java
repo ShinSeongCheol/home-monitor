@@ -8,14 +8,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public static User toDomain(UserEntity userEntity) {
-        return User.builder()
-                .id(userEntity.getId())
-                .email(userEntity.getEmail())
-                .username(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .roles(userEntity.getRoles().stream().map(UserRoleMapper::toDomain).collect(Collectors.toSet()))
-                .socialAccounts(userEntity.getSocialAccounts().stream().map(SocialAccountMapper::toDomain).collect(Collectors.toSet()))
-                .build();
+        return new User(userEntity.getId(), userEntity.getEmail(), userEntity.getUsername(), userEntity.getPassword());
     }
 
     public static UserEntity toEntity(User user) {
